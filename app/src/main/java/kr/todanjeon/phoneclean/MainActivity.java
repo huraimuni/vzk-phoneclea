@@ -88,8 +88,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CrashLog.install(getApplicationContext());
         loadSafe();
         buildUi();
+        if (CrashLog.hasCrash(this)) offerCrashReport();
         if (savedInstanceState == null && rootFrame != null) showSplash(rootFrame);
         startScan();
         SharedPreferences sp = getSharedPreferences(PREFS, MODE_PRIVATE);
@@ -327,6 +329,7 @@ public class MainActivity extends Activity {
                         @Override
                         public void run() {
                             scanning = false;
+                            CrashLog.record(MainActivity.this, "분석 전체", ex);
                             summary.setText("분석 중 오류가 났습니다: " + ex.getClass().getSimpleName()
                                     + (ex.getMessage() == null ? "" : " - " + ex.getMessage())
                                     + "\n[전체 앱 보기]를 눌러 다시 시도해 보세요.");
@@ -684,7 +687,7 @@ public class MainActivity extends Activity {
         final String[] items = {"응급 가이드 (폰이 멈췄을 때)", "광고·알고리즘 정리", "알림 정리 (알림 비우기·끄기)", "안전 표시한 앱 관리",
                 "사용 기록 허용 (정확도 향상)",
                 watchOn() ? "새 앱 즉시 분석 알림 끄기 (감시 중)" : "새 앱 즉시 분석 알림 켜기 (감시)",
-                "결과 공유 (카카오톡 등)", "도움말"};
+                "결과 공유 (카카오톡 등)", "오류 보고·건의하기", "도움말"};
         new AlertDialog.Builder(this)
                 .setTitle("더보기")
                 .setItems(items, new DialogInterface.OnClickListener() {
@@ -697,6 +700,7 @@ public class MainActivity extends Activity {
                         else if (which == 4) openUsageSettings();
                         else if (which == 5) toggleWatch();
                         else if (which == 6) shareReport();
+                        else if (which == items.length - 2) showFeedback();
                         else showHelp();
                     }
                 })
@@ -1116,6 +1120,62 @@ public class MainActivity extends Activity {
                         Ui.openUrl(MainActivity.this, Ui.CAFE_URL);
                     }
                 })
+                .show();
+    }
+
+    // ---------------------------------------------------------------- 오류 보고·건의
+
+    private void offerCrashReport() {
+        new AlertDialog.Builder(this)
+                .setTitle("지난번에 앱이 오류로 꺼졌습니다")
+                .setMessage("불편을 드려 죄송합니다. 오류 내용을 보내 주시면 고치는 데 큰 도움이 됩니다.\n"
+                        + "오류 내용에는 앱 이름이나 개인 정보가 들어 있지 않고, 기종·안드로이드 버전·오류 문구만 있습니다. "
+                        + "이 앱은 인터넷 권한이 없어서 자동으로 보내지 않고, 직접 보내기를 누르셨을 때만 공유됩니다.")
+                .setPositiveButton("오류 내용 보내기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface d, int w) {
+                        sendErrorReport();
+                        CrashLog.clearCrash(MainActivity.this);
+                    }
+                })
+                .setNegativeButton("나중에", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface d, int w) {
+                        CrashLog.clearCrash(MainActivity.this);
+                    }
+                })
+                .show();
+    }
+
+    private void sendErrorReport() {
+        String text = CrashLog.buildReport(this);
+        try {
+            ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            cm.setPrimaryClip(ClipData.newPlainText("오류 보고", text));
+        } catch (Exception ignored) {
+        }
+        Intent send = new Intent(Intent.ACTION_SEND);
+        send.setType("text/plain");
+        send.putExtra(Intent.EXTRA_TEXT, text);
+        try {
+            startActivity(Intent.createChooser(send, "오류 내용 보내기"));
+        } catch (Exception e) {
+            Ui.toast(this, "내용을 복사했습니다. 카페 게시판에 붙여넣어 주세요.");
+        }
+    }
+
+    private void showFeedback() {
+        final String[] items = {"오류 내용 보내기 (카톡·문자 등으로 공유)", "건의하기 (카페 게시판 열기)"};
+        new AlertDialog.Builder(this)
+                .setTitle("오류 보고·건의하기")
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface d, int which) {
+                        if (which == 0) sendErrorReport();
+                        else Ui.openUrl(MainActivity.this, Ui.CAFE_URL);
+                    }
+                })
+                .setNegativeButton("닫기", null)
                 .show();
     }
 }

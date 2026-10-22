@@ -564,8 +564,9 @@ final class Scanner {
             e.score = score;
             e.hard = hard;
             list.add(e);
-                    } catch (Throwable ignored) {
+                    } catch (Throwable t) {
                 // 한 앱을 읽다 오류가 나도 나머지 앱 분석은 계속한다
+                CrashLog.record(ctx, "앱 분석", t);
             }
 }
 
