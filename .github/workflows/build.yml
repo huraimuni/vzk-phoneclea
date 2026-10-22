@@ -1,5 +1,8 @@
 name: Build Store (AAB)
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [store]
@@ -42,3 +45,14 @@ jobs:
         with:
           name: VZK-PhoneClean-store
           path: out/*
+      - name: Publish store test APK (pre-release)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: store-test
+          target_commitish: ${{ github.sha }}
+          prerelease: true
+          name: VZK 폰클린 스토어 버전 테스트
+          body: |
+            스토어 제출용 버전의 테스트 APK입니다. (민감 권한 기능을 뺀 버전)
+            정식 스토어 파일(AAB)은 Actions 결과물에서 받습니다.
+          files: out/VZK_PhoneClean_store_test.apk
