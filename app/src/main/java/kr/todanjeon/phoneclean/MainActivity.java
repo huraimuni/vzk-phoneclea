@@ -104,6 +104,7 @@ public class MainActivity extends Activity {
     private void buildUi() {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
+        Ui.fit(root);
         root.setBackgroundColor(Ui.BG);
 
         root.addView(Ui.header(this, "VZK 폰클린",
@@ -349,10 +350,7 @@ public class MainActivity extends Activity {
         summary.setText("직접 설치한 앱 " + all.size() + "개 중  위험 의심 " + high + "개 / 주의 " + warn + "개");
         btnFilter.setText(onlySuspicious ? "전체 앱 보기" : "의심 앱만 보기");
         updateHomeBanner();
-        boolean ua = Scanner.hasUsageAccess(this);
-        lastUsageState = ua;
-        usageHint.setText(ua ? "사용 기록 허용됨: 한 번도 안 열어 본 앱까지 판정에 반영합니다."
-                : "정확도를 높이려면 [더보기 > 사용 기록 허용]을 켜 보세요. (선택)");
+        usageHint.setVisibility(View.GONE);
         refreshList();
     }
 
@@ -658,8 +656,7 @@ public class MainActivity extends Activity {
 
     private void showMore() {
         final String[] items = {"응급 가이드 (폰이 멈췄을 때)", "광고·알고리즘 정리", "알림 정리 (알림 비우기·끄기)", "안전 표시한 앱 관리",
-                "사용 기록 허용 (정확도 향상)",
-                watchOn() ? "새 앱 즉시 분석 알림 끄기 (감시 중)" : "새 앱 즉시 분석 알림 켜기 (감시)",
+                watchOn() ? "새 앱 설치 알림 끄기" : "새 앱 설치 알림 켜기 (15분마다 확인)",
                 "결과 공유 (카카오톡 등)", "도움말"};
         new AlertDialog.Builder(this)
                 .setTitle("더보기")
@@ -670,28 +667,11 @@ public class MainActivity extends Activity {
                         else if (which == 1) startActivity(new Intent(MainActivity.this, AdsGuideActivity.class));
                         else if (which == 2) startActivity(new Intent(MainActivity.this, NotifActivity.class));
                         else if (which == 3) manageSafe();
-                        else if (which == 4) openUsageSettings();
-                        else if (which == 5) toggleWatch();
-                        else if (which == 6) shareReport();
+                        else if (which == 4) toggleWatch();
+                        else if (which == 5) shareReport();
                         else showHelp();
                     }
                 })
-                .show();
-    }
-
-    private void openUsageSettings() {
-        new AlertDialog.Builder(this)
-                .setTitle("사용 기록 허용")
-                .setMessage("다음 화면에서 목록 중 [VZK 폰클린]을 눌러 [사용 기록 접근 허용]을 켜 주세요.\n\n"
-                        + "이 권한으로 '설치하고 한 번도 열어 보지 않은 앱', '오래 안 쓴 앱', '최근에 내가 쓴 앱(안전 후보)'을 가려냅니다. "
-                        + "사용 기록은 이 폰 안에서만 쓰이고 밖으로 나가지 않습니다.")
-                .setPositiveButton("설정 열기", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Ui.openFirst(MainActivity.this, new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS), null);
-                    }
-                })
-                .setNegativeButton("취소", null)
                 .show();
     }
 
@@ -702,7 +682,6 @@ public class MainActivity extends Activity {
     private void toggleWatch() {
         if (watchOn()) {
             NewAppJob.cancel(this);
-            WatchService.stop(this);
             getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean("watch_on", false).apply();
             Ui.toast(this, "새 앱 설치 알림을 껐습니다.");
             return;
@@ -718,9 +697,8 @@ public class MainActivity extends Activity {
     private void enableWatch() {
         NewAppJob.saveBaseline(this);
         NewAppJob.schedule(this);
-        WatchService.start(this);
         getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean("watch_on", true).apply();
-        Ui.toast(this, "켰습니다. 새 앱이 설치되면 바로 분석 결과를 알림으로 띄웁니다. (설치를 막지는 못하고, 설치된 뒤에 알립니다)");
+        Ui.toast(this, "켰습니다. 새 앱이 설치되면 15분 안에 분석 결과를 알림으로 알려 드립니다. (설치를 막지는 못하고, 설치된 뒤에 알립니다)");
     }
 
     @Override
@@ -1069,12 +1047,11 @@ public class MainActivity extends Activity {
                 + "- 바이러스를 잡는 백신이 아닙니다. 악성 파일 DB가 없고, 징후만 보고 판단합니다.\n"
                 + "- 징후가 있어도 정상 앱일 수 있습니다. 모르는 앱만 지우세요.\n"
                 + "- 판정 이름: 권한 장악형 / 광고 도배형 / 방치형 / 한 패거리형(같은 개발사) / 설치 도우미형 / 도구·겁주기 위장형. 근거가 2개 이상 겹치면 [위험 의심]입니다.\n"
-                + "- 최근 7일 안에 내가 직접 연 앱은 [안전 후보]로 내립니다. (사용 기록 허용이 켜져 있을 때)\n"
-                + "- [더보기 > 새 앱 즉시 분석 알림]을 켜면 새 앱이 깔리는 즉시 분석 결과가 화면 위 알림으로 뜹니다. 알림을 누르면 분석 팝업이 열리고 바로 삭제할 수 있습니다. (알림창에 '감시 중' 표시가 계속 보이고, 폰 절전 설정에 따라 꺼질 수 있어 15분마다 확인하는 보조 장치도 함께 켜집니다)\n"
-                + "- [더보기 > 알림 정리]에서 쌓인 알림을 앱별로 비우고, 알림이 자꾸 뜨는 앱은 알림 설정 화면으로 바로 가서 끌 수 있습니다.\n"
+                + "- [더보기 > 새 앱 설치 알림]을 켜면 새 앱이 깔린 뒤 15분 안에 분석 결과가 알림으로 뜹니다. 알림을 누르면 분석 화면이 열리고 바로 삭제할 수 있습니다. (설치를 막지는 못합니다)\n"
+                + "- [더보기 > 알림 정리]에서 알림이 자꾸 뜨는 앱의 알림 설정 화면으로 바로 가서 끌 수 있습니다.\n"
                 + "- [더보기 > 응급 가이드]에 폰이 멈췄을 때 안전 모드 등의 순서가 있습니다.\n"
                 + "- 내가 아는 안전한 앱은 체크한 뒤 [안전 앱으로 표시]를 누르면 목록·일시 중지·삭제에서 빠집니다.\n"
-                + "- [저장공간 관리]에서 중복 사진·영상, 중복 연락처를 정리할 수 있습니다. (필요할 때만 권한을 묻습니다)\n"
+                + "- [저장공간 관리]에서 저장공간 사용량을 보고 폰의 저장공간 정리 화면으로 이동할 수 있습니다.\n"
                 + "- 홈 화면(런처)이 바뀌어 있으면 맨 위에 빨간 안내가 뜹니다. [기본 홈 화면 되돌리기]로 설정 화면에서 기본 홈 앱을 다시 고르세요. (앱이 대신 바꿔 주지는 못합니다)\n"
                 + "- 폰에 원래 들어 있던 기본 앱(출고 시 설치)은 의심 목록에서 뺍니다.\n"
                 + "- 일시 중지는 백그라운드 실행을 끄는 임시 조치입니다. 앱이 다시 켜질 수 있고, 지금 화면에 떠 있는 앱은 못 끌 수 있습니다.\n"

@@ -123,4 +123,27 @@ final class Ui {
     static void center(TextView t) {
         t.setGravity(Gravity.CENTER);
     }
+
+    /** 화면이 상태바·내비게이션바 밑까지 확장돼도 내용이 가려지지 않게 여백을 준다. */
+    static View fit(View v) {
+        v.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+            @Override
+            public android.view.WindowInsets onApplyWindowInsets(View view, android.view.WindowInsets ins) {
+                int l, t, r, b;
+                if (android.os.Build.VERSION.SDK_INT >= 30) {
+                    android.graphics.Insets i = ins.getInsets(android.view.WindowInsets.Type.systemBars()
+                            | android.view.WindowInsets.Type.displayCutout());
+                    l = i.left; t = i.top; r = i.right; b = i.bottom;
+                } else {
+                    l = ins.getSystemWindowInsetLeft();
+                    t = ins.getSystemWindowInsetTop();
+                    r = ins.getSystemWindowInsetRight();
+                    b = ins.getSystemWindowInsetBottom();
+                }
+                view.setPadding(l, t, r, b);
+                return android.view.WindowInsets.CONSUMED;
+            }
+        });
+        return v;
+    }
 }

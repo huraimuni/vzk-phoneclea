@@ -20,6 +20,7 @@ public class EmergencyActivity extends Activity {
 
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
+        Ui.fit(root);
         root.setBackgroundColor(Ui.BG);
         root.addView(Ui.header(this, "응급 가이드", "폰이 멈추고 조작이 안 될 때 순서대로"));
 

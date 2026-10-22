@@ -63,7 +63,6 @@ final class Alerts {
                 .setContentText(shortText)
                 .setStyle(new Notification.BigTextStyle().bigText(sb.toString()))
                 .setContentIntent(pi)
-                .setFullScreenIntent(pi, true)
                 .setAutoCancel(true)
                 .addAction(new Notification.Action.Builder(
                         Icon.createWithResource(c, android.R.drawable.ic_menu_delete), "삭제", delPi).build());

@@ -26,8 +26,9 @@ public class StorageActivity extends Activity {
 
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
+        Ui.fit(root);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, "저장공간 관리", "겹치는 사진·영상과 연락처를 찾아 정리합니다"));
+        root.addView(Ui.header(this, "저장공간 관리", "저장공간 사용량을 보고 정리하러 갑니다"));
 
         ScrollView sv = new ScrollView(this);
         LinearLayout body = new LinearLayout(this);
@@ -45,29 +46,21 @@ public class StorageActivity extends Activity {
         blp.setMargins(0, Ui.dp(this, 6), 0, Ui.dp(this, 14));
         body.addView(bar, blp);
 
-        addCard(body, "중복 사진·영상",
-                "같은 내용인데 여러 번 저장된 사진과 영상을 묶어서 보여 줍니다. "
-                        + "남길 파일 1개만 빼고 나머지를 휴지통으로 보낼 수 있습니다. (휴지통 30일 보관, 안드로이드 11 이상)",
-                "중복 사진·영상 찾기", Ui.CORAL, new Runnable() {
+        addCard(body, "저장공간 정리",
+                "폰이 제공하는 저장공간 화면에서 큰 파일, 안 쓰는 앱, 중복 파일을 확인하고 정리할 수 있습니다. "
+                        + "삼성 폰은 [설정 > 배터리 및 디바이스 케어 > 저장공간]에서도 볼 수 있습니다.",
+                "폰 저장공간 화면 열기", Ui.CORAL, new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(StorageActivity.this, DupMediaActivity.class));
-                    }
-                });
-
-        addCard(body, "중복 연락처",
-                "같은 전화번호가 여러 연락처에 들어 있는 경우를 묶어서 보여 줍니다. "
-                        + "삭제하면 되돌릴 수 없으니, 먼저 구글 연락처 앱에서 내보내기(백업)를 해 두세요.",
-                "중복 연락처 찾기", Ui.GREEN, new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(StorageActivity.this, DupContactsActivity.class));
+                        Ui.openFirst(StorageActivity.this,
+                                new Intent(android.provider.Settings.ACTION_INTERNAL_STORAGE_SETTINGS),
+                                new Intent(android.provider.Settings.ACTION_SETTINGS));
                     }
                 });
 
         TextView note = Ui.text(this,
-                "참고\n- 같은 파일인지는 파일 크기와 내용 일부를 비교해서 추정합니다. 지우기 전에 미리보기로 꼭 확인하세요.\n"
-                        + "- 이 앱은 인터넷 권한이 없어서, 사진·연락처가 밖으로 나가지 않습니다.",
+                "참고\n- 이 앱은 사진·연락처 같은 개인 자료에 접근하지 않고, 저장공간 사용량만 보여 줍니다.\n"
+                        + "- 인터넷 권한이 없어서 폰 밖으로 아무것도 나가지 않습니다.",
                 13, Ui.GRAY, false);
         note.setLineSpacing(0, 1.2f);
         body.addView(note);

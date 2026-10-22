@@ -24,6 +24,7 @@ public class AdsGuideActivity extends Activity {
 
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
+        Ui.fit(root);
         root.setBackgroundColor(Ui.BG);
         root.addView(Ui.header(this, "광고·알고리즘 정리", "이상한 광고가 계속 나올 때 순서대로 따라 하세요"));
 

@@ -9,23 +9,12 @@
     <!-- 의심 앱의 백그라운드 실행을 일시 중지(종료)시키기 위한 권한 -->
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <!-- 저장공간 관리: 중복 사진·영상 찾기 (사용자가 기능을 열 때만 허용 요청) -->
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <!-- 저장공간 관리: 중복 연락처 찾기/삭제 -->
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <!-- 정확도 향상(선택): 사용자가 설정에서 허용하면 '한 번도 안 열어 본 앱'을 알 수 있음 -->
-    <uses-permission
-        android:name="android.permission.PACKAGE_USAGE_STATS"
-        tools:ignore="ProtectedPermissions" />
     <!-- 새 앱 설치 알림(선택) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!-- 상시 감시 모드(선택): 새 앱 설치를 바로 알려 주기 위한 상시 실행 -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application
         android:allowBackup="false"
@@ -51,23 +40,6 @@
         <activity
             android:name=".NotifActivity"
             android:exported="false" />
-        <service
-            android:name=".NotifListener"
-            android:exported="true"
-            android:label="VZK 폰클린 알림 정리"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".WatchService"
-            android:exported="false"
-            android:foregroundServiceType="specialUse">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="new_app_install_monitoring" />
-        </service>
         <receiver
             android:name=".BootReceiver"
             android:exported="true">
@@ -87,12 +59,6 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <activity
             android:name=".StorageActivity"
-            android:exported="false" />
-        <activity
-            android:name=".DupMediaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".DupContactsActivity"
             android:exported="false" />
     </application>
 </manifest>

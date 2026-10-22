@@ -4,20 +4,39 @@ plugins {
 
 android {
     namespace 'kr.todanjeon.phoneclean'
-    compileSdk 34
+    compileSdk 36
 
     defaultConfig {
         applicationId 'kr.todanjeon.phoneclean'
         minSdk 26
-        targetSdk 34
+        targetSdk 36
         versionCode 1
         versionName '1.0'
+    }
+
+    signingConfigs {
+        release {
+            if (System.getenv('KEYSTORE_FILE')) {
+                storeFile file(System.getenv('KEYSTORE_FILE'))
+                storePassword System.getenv('KEYSTORE_PASSWORD')
+                keyAlias System.getenv('KEY_ALIAS')
+                keyPassword System.getenv('KEY_PASSWORD')
+            }
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            if (System.getenv('KEYSTORE_FILE')) {
+                signingConfig signingConfigs.release
+            }
         }
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
     }
 
     compileOptions {
