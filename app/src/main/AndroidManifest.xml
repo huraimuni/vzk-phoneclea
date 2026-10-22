@@ -7,6 +7,13 @@
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <!-- 의심 앱의 백그라운드 실행을 일시 중지(종료)시키기 위한 권한 -->
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <!-- 저장공간 관리: 중복 사진·영상 찾기 (사용자가 기능을 열 때만 허용 요청) -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <!-- 저장공간 관리: 중복 연락처 찾기/삭제 -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <application
         android:allowBackup="false"
@@ -25,6 +32,15 @@
 
         <activity
             android:name=".AdsGuideActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StorageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DupMediaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DupContactsActivity"
             android:exported="false" />
     </application>
 </manifest>

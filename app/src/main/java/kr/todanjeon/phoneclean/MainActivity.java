@@ -3,6 +3,8 @@ package kr.todanjeon.phoneclean;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,6 +33,8 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -60,6 +64,7 @@ public class MainActivity extends Activity {
     private Button btnPause;
     private CheckBox cbKeep;
     private TextView homeBanner;
+    private final Set<String> safeSet = new HashSet<>();
     private final Set<String> paused = new HashSet<>();
     private final Handler handler = new Handler(Looper.getMainLooper());
     private boolean resumed = false;
@@ -78,6 +83,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loadSafe();
         buildUi();
         startScan();
         SharedPreferences sp = getSharedPreferences(PREFS, MODE_PRIVATE);
@@ -173,7 +179,7 @@ public class MainActivity extends Activity {
                 applyFilter();
             }
         });
-        Button btnSelect = Ui.button(this, "의심 앱 모두 선택", Color.rgb(255, 226, 214), Ui.CORAL_DARK);
+        Button btnSelect = Ui.button(this, "의심 앱 선택", Color.rgb(255, 226, 214), Ui.CORAL_DARK);
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,7 +192,19 @@ public class MainActivity extends Activity {
             }
         });
         row1.addView(btnFilter, Ui.weight(this, 3));
+        Button btnClear = Ui.button(this, "선택 해제", Color.rgb(226, 230, 244), Ui.NAVY);
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selected.clear();
+                refreshList();
+            }
+        });
+        btnFilter.setTextSize(13);
+        btnSelect.setTextSize(13);
+        btnClear.setTextSize(13);
         row1.addView(btnSelect, Ui.weight(this, 3));
+        row1.addView(btnClear, Ui.weight(this, 3));
         root.addView(row1);
 
         listView = new ListView(this);
@@ -218,25 +236,28 @@ public class MainActivity extends Activity {
         LinearLayout row2 = new LinearLayout(this);
         row2.setOrientation(LinearLayout.HORIZONTAL);
         row2.setPadding(Ui.dp(this, 8), 0, Ui.dp(this, 8), Ui.dp(this, 6));
-        Button b1 = Ui.button(this, "광고·알고리즘 정리", Ui.CORAL, Color.WHITE);
+        Button b1 = Ui.button(this, "안전 앱으로 표시", Ui.GREEN, Color.WHITE);
+        b1.setTextSize(13);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, AdsGuideActivity.class));
+                markSelectedSafe();
             }
         });
-        Button b2 = Ui.button(this, "결과 공유", Ui.GREEN, Color.WHITE);
+        Button b2 = Ui.button(this, "저장공간 관리", Ui.CORAL, Color.WHITE);
+        b2.setTextSize(13);
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shareReport();
+                startActivity(new Intent(MainActivity.this, StorageActivity.class));
             }
         });
-        Button b3 = Ui.button(this, "도움말", Ui.NAVY, Color.WHITE);
+        Button b3 = Ui.button(this, "더보기", Ui.NAVY, Color.WHITE);
+        b3.setTextSize(13);
         b3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showHelp();
+                showMore();
             }
         });
         row2.addView(b1, Ui.weight(this, 3));
@@ -260,6 +281,16 @@ public class MainActivity extends Activity {
                     public void run() {
                         all.clear();
                         all.addAll(result);
+                        for (AppEntry e : all) e.safe = safeSet.contains(e.pkg);
+                        Collections.sort(all, new Comparator<AppEntry>() {
+                            @Override
+                            public int compare(AppEntry x, AppEntry y) {
+                                int sx = x.safe ? -1 : x.score;
+                                int sy = y.safe ? -1 : y.score;
+                                if (sx != sy) return sy - sx;
+                                return Long.compare(y.installTime, x.installTime);
+                            }
+                        });
                         // 이미 지워진 앱은 선택에서 뺀다
                         Set<String> present = new HashSet<>();
                         for (AppEntry e : all) present.add(e.pkg);
@@ -431,7 +462,7 @@ public class MainActivity extends Activity {
         Set<String> keep = Scanner.essentialPackages(this);
         List<String> out = new ArrayList<>();
         for (AppEntry e : all) {
-            if (e.preloaded || keep.contains(e.pkg)) continue;
+            if (e.preloaded || e.safe || keep.contains(e.pkg)) continue;
             out.add(e.pkg);
         }
         return out;
@@ -474,7 +505,7 @@ public class MainActivity extends Activity {
         new AlertDialog.Builder(this)
                 .setTitle("일시 중지 명령을 보냈습니다")
                 .setMessage("직접 설치한 앱 " + pkgs.size() + "개의 백그라운드 실행을 멈추게 했습니다. "
-                        + "(시스템 앱, 키보드·홈 화면·문자·전화 앱은 제외)\n\n"
+                        + "(시스템 앱, 안전 표시한 앱, 키보드·홈 화면·문자·전화 앱은 제외)\n\n"
                         + "폰이 조금 가벼워졌는지 확인해 보세요. 이건 임시 조치라서, 앱이 다시 켜질 수 있습니다. "
                         + "카톡 같은 앱은 새 알림이 오면 다시 켜집니다. 다시 느려지면 한 번 더 누르세요.\n\n"
                         + "다음 단계로 지울 앱을 고르시겠어요?")
@@ -492,6 +523,126 @@ public class MainActivity extends Activity {
                 })
                 .setNegativeButton("나중에", null)
                 .show();
+    }
+
+    // ---------------------------------------------------------------- 안전 표시 / 더보기 / AI
+
+    private void loadSafe() {
+        try {
+            Set<String> st = getSharedPreferences(PREFS, MODE_PRIVATE).getStringSet("safe_pkgs", null);
+            safeSet.clear();
+            if (st != null) safeSet.addAll(st);
+        } catch (Exception ignored) {
+        }
+    }
+
+    private void saveSafe() {
+        getSharedPreferences(PREFS, MODE_PRIVATE).edit()
+                .putStringSet("safe_pkgs", new HashSet<>(safeSet)).apply();
+    }
+
+    private void setSafe(List<String> pkgs, boolean safe) {
+        for (String p : pkgs) {
+            if (safe) safeSet.add(p);
+            else safeSet.remove(p);
+        }
+        saveSafe();
+        selected.removeAll(pkgs);
+        for (AppEntry e : all) e.safe = safeSet.contains(e.pkg);
+        Collections.sort(all, new Comparator<AppEntry>() {
+            @Override
+            public int compare(AppEntry x, AppEntry y) {
+                int sx = x.safe ? -1 : x.score;
+                int sy = y.safe ? -1 : y.score;
+                if (sx != sy) return sy - sx;
+                return Long.compare(y.installTime, x.installTime);
+            }
+        });
+        applyFilter();
+        Ui.toast(this, pkgs.size() + "개 앱을 " + (safe ? "안전한 앱으로 표시했습니다." : "안전 표시에서 뺐습니다."));
+    }
+
+    private void markSelectedSafe() {
+        if (selected.isEmpty()) {
+            Ui.toast(this, "안전한 앱을 먼저 체크해 주세요. 목록 왼쪽 네모 칸을 누르면 됩니다.");
+            return;
+        }
+        final List<String> pkgs = new ArrayList<>(selected);
+        new AlertDialog.Builder(this)
+                .setTitle(pkgs.size() + "개를 안전한 앱으로 표시할까요?")
+                .setMessage("내가 알고 쓰는 앱만 표시하세요.\n표시한 앱은 의심 목록에서 빠지고, 일시 중지와 삭제 대상에서도 제외됩니다. "
+                        + "[더보기 > 안전 표시한 앱 관리]에서 언제든 되돌릴 수 있습니다.")
+                .setPositiveButton("안전 표시", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setSafe(pkgs, true);
+                    }
+                })
+                .setNegativeButton("취소", null)
+                .show();
+    }
+
+    private void manageSafe() {
+        final List<AppEntry> list = new ArrayList<>();
+        for (AppEntry e : all) if (e.safe) list.add(e);
+        if (list.isEmpty()) {
+            Ui.toast(this, "안전 표시한 앱이 없습니다.");
+            return;
+        }
+        final String[] names = new String[list.size()];
+        final boolean[] on = new boolean[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            names[i] = list.get(i).label;
+            on[i] = false;
+        }
+        new AlertDialog.Builder(this)
+                .setTitle("안전 표시한 앱 (해제할 앱을 체크)")
+                .setMultiChoiceItems(names, on, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        on[which] = isChecked;
+                    }
+                })
+                .setPositiveButton("안전 표시 해제", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        List<String> rm = new ArrayList<>();
+                        for (int i = 0; i < on.length; i++) if (on[i]) rm.add(list.get(i).pkg);
+                        if (!rm.isEmpty()) setSafe(rm, false);
+                    }
+                })
+                .setNegativeButton("닫기", null)
+                .show();
+    }
+
+    private void showMore() {
+        final String[] items = {"광고·알고리즘 정리", "안전 표시한 앱 관리", "결과 공유 (카카오톡 등)", "도움말"};
+        new AlertDialog.Builder(this)
+                .setTitle("더보기")
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) startActivity(new Intent(MainActivity.this, AdsGuideActivity.class));
+                        else if (which == 1) manageSafe();
+                        else if (which == 2) shareReport();
+                        else showHelp();
+                    }
+                })
+                .show();
+    }
+
+    /** 앱 서버로 아무것도 보내지 않는다. 질문 글을 복사해 주고 네이버 AI(클로바X)를 브라우저로 연다. */
+    private void askAi(AppEntry e) {
+        String q = "안드로이드 앱 '" + e.label + "' (패키지명: " + e.pkg + ")이 안전한 앱인가요? "
+                + "유튜브 광고를 누르다가 설치된 것 같은데, 지워도 되는지 알려 주세요.";
+        try {
+            ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            cm.setPrimaryClip(ClipData.newPlainText("질문", q));
+            Ui.toast(this, "질문을 복사했습니다. 열리는 화면에 붙여넣기 하세요.");
+        } catch (Exception ex) {
+            Ui.toast(this, "복사하지 못했습니다. 앱 이름으로 직접 물어보세요.");
+        }
+        Ui.openUrl(this, "https://clova-x.naver.com");
     }
 
     // ---------------------------------------------------------------- 홈 화면(런처)
@@ -614,7 +765,26 @@ public class MainActivity extends Activity {
                         + Uri.encode(e.label + " 앱"));
             }
         });
-        for (Button b : new Button[]{del, info2, naver, google}) {
+        Button safeBtn = Ui.button(this, e.safe ? "안전 표시 해제" : "안전한 앱으로 표시 (목록에서 제외)",
+                Color.rgb(222, 245, 232), Color.rgb(10, 110, 60));
+        safeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+                List<String> one = new ArrayList<>();
+                one.add(e.pkg);
+                setSafe(one, !e.safe);
+            }
+        });
+        Button aiBtn = Ui.button(this, "AI에게 물어보기 (질문 복사 후 네이버 클로바X 열기)",
+                Color.rgb(237, 231, 255), Color.rgb(80, 50, 170));
+        aiBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                askAi(e);
+            }
+        });
+        for (Button b : new Button[]{del, safeBtn, info2, aiBtn, naver, google}) {
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(0, Ui.dp(this, 4), 0, Ui.dp(this, 4));
@@ -791,6 +961,8 @@ public class MainActivity extends Activity {
                 + "알아두세요\n"
                 + "- 바이러스를 잡는 백신이 아닙니다. 악성 파일 DB가 없고, 징후만 보고 판단합니다.\n"
                 + "- 징후가 있어도 정상 앱일 수 있습니다. 모르는 앱만 지우세요.\n"
+                + "- 내가 아는 안전한 앱은 체크한 뒤 [안전 앱으로 표시]를 누르면 목록·일시 중지·삭제에서 빠집니다.\n"
+                + "- [저장공간 관리]에서 중복 사진·영상, 중복 연락처를 정리할 수 있습니다. (필요할 때만 권한을 묻습니다)\n"
                 + "- 홈 화면(런처)이 바뀌어 있으면 맨 위에 빨간 안내가 뜹니다. [기본 홈 화면 되돌리기]로 설정 화면에서 기본 홈 앱을 다시 고르세요. (앱이 대신 바꿔 주지는 못합니다)\n"
                 + "- 폰에 원래 들어 있던 기본 앱(출고 시 설치)은 의심 목록에서 뺍니다.\n"
                 + "- 일시 중지는 백그라운드 실행을 끄는 임시 조치입니다. 앱이 다시 켜질 수 있고, 지금 화면에 떠 있는 앱은 못 끌 수 있습니다.\n"
