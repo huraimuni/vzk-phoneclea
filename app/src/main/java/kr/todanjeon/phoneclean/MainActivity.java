@@ -71,6 +71,7 @@ public class MainActivity extends Activity {
     private final Set<String> safeSet = new HashSet<>();
     private final Set<String> paused = new HashSet<>();
     private final Handler handler = new Handler(Looper.getMainLooper());
+    private android.widget.FrameLayout rootFrame;
     private boolean resumed = false;
     private final Runnable keepTask = new Runnable() {
         @Override
@@ -89,6 +90,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         loadSafe();
         buildUi();
+        if (savedInstanceState == null && rootFrame != null) showSplash(rootFrame);
         startScan();
         SharedPreferences sp = getSharedPreferences(PREFS, MODE_PRIVATE);
         if (!sp.getBoolean("seen_help", false)) {
@@ -273,7 +275,31 @@ public class MainActivity extends Activity {
         row2.addView(b3, Ui.weight(this, 3));
         root.addView(row2);
 
-        setContentView(root);
+        android.widget.FrameLayout frame = new android.widget.FrameLayout(this);
+        frame.addView(root, new android.widget.FrameLayout.LayoutParams(
+                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
+                android.widget.FrameLayout.LayoutParams.MATCH_PARENT));
+        setContentView(frame);
+        rootFrame = frame;
+    }
+
+    /** 앱을 처음 켤 때 로고를 1.2초쯤 보여 준 뒤 서서히 사라지게 한다. */
+    private void showSplash(final android.widget.FrameLayout frame) {
+        final SplashView sv = new SplashView(this);
+        frame.addView(sv, new android.widget.FrameLayout.LayoutParams(
+                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
+                android.widget.FrameLayout.LayoutParams.MATCH_PARENT));
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sv.animate().alpha(0f).setDuration(350).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        frame.removeView(sv);
+                    }
+                }).start();
+            }
+        }, 1200);
     }
 
     private void startScan() {
