@@ -35,12 +35,21 @@ jobs:
             echo "signing=off (unsigned AAB)"
           fi
       - name: Build AAB (store) and test APK
-        run: gradle bundleRelease assembleDebug --no-daemon
+        run: |
+          if [ -n "$KEYSTORE_FILE" ]; then
+            gradle bundleRelease assembleRelease --no-daemon
+          else
+            gradle bundleRelease assembleDebug --no-daemon
+          fi
       - name: Collect
         run: |
           mkdir out
           cp app/build/outputs/bundle/release/app-release.aab out/VZK_PhoneClean_store.aab
-          cp app/build/outputs/apk/debug/app-debug.apk out/VZK_PhoneClean_store_test.apk
+          if [ -n "$KEYSTORE_FILE" ]; then
+            cp app/build/outputs/apk/release/app-release.apk out/VZK_PhoneClean_store_test.apk
+          else
+            cp app/build/outputs/apk/debug/app-debug.apk out/VZK_PhoneClean_store_test.apk
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: VZK-PhoneClean-store
