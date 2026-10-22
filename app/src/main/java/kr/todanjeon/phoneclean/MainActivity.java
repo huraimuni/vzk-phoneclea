@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -64,6 +65,9 @@ public class MainActivity extends Activity {
     private Button btnPause;
     private CheckBox cbKeep;
     private TextView homeBanner;
+    private TextView usageHint;
+    private boolean lastUsageState = false;
+    private static final int REQ_NOTI = 31;
     private final Set<String> safeSet = new HashSet<>();
     private final Set<String> paused = new HashSet<>();
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -106,6 +110,10 @@ public class MainActivity extends Activity {
         summary = Ui.text(this, "앱을 분석하는 중입니다...", 15, Ui.INK, true);
         summary.setPadding(Ui.dp(this, 14), Ui.dp(this, 10), Ui.dp(this, 14), Ui.dp(this, 6));
         root.addView(summary);
+
+        usageHint = Ui.text(this, "", 12, Ui.GRAY, false);
+        usageHint.setPadding(Ui.dp(this, 14), 0, Ui.dp(this, 14), Ui.dp(this, 2));
+        root.addView(usageHint);
 
         btnPause = Ui.button(this, "1단계 ▸ 원클릭 전체 일시 중지", Ui.CORAL, Color.WHITE);
         btnPause.setTextSize(19);
@@ -285,8 +293,8 @@ public class MainActivity extends Activity {
                         Collections.sort(all, new Comparator<AppEntry>() {
                             @Override
                             public int compare(AppEntry x, AppEntry y) {
-                                int sx = x.safe ? -1 : x.score;
-                                int sy = y.safe ? -1 : y.score;
+                                int sx = x.sortScore();
+                                int sy = y.sortScore();
                                 if (sx != sy) return sy - sx;
                                 return Long.compare(y.installTime, x.installTime);
                             }
@@ -315,6 +323,10 @@ public class MainActivity extends Activity {
         summary.setText("직접 설치한 앱 " + all.size() + "개 중  위험 의심 " + high + "개 / 주의 " + warn + "개");
         btnFilter.setText(onlySuspicious ? "전체 앱 보기" : "의심 앱만 보기");
         updateHomeBanner();
+        boolean ua = Scanner.hasUsageAccess(this);
+        lastUsageState = ua;
+        usageHint.setText(ua ? "사용 기록 허용됨: 한 번도 안 열어 본 앱까지 판정에 반영합니다."
+                : "정확도를 높이려면 [더보기 > 사용 기록 허용]을 켜 보세요. (선택)");
         refreshList();
     }
 
@@ -404,7 +416,9 @@ public class MainActivity extends Activity {
 
             name.setText(e.label);
             String date = e.installTime > 0 ? dateFmt.format(new Date(e.installTime)) : "날짜 모름";
-            meta.setText("[" + e.levelText() + "]  " + date + " 설치" + (paused.contains(e.pkg) ? "  [정지 명령 보냄]" : ""));
+            String tg = e.tagText();
+            meta.setText("[" + e.levelText() + "]  " + date + " 설치" + (paused.contains(e.pkg) ? "  [정지 명령 보냄]" : "")
+                    + (tg.isEmpty() ? "" : "\n" + tg));
             meta.setTextColor(levelColor(e));
             if (e.reasons.isEmpty()) {
                 why.setText(e.preloaded ? "출고 시 기본 설치된 앱으로 보임" : (e.trusted ? "정상 스토어에서 설치된 알려진 앱" : "특이 징후 없음"));
@@ -444,6 +458,7 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         resumed = true;
+        if (Scanner.hasUsageAccess(this) != lastUsageState && !scanning && !all.isEmpty()) startScan();
         if (cbKeep != null && cbKeep.isChecked()) {
             handler.removeCallbacks(keepTask);
             handler.postDelayed(keepTask, 2000);
@@ -552,8 +567,8 @@ public class MainActivity extends Activity {
         Collections.sort(all, new Comparator<AppEntry>() {
             @Override
             public int compare(AppEntry x, AppEntry y) {
-                int sx = x.safe ? -1 : x.score;
-                int sy = y.safe ? -1 : y.score;
+                int sx = x.sortScore();
+                int sy = y.sortScore();
                 if (sx != sy) return sy - sx;
                 return Long.compare(y.installTime, x.installTime);
             }
@@ -616,19 +631,76 @@ public class MainActivity extends Activity {
     }
 
     private void showMore() {
-        final String[] items = {"광고·알고리즘 정리", "안전 표시한 앱 관리", "결과 공유 (카카오톡 등)", "도움말"};
+        final String[] items = {"응급 가이드 (폰이 멈췄을 때)", "광고·알고리즘 정리", "안전 표시한 앱 관리",
+                "사용 기록 허용 (정확도 향상)",
+                watchOn() ? "새 앱 설치 알림 끄기" : "새 앱 설치 알림 켜기",
+                "결과 공유 (카카오톡 등)", "도움말"};
         new AlertDialog.Builder(this)
                 .setTitle("더보기")
                 .setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) startActivity(new Intent(MainActivity.this, AdsGuideActivity.class));
-                        else if (which == 1) manageSafe();
-                        else if (which == 2) shareReport();
+                        if (which == 0) startActivity(new Intent(MainActivity.this, EmergencyActivity.class));
+                        else if (which == 1) startActivity(new Intent(MainActivity.this, AdsGuideActivity.class));
+                        else if (which == 2) manageSafe();
+                        else if (which == 3) openUsageSettings();
+                        else if (which == 4) toggleWatch();
+                        else if (which == 5) shareReport();
                         else showHelp();
                     }
                 })
                 .show();
+    }
+
+    private void openUsageSettings() {
+        new AlertDialog.Builder(this)
+                .setTitle("사용 기록 허용")
+                .setMessage("다음 화면에서 목록 중 [VZK 폰클린]을 눌러 [사용 기록 접근 허용]을 켜 주세요.\n\n"
+                        + "이 권한으로 '설치하고 한 번도 열어 보지 않은 앱', '오래 안 쓴 앱', '최근에 내가 쓴 앱(안전 후보)'을 가려냅니다. "
+                        + "사용 기록은 이 폰 안에서만 쓰이고 밖으로 나가지 않습니다.")
+                .setPositiveButton("설정 열기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Ui.openFirst(MainActivity.this, new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS), null);
+                    }
+                })
+                .setNegativeButton("취소", null)
+                .show();
+    }
+
+    private boolean watchOn() {
+        return getSharedPreferences(PREFS, MODE_PRIVATE).getBoolean("watch_on", false);
+    }
+
+    private void toggleWatch() {
+        if (watchOn()) {
+            NewAppJob.cancel(this);
+            getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean("watch_on", false).apply();
+            Ui.toast(this, "새 앱 설치 알림을 껐습니다.");
+            return;
+        }
+        if (Build.VERSION.SDK_INT >= 33
+                && checkSelfPermission("android.permission.POST_NOTIFICATIONS") != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{"android.permission.POST_NOTIFICATIONS"}, REQ_NOTI);
+            return;
+        }
+        enableWatch();
+    }
+
+    private void enableWatch() {
+        NewAppJob.saveBaseline(this);
+        NewAppJob.schedule(this);
+        getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean("watch_on", true).apply();
+        Ui.toast(this, "켰습니다. 지금부터 새로 설치되는 앱을 약 15분 안에 알려 드립니다. (설치를 막지는 못하고, 설치된 뒤에 알립니다)");
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQ_NOTI) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) enableWatch();
+            else Ui.toast(this, "알림 권한이 없어서 새 앱 알림을 켤 수 없습니다.");
+        }
     }
 
     /** 앱 서버로 아무것도 보내지 않는다. 질문 글을 복사해 주고 네이버 AI(클로바X)를 브라우저로 연다. */
@@ -701,7 +773,7 @@ public class MainActivity extends Activity {
         box.setPadding(Ui.dp(this, 20), Ui.dp(this, 14), Ui.dp(this, 20), Ui.dp(this, 6));
         sv.addView(box);
 
-        TextView lv = Ui.text(this, "판정: " + e.levelText(), 16, levelColor(e), true);
+        TextView lv = Ui.text(this, "판정: " + e.levelText() + (e.tagText().isEmpty() ? "" : "  (" + e.tagText() + ")"), 16, levelColor(e), true);
         box.addView(lv);
         String date = e.installTime > 0 ? dateFmt.format(new Date(e.installTime)) : "날짜 모름";
         TextView info = Ui.text(this,
@@ -961,6 +1033,10 @@ public class MainActivity extends Activity {
                 + "알아두세요\n"
                 + "- 바이러스를 잡는 백신이 아닙니다. 악성 파일 DB가 없고, 징후만 보고 판단합니다.\n"
                 + "- 징후가 있어도 정상 앱일 수 있습니다. 모르는 앱만 지우세요.\n"
+                + "- 판정 이름: 권한 장악형 / 광고 도배형 / 방치형 / 한 패거리형(같은 개발사) / 설치 도우미형 / 도구·겁주기 위장형. 근거가 2개 이상 겹치면 [위험 의심]입니다.\n"
+                + "- 최근 7일 안에 내가 직접 연 앱은 [안전 후보]로 내립니다. (사용 기록 허용이 켜져 있을 때)\n"
+                + "- [더보기 > 새 앱 설치 알림]을 켜면 새 앱이 깔린 뒤 약 15분 안에 알려 줍니다.\n"
+                + "- [더보기 > 응급 가이드]에 폰이 멈췄을 때 안전 모드 등의 순서가 있습니다.\n"
                 + "- 내가 아는 안전한 앱은 체크한 뒤 [안전 앱으로 표시]를 누르면 목록·일시 중지·삭제에서 빠집니다.\n"
                 + "- [저장공간 관리]에서 중복 사진·영상, 중복 연락처를 정리할 수 있습니다. (필요할 때만 권한을 묻습니다)\n"
                 + "- 홈 화면(런처)이 바뀌어 있으면 맨 위에 빨간 안내가 뜹니다. [기본 홈 화면 되돌리기]로 설정 화면에서 기본 홈 앱을 다시 고르세요. (앱이 대신 바꿔 주지는 못합니다)\n"

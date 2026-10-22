@@ -8,13 +8,25 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.InstallSourceInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ServiceInfo;
+import android.content.pm.SigningInfo;
+import android.content.pm.Signature;
 import android.content.pm.ResolveInfo;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.os.Build;
+import android.os.PowerManager;
+import android.os.Process;
 import android.provider.Settings;
 import android.provider.Telephony;
 import android.telecom.TelecomManager;
 
+import java.io.File;
+import java.security.MessageDigest;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -61,7 +73,91 @@ final class Scanner {
             "파일 관리", "file manager", "file explorer"
     };
 
+    /** 광고 SDK 패키지 이름 (광고가 있다는 뜻일 뿐, 그 자체가 악성이라는 뜻은 아님) */
+    private static final String[] AD_SDKS = {
+            "com.google.android.gms.ads", "com.facebook.ads", "com.unity3d.services.ads", "com.applovin",
+            "com.ironsource", "com.mbridge", "com.vungle", "com.chartboost", "com.inmobi", "com.adcolony",
+            "com.bytedance.sdk.openadsdk", "com.mopub", "com.startapp", "net.pubnative", "com.fyber",
+            "com.tapjoy", "com.smaato", "com.kakao.adfit", "com.fsn.cauly", "com.igaworks",
+            "com.mocoplex.adlib", "com.buzzvil", "com.pincrux", "com.nextapps"
+    };
+
+    private static final String[] SENSITIVE_PERMS = {
+            "android.permission.READ_CONTACTS", "android.permission.READ_SMS", "android.permission.RECEIVE_SMS",
+            "android.permission.READ_CALL_LOG", "android.permission.ACCESS_FINE_LOCATION",
+            "android.permission.ACCESS_BACKGROUND_LOCATION", "android.permission.RECORD_AUDIO"
+    };
+
     private Scanner() {
+    }
+
+    private static boolean opAllowed(Context ctx, String op, int uid, String pkg) {
+        try {
+            AppOpsManager ops = (AppOpsManager) ctx.getSystemService(Context.APP_OPS_SERVICE);
+            return ops.checkOpNoThrow(op, uid, pkg) == AppOpsManager.MODE_ALLOWED;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /** 사용 기록 접근이 허용돼 있는가 (설정에서 사용자가 직접 켜는 권한) */
+    static boolean hasUsageAccess(Context ctx) {
+        return opAllowed(ctx, "android:get_usage_stats", Process.myUid(), ctx.getPackageName());
+    }
+
+    private static Map<String, Long> lastUsedMap(Context ctx, long now) {
+        Map<String, Long> out = new HashMap<>();
+        try {
+            UsageStatsManager usm = (UsageStatsManager) ctx.getSystemService(Context.USAGE_STATS_SERVICE);
+            Map<String, UsageStats> m = usm.queryAndAggregateUsageStats(now - 90 * DAY, now);
+            if (m != null) {
+                for (Map.Entry<String, UsageStats> en : m.entrySet()) {
+                    out.put(en.getKey(), en.getValue().getLastTimeUsed());
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return out;
+    }
+
+    private static int countAdSdks(PackageManager pm, String pkg) {
+        Set<String> found = new HashSet<>();
+        try {
+            PackageInfo pi = pm.getPackageInfo(pkg, PackageManager.GET_ACTIVITIES
+                    | PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS);
+            if (pi.activities != null) for (ActivityInfo a : pi.activities) matchAd(a.name, found);
+            if (pi.services != null) for (ServiceInfo sv : pi.services) matchAd(sv.name, found);
+            if (pi.receivers != null) for (ActivityInfo r : pi.receivers) matchAd(r.name, found);
+        } catch (Exception ignored) {
+        }
+        return found.size();
+    }
+
+    private static void matchAd(String name, Set<String> found) {
+        if (name == null) return;
+        for (String p : AD_SDKS) {
+            if (name.startsWith(p)) {
+                found.add(p);
+                return;
+            }
+        }
+    }
+
+    private static String signerHash(PackageManager pm, String pkg) {
+        if (Build.VERSION.SDK_INT < 28) return null;
+        try {
+            PackageInfo pi = pm.getPackageInfo(pkg, PackageManager.GET_SIGNING_CERTIFICATES);
+            SigningInfo si = pi.signingInfo;
+            if (si == null) return null;
+            Signature[] sigs = si.hasMultipleSigners() ? si.getApkContentsSigners() : si.getSigningCertificateHistory();
+            if (sigs == null || sigs.length == 0) return null;
+            byte[] d = MessageDigest.getInstance("SHA-256").digest(sigs[0].toByteArray());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : d) sb.append(String.format("%02x", b));
+            return sb.toString();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /** 지금 기본 홈 화면(런처) 앱. 지정 안 돼 있으면 null */
@@ -236,6 +332,10 @@ final class Scanner {
         } catch (Exception ignored) {
         }
 
+        Map<String, Long> usage = hasUsageAccess(ctx) ? lastUsedMap(ctx, now) : new HashMap<String, Long>();
+        boolean usageKnown = !usage.isEmpty();
+        PowerManager power = (PowerManager) ctx.getSystemService(Context.POWER_SERVICE);
+
         List<AppEntry> list = new ArrayList<>();
         List<ApplicationInfo> apps = pm.getInstalledApplications(0);
         for (ApplicationInfo ai : apps) {
@@ -299,23 +399,28 @@ final class Scanner {
             }
 
             int score = 0;
+            int hard = 0;
             if (sideload && !preloaded) {
                 score += 3;
+                hard++;
                 e.reasons.add("플레이스토어·갤럭시 스토어가 아닌 곳에서 설치됨");
             }
 
             if (e.isHome) {
                 score += 4;
+                hard++;
                 e.reasons.add("홈 화면(런처)이 폰 기본 앱이 아닌 이 앱으로 바뀌어 있음");
             }
 
             if (e.accEnabled) {
                 score += 4;
+                hard++;
                 e.reasons.add("접근성 권한이 켜져 있음 (화면을 읽고 대신 조작할 수 있음)");
             }
 
             if (e.adminActive) {
                 score += 4;
+                hard++;
                 e.reasons.add("기기 관리자로 등록됨 (그냥은 삭제가 안 됨)");
             }
 
@@ -324,9 +429,11 @@ final class Scanner {
                 e.reasons.add("알림 읽기 권한이 켜져 있음");
             }
 
-            if (perms.contains("android.permission.SYSTEM_ALERT_WINDOW")
-                    && overlayGranted(ctx, ai.uid, ai.packageName)) {
+            e.overlay = perms.contains("android.permission.SYSTEM_ALERT_WINDOW")
+                    && overlayGranted(ctx, ai.uid, ai.packageName);
+            if (e.overlay) {
                 score += 2;
+                hard++;
                 e.reasons.add("다른 앱 위에 화면을 띄울 수 있음 (광고 팝업에 쓰이는 권한)");
             }
 
@@ -335,22 +442,81 @@ final class Scanner {
                 e.reasons.add("실행 아이콘이 없는 앱 (화면에 안 보이고 숨어 있을 수 있음)");
             }
 
-            if (perms.contains("android.permission.REQUEST_INSTALL_PACKAGES")) {
-                score += 1;
-                e.reasons.add("다른 앱을 설치할 수 있는 권한을 요청함");
+            boolean requestsInstall = perms.contains("android.permission.REQUEST_INSTALL_PACKAGES");
+            e.installAllowed = requestsInstall
+                    && opAllowed(ctx, "android:request_install_packages", ai.uid, ai.packageName);
+            if (e.installAllowed) {
+                score += 3;
+                hard++;
+                e.reasons.add("'다른 앱 설치 허용'이 켜져 있음 (또 다른 앱을 깔 수 있음)");
             }
+            long apkSize = 0;
+            try {
+                apkSize = new File(ai.sourceDir).length();
+            } catch (Exception ignored) {
+            }
+            if (requestsInstall && apkSize > 0 && apkSize < 3L * 1024 * 1024) {
+                e.tiny = true;
+                score += 2;
+                e.reasons.add("아주 작은 파일인데 다른 앱 설치 권한을 요청함");
+            }
+
             if (perms.contains("android.permission.RECEIVE_SMS") || perms.contains("android.permission.READ_SMS")) {
                 score += 1;
                 e.reasons.add("문자 읽기·수신 권한을 요청함");
             }
 
             String hay = (e.label + " " + e.pkg).toLowerCase(Locale.ROOT);
-            if (containsAny(hay, KW_STRONG)) {
+            boolean strong = containsAny(hay, KW_STRONG);
+            boolean weak = !strong && containsAny(hay, KW_WEAK);
+            if (strong) {
+                e.keyStrong = true;
                 score += 2;
                 e.reasons.add("겁주기·청소 앱에 흔한 이름 (바이러스·백신·청소·최적화 등)");
-            } else if (containsAny(hay, KW_WEAK)) {
+            } else if (weak) {
                 score += 1;
                 e.reasons.add("광고로 자주 깔리는 도구형 앱 이름 (PDF·뷰어·스캐너 등)");
+            }
+
+            int sens = 0;
+            for (String sp : SENSITIVE_PERMS) if (perms.contains(sp)) sens++;
+            if ((strong || weak) && sens >= 1) {
+                e.mismatch = true;
+                score += 2;
+                hard++;
+                e.reasons.add("이름은 단순 도구인데 연락처·문자·위치·마이크 같은 권한을 요청함");
+            }
+
+            e.adCount = countAdSdks(pm, ai.packageName);
+            if (e.adCount >= 3) {
+                score += 2;
+                hard++;
+                e.reasons.add("광고 프로그램(SDK)이 " + e.adCount + "종 들어 있음");
+            } else if (e.adCount == 2) {
+                score += 1;
+                e.reasons.add("광고 프로그램(SDK)이 2종 들어 있음");
+            }
+
+            boolean boot = perms.contains("android.permission.RECEIVE_BOOT_COMPLETED");
+            boolean batteryReq = perms.contains("android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS");
+            boolean fullScreen = perms.contains("android.permission.USE_FULL_SCREEN_INTENT");
+            if (e.adCount >= 1 && boot && (e.overlay || fullScreen || batteryReq)) {
+                e.bootCombo = true;
+                score += 2;
+                hard++;
+                e.reasons.add("광고 + 폰 켤 때 자동 실행 + 화면 위 표시·상시 실행 조합");
+            }
+            try {
+                if (batteryReq && power != null && power.isIgnoringBatteryOptimizations(ai.packageName)) {
+                    score += 1;
+                    e.reasons.add("배터리 제한이 풀려서 항상 켜져 있도록 허용됨");
+                }
+            } catch (Exception ignored) {
+            }
+
+            if (ai.targetSdkVersion < 23 && sideload && !preloaded) {
+                score += 2;
+                e.reasons.add("오래된 방식으로 만든 앱 (권한 창 없이 권한이 한꺼번에 부여됨)");
             }
 
             if (e.installTime > 0 && now - e.installTime <= 30 * DAY) {
@@ -358,7 +524,34 @@ final class Scanner {
                 e.reasons.add("최근 30일 안에 설치됨");
             }
 
+            if (usageKnown) {
+                e.usageKnown = true;
+                Long lu = usage.get(ai.packageName);
+                long last = lu == null ? 0 : lu;
+                e.lastUsed = last;
+                if (last >= now - 7 * DAY) {
+                    e.usedRecently = true;
+                } else if (last == 0) {
+                    if (e.installTime >= now - 90 * DAY && now - e.installTime > 6L * 60 * 60 * 1000) {
+                        e.neverOpened = true;
+                        score += 3;
+                        hard++;
+                        e.reasons.add("설치한 뒤 한 번도 열어 보지 않음 (광고로 자동 설치된 앱의 흔한 특징)");
+                    } else {
+                        e.longUnused = true;
+                        score += 1;
+                        e.reasons.add("최근 90일 동안 한 번도 쓰지 않음");
+                    }
+                } else if (now - last > 60 * DAY) {
+                    e.longUnused = true;
+                    score += 1;
+                    e.reasons.add("60일 넘게 쓰지 않음");
+                }
+            }
+
+            e.signer = signerHash(pm, ai.packageName);
             e.score = score;
+            e.hard = hard;
             list.add(e);
         }
 
@@ -375,10 +568,48 @@ final class Scanner {
             }
         }
 
+        // 같은 개발사(서명)가 만든 앱이 3개 이상이고, 그 앱에 다른 의심 근거가 있으면 가산
+        Map<String, List<AppEntry>> bySigner = new HashMap<>();
+        for (AppEntry a : list) {
+            if (a.trusted || a.signer == null) continue;
+            List<AppEntry> l = bySigner.get(a.signer);
+            if (l == null) {
+                l = new ArrayList<>();
+                bySigner.put(a.signer, l);
+            }
+            l.add(a);
+        }
+        for (List<AppEntry> l : bySigner.values()) {
+            if (l.size() < 3) continue;
+            for (AppEntry a : l) {
+                if (a.score > 0) {
+                    a.clustered = true;
+                    a.score += 2;
+                    a.hard++;
+                    a.reasons.add("같은 개발사(서명)가 만든 앱이 " + l.size() + "개 설치돼 있음");
+                }
+            }
+        }
+
+        // 판정 유형 이름 붙이기 + 최근에 직접 열어 본 앱은 안전 후보로
+        for (AppEntry a : list) {
+            if (a.trusted) continue;
+            if (a.usedRecently && !a.accEnabled && !a.adminActive && !a.isHome && !a.installAllowed) {
+                a.autoSafe = true;
+                a.reasons.add(0, "최근 7일 안에 직접 열어 본 앱이라 안전 후보로 분류함");
+            }
+            if (a.accEnabled || a.adminActive || a.overlay || a.isHome) a.tags.add("권한 장악형");
+            if (a.adCount >= 3 || (a.adCount >= 2 && (a.overlay || a.neverOpened || a.bootCombo))) a.tags.add("광고 도배형");
+            if (a.neverOpened || a.longUnused) a.tags.add("방치형");
+            if (a.clustered) a.tags.add("한 패거리형");
+            if (a.installAllowed || a.tiny) a.tags.add("설치 도우미형");
+            if (a.mismatch || a.keyStrong) a.tags.add("도구·겁주기 위장형");
+        }
+
         Collections.sort(list, new Comparator<AppEntry>() {
             @Override
             public int compare(AppEntry x, AppEntry y) {
-                if (x.score != y.score) return y.score - x.score;
+                if (x.sortScore() != y.sortScore()) return y.sortScore() - x.sortScore();
                 return Long.compare(y.installTime, x.installTime);
             }
         });
