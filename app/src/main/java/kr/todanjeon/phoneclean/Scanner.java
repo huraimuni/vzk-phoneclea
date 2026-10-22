@@ -41,10 +41,15 @@ final class Scanner {
 
     private static final long DAY = 24L * 60 * 60 * 1000;
 
+    /** 분석 진행 상황 (화면에서 몇 개째인지 보여 주기 위함) */
+    static volatile int progressDone = 0;
+    static volatile int progressTotal = 0;
+
     private static final Set<String> TRUSTED_INSTALLERS = new HashSet<>(Arrays.asList(
             "com.android.vending",
             "com.sec.android.app.samsungapps",
-            "com.skt.skaf.A000Z00040"));
+            "com.skt.skaf.A000Z00040",
+            "com.sec.android.easyMover"));
 
     /** 제조사가 출고 때 설치해 주는 앱의 설치 프로그램 */
     private static final Set<String> PRELOAD_INSTALLERS = new HashSet<>(Arrays.asList(
@@ -338,7 +343,11 @@ final class Scanner {
 
         List<AppEntry> list = new ArrayList<>();
         List<ApplicationInfo> apps = pm.getInstalledApplications(0);
+        progressDone = 0;
+        progressTotal = apps.size();
         for (ApplicationInfo ai : apps) {
+            progressDone++;
+            try {
             if (ai.packageName.equals(ctx.getPackageName())) continue;
             if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) != 0) continue;
 
@@ -369,6 +378,8 @@ final class Scanner {
                 e.installerText = "갤럭시 스토어";
             } else if ("com.skt.skaf.A000Z00040".equals(installer)) {
                 e.installerText = "원스토어";
+            } else if ("com.sec.android.easyMover".equals(installer)) {
+                e.installerText = "삼성 스마트 스위치 (폰 옮기기)";
             } else if (installer.contains("packageinstaller")) {
                 e.installerText = "파일 설치 (브라우저·파일앱 등에서 직접 설치)";
             } else {
@@ -403,7 +414,7 @@ final class Scanner {
             if (sideload && !preloaded) {
                 score += 3;
                 hard++;
-                e.reasons.add("플레이스토어·갤럭시 스토어가 아닌 곳에서 설치됨");
+                e.reasons.add("플레이스토어·갤럭시 스토어가 아닌 곳에서 설치됨 [" + e.installerText + "]");
             }
 
             if (e.isHome) {
@@ -553,7 +564,10 @@ final class Scanner {
             e.score = score;
             e.hard = hard;
             list.add(e);
-        }
+                    } catch (Throwable ignored) {
+                // 한 앱을 읽다 오류가 나도 나머지 앱 분석은 계속한다
+            }
+}
 
         // 짧은 기간에 몰려서 설치된 앱 찾기 (48시간 안에 5개 이상)
         for (AppEntry a : list) {
