@@ -4,12 +4,16 @@ import android.app.AppOpsManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.InstallSourceInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.provider.Settings;
+import android.provider.Telephony;
+import android.telecom.TelecomManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +34,14 @@ final class Scanner {
             "com.sec.android.app.samsungapps",
             "com.skt.skaf.A000Z00040"));
 
+    /** 제조사가 출고 때 설치해 주는 앱의 설치 프로그램 */
+    private static final Set<String> PRELOAD_INSTALLERS = new HashSet<>(Arrays.asList(
+            "com.sec.android.preloadinstaller",
+            "com.samsung.android.app.omcagent",
+            "com.lge.appbox.client"));
+
     private static final String[] TRUSTED_PREFIXES = {
+            "com.lge.", "com.qualcomm.",
             "com.google.", "com.samsung.", "com.sec.", "com.android.", "com.kakao.",
             "com.nhn.android.", "com.naver.", "com.skt.", "com.kt.", "com.lguplus.",
             "com.microsoft.", "com.facebook.", "com.instagram.", "com.whatsapp",
@@ -51,6 +62,72 @@ final class Scanner {
     };
 
     private Scanner() {
+    }
+
+    /** 지금 기본 홈 화면(런처) 앱. 지정 안 돼 있으면 null */
+    static String homePackage(PackageManager pm) {
+        try {
+            Intent i = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME);
+            ResolveInfo ri = pm.resolveActivity(i, PackageManager.MATCH_DEFAULT_ONLY);
+            if (ri == null || ri.activityInfo == null) return null;
+            String p = ri.activityInfo.packageName;
+            return "android".equals(p) ? null : p;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    static boolean isSystemPkg(PackageManager pm, String pkg) {
+        try {
+            return (pm.getApplicationInfo(pkg, 0).flags & ApplicationInfo.FLAG_SYSTEM) != 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /** 폰에 원래 들어 있는(시스템) 홈 화면 앱 목록: {패키지, 이름} */
+    static List<String[]> systemHomes(PackageManager pm) {
+        List<String[]> out = new ArrayList<>();
+        try {
+            Intent i = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME);
+            for (ResolveInfo ri : pm.queryIntentActivities(i, 0)) {
+                if (ri.activityInfo == null) continue;
+                String p = ri.activityInfo.packageName;
+                if (isSystemPkg(pm, p)) {
+                    CharSequence l = ri.loadLabel(pm);
+                    out.add(new String[]{p, l == null ? p : l.toString()});
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return out;
+    }
+
+    /** 일시 중지에서 빼야 하는 필수 앱: 키보드, 홈 화면, 기본 문자, 기본 전화 */
+    static Set<String> essentialPackages(Context ctx) {
+        Set<String> out = new HashSet<>();
+        try {
+            String ime = Settings.Secure.getString(ctx.getContentResolver(), "default_input_method");
+            if (ime != null) {
+                ComponentName cn = ComponentName.unflattenFromString(ime);
+                if (cn != null) out.add(cn.getPackageName());
+            }
+        } catch (Exception ignored) {
+        }
+        String home = homePackage(ctx.getPackageManager());
+        if (home != null) out.add(home);
+        try {
+            String sms = Telephony.Sms.getDefaultSmsPackage(ctx);
+            if (sms != null) out.add(sms);
+        } catch (Exception ignored) {
+        }
+        try {
+            TelecomManager tm = (TelecomManager) ctx.getSystemService(Context.TELECOM_SERVICE);
+            String dialer = tm == null ? null : tm.getDefaultDialerPackage();
+            if (dialer != null) out.add(dialer);
+        } catch (Exception ignored) {
+        }
+        return out;
     }
 
     static boolean isInstalled(PackageManager pm, String pkg) {
@@ -148,6 +225,17 @@ final class Scanner {
         Set<String> listenerSet = enabledListenerPackages(ctx);
         Set<String> adminSet = activeAdminPackages(ctx);
 
+        // 홈 화면이 기본 앱이 아닌 다른 앱으로 바뀌었는지
+        String homeRaw = homePackage(pm);
+        String homePkg = (homeRaw != null && !isSystemPkg(pm, homeRaw)) ? homeRaw : null;
+
+        // 출고 때 같이 설치된 앱 구분용 기준 시각 (안드로이드 시스템 자체의 최초 설치 시각)
+        long systemTime = 0;
+        try {
+            systemTime = pm.getPackageInfo("android", 0).firstInstallTime;
+        } catch (Exception ignored) {
+        }
+
         List<AppEntry> list = new ArrayList<>();
         List<ApplicationInfo> apps = pm.getInstalledApplications(0);
         for (ApplicationInfo ai : apps) {
@@ -187,7 +275,23 @@ final class Scanner {
                 e.installerText = "다른 설치 프로그램 (" + installer + ")";
             }
 
-            e.trusted = trustedInstaller && hasTrustedPrefix(ai.packageName);
+            e.accEnabled = accSet.contains(ai.packageName);
+            e.adminActive = adminSet.contains(ai.packageName);
+            e.isHome = ai.packageName.equals(homePkg);
+
+            // 출고 시 기본 설치된 앱(제조사·통신사 기본 앱)은 의심 대상에서 뺀다
+            boolean preloaded = (installer != null && PRELOAD_INSTALLERS.contains(installer))
+                    || (e.installTime > 0 && systemTime > 0 && e.installTime <= systemTime + 3 * DAY);
+            e.preloaded = preloaded;
+            if (preloaded && !e.accEnabled && !e.adminActive && !e.isHome) {
+                e.installerText = "출고 시 기본 설치된 앱으로 보임 (제조사·통신사 기본 앱)";
+                e.trusted = true;
+                e.score = 0;
+                list.add(e);
+                continue;
+            }
+
+            e.trusted = trustedInstaller && hasTrustedPrefix(ai.packageName) && !e.isHome;
             if (e.trusted) {
                 e.score = 0;
                 list.add(e);
@@ -195,18 +299,21 @@ final class Scanner {
             }
 
             int score = 0;
-            if (sideload) {
+            if (sideload && !preloaded) {
                 score += 3;
                 e.reasons.add("플레이스토어·갤럭시 스토어가 아닌 곳에서 설치됨");
             }
 
-            e.accEnabled = accSet.contains(ai.packageName);
+            if (e.isHome) {
+                score += 4;
+                e.reasons.add("홈 화면(런처)이 폰 기본 앱이 아닌 이 앱으로 바뀌어 있음");
+            }
+
             if (e.accEnabled) {
                 score += 4;
                 e.reasons.add("접근성 권한이 켜져 있음 (화면을 읽고 대신 조작할 수 있음)");
             }
 
-            e.adminActive = adminSet.contains(ai.packageName);
             if (e.adminActive) {
                 score += 4;
                 e.reasons.add("기기 관리자로 등록됨 (그냥은 삭제가 안 됨)");

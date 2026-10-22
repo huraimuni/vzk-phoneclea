@@ -13,6 +13,8 @@ final class AppEntry {
     boolean trusted;
     boolean accEnabled;
     boolean adminActive;
+    boolean preloaded;
+    boolean isHome;
     final List<String> reasons = new ArrayList<>();
 
     static final int LEVEL_HIGH = 2;

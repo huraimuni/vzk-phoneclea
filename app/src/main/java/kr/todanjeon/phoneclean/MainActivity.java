@@ -59,6 +59,7 @@ public class MainActivity extends Activity {
     private RowAdapter adapter;
     private Button btnPause;
     private CheckBox cbKeep;
+    private TextView homeBanner;
     private final Set<String> paused = new HashSet<>();
     private final Handler handler = new Handler(Looper.getMainLooper());
     private boolean resumed = false;
@@ -66,7 +67,7 @@ public class MainActivity extends Activity {
         @Override
         public void run() {
             if (resumed && cbKeep != null && cbKeep.isChecked() && !scanning) {
-                sendStop(targets(false));
+                sendStop(targets());
                 handler.postDelayed(this, 4000);
             }
         }
@@ -100,13 +101,13 @@ public class MainActivity extends Activity {
         summary.setPadding(Ui.dp(this, 14), Ui.dp(this, 10), Ui.dp(this, 14), Ui.dp(this, 6));
         root.addView(summary);
 
-        btnPause = Ui.button(this, "1단계 ▸ 원클릭 일시 중지", Ui.CORAL, Color.WHITE);
+        btnPause = Ui.button(this, "1단계 ▸ 원클릭 전체 일시 중지", Ui.CORAL, Color.WHITE);
         btnPause.setTextSize(19);
         btnPause.setPadding(Ui.dp(this, 10), Ui.dp(this, 18), Ui.dp(this, 10), Ui.dp(this, 18));
         btnPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                doPause(false);
+                doPause();
             }
         });
         LinearLayout.LayoutParams plp = new LinearLayout.LayoutParams(
@@ -114,12 +115,33 @@ public class MainActivity extends Activity {
         plp.setMargins(Ui.dp(this, 11), Ui.dp(this, 2), Ui.dp(this, 11), 0);
         root.addView(btnPause, plp);
 
+        TextView pauseNote = Ui.text(this,
+                "이 앱, 시스템 앱, 키보드·홈 화면·문자·전화 앱은 빼고 모두 멈춥니다",
+                12, Ui.GRAY, false);
+        pauseNote.setPadding(Ui.dp(this, 14), Ui.dp(this, 4), Ui.dp(this, 14), 0);
+        root.addView(pauseNote);
+
+        homeBanner = Ui.text(this, "", 14, Color.WHITE, true);
+        homeBanner.setBackground(Ui.round(Ui.RED, 10, this));
+        homeBanner.setPadding(Ui.dp(this, 12), Ui.dp(this, 10), Ui.dp(this, 12), Ui.dp(this, 10));
+        homeBanner.setVisibility(View.GONE);
+        homeBanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restoreHome();
+            }
+        });
+        LinearLayout.LayoutParams hlp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        hlp.setMargins(Ui.dp(this, 11), Ui.dp(this, 6), Ui.dp(this, 11), 0);
+        root.addView(homeBanner, hlp);
+
         LinearLayout pauseRow = new LinearLayout(this);
         pauseRow.setOrientation(LinearLayout.HORIZONTAL);
         pauseRow.setGravity(Gravity.CENTER_VERTICAL);
         pauseRow.setPadding(Ui.dp(this, 12), Ui.dp(this, 4), Ui.dp(this, 12), Ui.dp(this, 2));
         cbKeep = new CheckBox(this);
-        cbKeep.setText("정지 유지 (켜 두는 동안 4초마다 다시 정지)");
+        cbKeep.setText("정지 유지 (4초마다 반복, 카톡 알림이 늦을 수 있음)");
         cbKeep.setTextSize(13);
         cbKeep.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,15 +151,15 @@ public class MainActivity extends Activity {
             }
         });
         pauseRow.addView(cbKeep, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-        Button allBtn = Ui.button(this, "직접 설치한 앱 전체 중지", Color.rgb(226, 230, 244), Ui.NAVY);
-        allBtn.setTextSize(12);
-        allBtn.setOnClickListener(new View.OnClickListener() {
+        Button homeBtn = Ui.button(this, "기본 홈 화면 되돌리기", Color.rgb(226, 230, 244), Ui.NAVY);
+        homeBtn.setTextSize(12);
+        homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                doPause(true);
+                restoreHome();
             }
         });
-        pauseRow.addView(allBtn);
+        pauseRow.addView(homeBtn);
         root.addView(pauseRow);
 
         LinearLayout row1 = new LinearLayout(this);
@@ -261,6 +283,7 @@ public class MainActivity extends Activity {
         }
         summary.setText("직접 설치한 앱 " + all.size() + "개 중  위험 의심 " + high + "개 / 주의 " + warn + "개");
         btnFilter.setText(onlySuspicious ? "전체 앱 보기" : "의심 앱만 보기");
+        updateHomeBanner();
         refreshList();
     }
 
@@ -353,7 +376,7 @@ public class MainActivity extends Activity {
             meta.setText("[" + e.levelText() + "]  " + date + " 설치" + (paused.contains(e.pkg) ? "  [정지 명령 보냄]" : ""));
             meta.setTextColor(levelColor(e));
             if (e.reasons.isEmpty()) {
-                why.setText(e.trusted ? "정상 스토어에서 설치된 알려진 앱" : "특이 징후 없음");
+                why.setText(e.preloaded ? "출고 시 기본 설치된 앱으로 보임" : (e.trusted ? "정상 스토어에서 설치된 알려진 앱" : "특이 징후 없음"));
             } else {
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < e.reasons.size() && i < 2; i++) {
@@ -403,12 +426,13 @@ public class MainActivity extends Activity {
         handler.removeCallbacks(keepTask);
     }
 
-    /** 일시 중지 대상: 평소엔 의심·주의 앱, allUser면 직접 설치한 앱 중 알려진 정상 앱을 뺀 전부 */
-    private List<String> targets(boolean allUser) {
+    /** 일시 중지 대상: 직접 설치한 앱 전부. 단, 출고 기본 앱과 키보드·홈 화면·문자·전화 앱은 뺀다 */
+    private List<String> targets() {
+        Set<String> keep = Scanner.essentialPackages(this);
         List<String> out = new ArrayList<>();
         for (AppEntry e : all) {
-            if (e.trusted) continue;
-            if (allUser || e.level() >= AppEntry.LEVEL_WARN) out.add(e.pkg);
+            if (e.preloaded || keep.contains(e.pkg)) continue;
+            out.add(e.pkg);
         }
         return out;
     }
@@ -424,14 +448,14 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void doPause(boolean allUser) {
+    private void doPause() {
         if (scanning) {
             Ui.toast(this, "앱을 분석하는 중입니다. 잠시 뒤에 다시 눌러 주세요.");
             return;
         }
-        final List<String> pkgs = targets(allUser);
+        final List<String> pkgs = targets();
         if (pkgs.isEmpty()) {
-            Ui.toast(this, allUser ? "정지할 앱이 없습니다." : "의심·주의 앱이 없습니다. [직접 설치한 앱 전체 중지]도 써 볼 수 있습니다.");
+            Ui.toast(this, "정지할 앱이 없습니다.");
             return;
         }
         // 한 번에 끝나지 않는 경우가 많아서 몇 번 반복해서 보낸다
@@ -449,9 +473,10 @@ public class MainActivity extends Activity {
         refreshList();
         new AlertDialog.Builder(this)
                 .setTitle("일시 중지 명령을 보냈습니다")
-                .setMessage(pkgs.size() + "개 앱의 백그라운드 실행을 멈추게 했습니다.\n\n"
+                .setMessage("직접 설치한 앱 " + pkgs.size() + "개의 백그라운드 실행을 멈추게 했습니다. "
+                        + "(시스템 앱, 키보드·홈 화면·문자·전화 앱은 제외)\n\n"
                         + "폰이 조금 가벼워졌는지 확인해 보세요. 이건 임시 조치라서, 앱이 다시 켜질 수 있습니다. "
-                        + "다시 켜지면 한 번 더 누르거나, [정지 유지]를 체크해 두세요.\n\n"
+                        + "카톡 같은 앱은 새 알림이 오면 다시 켜집니다. 다시 느려지면 한 번 더 누르세요.\n\n"
                         + "다음 단계로 지울 앱을 고르시겠어요?")
                 .setPositiveButton("삭제할 앱 고르기", new DialogInterface.OnClickListener() {
                     @Override
@@ -466,6 +491,53 @@ public class MainActivity extends Activity {
                     }
                 })
                 .setNegativeButton("나중에", null)
+                .show();
+    }
+
+    // ---------------------------------------------------------------- 홈 화면(런처)
+
+    private void updateHomeBanner() {
+        String raw = Scanner.homePackage(getPackageManager());
+        if (raw != null && !Scanner.isSystemPkg(getPackageManager(), raw)) {
+            String name = labelOf(raw);
+            homeBanner.setText("홈 화면이 폰 기본 앱이 아닌 [" + name + "](으)로 바뀌어 있습니다.\n눌러서 기본 홈으로 되돌리기");
+            homeBanner.setVisibility(View.VISIBLE);
+        } else {
+            homeBanner.setVisibility(View.GONE);
+        }
+    }
+
+    private void restoreHome() {
+        PackageManager pm = getPackageManager();
+        String raw = Scanner.homePackage(pm);
+        boolean replaced = raw != null && !Scanner.isSystemPkg(pm, raw);
+        List<String[]> homes = Scanner.systemHomes(pm);
+        StringBuilder sb = new StringBuilder();
+        if (replaced) {
+            sb.append("지금 홈 화면: ").append(labelOf(raw)).append(" (직접 설치된 앱)\n\n");
+        } else {
+            sb.append("지금 홈 화면은 폰 기본 앱입니다. 그래도 다른 홈 앱으로 바꾸고 싶지 않다면 이대로 두셔도 됩니다.\n\n");
+        }
+        if (homes.isEmpty()) {
+            sb.append("폰 기본 홈 앱을 찾지 못했습니다. 설정 화면에서 직접 골라 주세요.\n");
+        } else {
+            sb.append("폰 기본 홈 앱:\n");
+            for (String[] h : homes) sb.append("- ").append(h[1]).append("\n");
+        }
+        sb.append("\n[홈 설정 열기]를 누르고, [기본 홈 앱]에서 위 기본 앱을 선택하세요. ")
+                .append("끝나면 바뀌어 있던 런처 앱은 목록에서 삭제하시면 됩니다.");
+        new AlertDialog.Builder(this)
+                .setTitle("기본 홈 화면 되돌리기")
+                .setMessage(sb.toString())
+                .setPositiveButton("홈 설정 열기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Ui.openFirst(MainActivity.this,
+                                new Intent(Settings.ACTION_HOME_SETTINGS),
+                                new Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS));
+                    }
+                })
+                .setNegativeButton("닫기", null)
                 .show();
     }
 
@@ -628,6 +700,12 @@ public class MainActivity extends Activity {
         for (AppEntry e : all) {
             if (e.pkg.equals(pkg)) return e.label;
         }
+        try {
+            CharSequence l = getPackageManager().getApplicationLabel(
+                    getPackageManager().getApplicationInfo(pkg, 0));
+            if (l != null) return l.toString();
+        } catch (Exception ignored) {
+        }
         return pkg;
     }
 
@@ -704,7 +782,7 @@ public class MainActivity extends Activity {
                 + "내 폰에 직접 설치된 앱을 훑어서, 광고로 깔린 앱에서 흔한 징후(출처, 설치 시기, 위험한 권한 등)를 찾아 보여 줍니다.\n\n"
                 + "사용 순서\n"
                 + "폰이 너무 느려서 조작이 안 될 때\n"
-                + "1단계 [원클릭 일시 중지]를 누르면 의심·주의 앱의 백그라운드 실행을 멈추게 합니다. 그러면 폰이 조금 가벼워집니다. (임시 조치)\n\n"
+                + "1단계 [원클릭 전체 일시 중지]를 누르면, 직접 설치한 앱 전체의 백그라운드 실행을 멈추게 합니다. 시스템 앱과 이 앱, 키보드·홈 화면·문자·전화 앱은 빼고 멈춥니다. 그러면 폰이 조금 가벼워집니다. (임시 조치)\n\n"
                 + "2단계 삭제\n"
                 + "- 일시 중지 뒤 안내 창에서 [삭제할 앱 고르기]를 누르면 의심 앱이 미리 체크됩니다.\n"
                 + "- 내가 쓰는 앱은 체크를 풀고 (앱을 누르면 이유가 나옵니다)\n"
@@ -713,6 +791,8 @@ public class MainActivity extends Activity {
                 + "알아두세요\n"
                 + "- 바이러스를 잡는 백신이 아닙니다. 악성 파일 DB가 없고, 징후만 보고 판단합니다.\n"
                 + "- 징후가 있어도 정상 앱일 수 있습니다. 모르는 앱만 지우세요.\n"
+                + "- 홈 화면(런처)이 바뀌어 있으면 맨 위에 빨간 안내가 뜹니다. [기본 홈 화면 되돌리기]로 설정 화면에서 기본 홈 앱을 다시 고르세요. (앱이 대신 바꿔 주지는 못합니다)\n"
+                + "- 폰에 원래 들어 있던 기본 앱(출고 시 설치)은 의심 목록에서 뺍니다.\n"
                 + "- 일시 중지는 백그라운드 실행을 끄는 임시 조치입니다. 앱이 다시 켜질 수 있고, 지금 화면에 떠 있는 앱은 못 끌 수 있습니다.\n"
                 + "- 앱을 몰래 지우지 않습니다. 삭제는 항상 확인 창에서 직접 누릅니다.\n"
                 + "- 인터넷 권한이 없어서, 점검 결과가 밖으로 나가지 않습니다.\n"
