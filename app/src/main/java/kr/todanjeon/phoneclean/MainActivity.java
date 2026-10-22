@@ -712,11 +712,17 @@ public class MainActivity extends Activity {
         try {
             ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             cm.setPrimaryClip(ClipData.newPlainText("질문", q));
-            Ui.toast(this, "질문을 복사했습니다. 열리는 화면에 붙여넣기 하세요.");
+            Ui.toast(this, "네이버 검색으로 연결합니다. (질문도 복사해 두었습니다)");
         } catch (Exception ex) {
             Ui.toast(this, "복사하지 못했습니다. 앱 이름으로 직접 물어보세요.");
         }
-        Ui.openUrl(this, "https://clova-x.naver.com");
+        try {
+            String sq = "앱 " + e.label + " 안전한가요 삭제해도 되나요";
+            Ui.openUrl(this, "https://m.search.naver.com/search.naver?query="
+                    + java.net.URLEncoder.encode(sq, "UTF-8"));
+        } catch (Exception ex) {
+            Ui.openUrl(this, "https://m.naver.com");
+        }
     }
 
     // ---------------------------------------------------------------- 홈 화면(런처)
