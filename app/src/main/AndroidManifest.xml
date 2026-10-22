@@ -22,6 +22,10 @@
     <!-- 새 앱 설치 알림(선택) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- 상시 감시 모드(선택): 새 앱 설치를 바로 알려 주기 위한 상시 실행 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application
         android:allowBackup="false"
@@ -44,6 +48,27 @@
         <activity
             android:name=".EmergencyActivity"
             android:exported="false" />
+        <service
+            android:name=".WatchService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="new_app_install_monitoring" />
+        </service>
+        <receiver
+            android:name=".BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <activity
+            android:name=".AnalysisActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:showWhenLocked="true"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
         <service
             android:name=".NewAppJob"
             android:exported="false"

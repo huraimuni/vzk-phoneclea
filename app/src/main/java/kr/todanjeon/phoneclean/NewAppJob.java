@@ -94,39 +94,12 @@ public class NewAppJob extends JobService {
         if (added.isEmpty()) return;
 
         List<AppEntry> scanned = Scanner.scan(c);
-        NotificationManager nm = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (nm == null) return;
-        if (Build.VERSION.SDK_INT >= 26) {
-            nm.createNotificationChannel(new NotificationChannel(CHANNEL, "새 앱 설치 알림",
-                    NotificationManager.IMPORTANCE_HIGH));
-        }
         int shown = 0;
         for (AppEntry e : scanned) {
             if (!added.contains(e.pkg)) continue;
             if (shown >= 5) break;
             shown++;
-            String detail = e.reasons.isEmpty() ? "특이 징후 없음" : e.reasons.get(0);
-            notifyOne(c, nm, e.pkg.hashCode(), "새 앱이 설치됐어요: " + e.label,
-                    "[" + e.levelText() + "] " + detail + "\n눌러서 확인하고, 모르는 앱이면 삭제하세요.");
-        }
-    }
-
-    private static void notifyOne(Context c, NotificationManager nm, int id, String title, String text) {
-        Intent open = new Intent(c, MainActivity.class);
-        open.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pi = PendingIntent.getActivity(c, id, open,
-                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification n = new Notification.Builder(c, CHANNEL)
-                .setSmallIcon(android.R.drawable.stat_sys_warning)
-                .setContentTitle(title)
-                .setContentText(text)
-                .setStyle(new Notification.BigTextStyle().bigText(text))
-                .setContentIntent(pi)
-                .setAutoCancel(true)
-                .build();
-        try {
-            nm.notify(id, n);
-        } catch (Exception ignored) {
+            Alerts.notifyNewApp(c, e);
         }
     }
 }

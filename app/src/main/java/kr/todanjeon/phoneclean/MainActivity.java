@@ -633,7 +633,7 @@ public class MainActivity extends Activity {
     private void showMore() {
         final String[] items = {"응급 가이드 (폰이 멈췄을 때)", "광고·알고리즘 정리", "안전 표시한 앱 관리",
                 "사용 기록 허용 (정확도 향상)",
-                watchOn() ? "새 앱 설치 알림 끄기" : "새 앱 설치 알림 켜기",
+                watchOn() ? "새 앱 즉시 분석 알림 끄기 (감시 중)" : "새 앱 즉시 분석 알림 켜기 (감시)",
                 "결과 공유 (카카오톡 등)", "도움말"};
         new AlertDialog.Builder(this)
                 .setTitle("더보기")
@@ -675,6 +675,7 @@ public class MainActivity extends Activity {
     private void toggleWatch() {
         if (watchOn()) {
             NewAppJob.cancel(this);
+            WatchService.stop(this);
             getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean("watch_on", false).apply();
             Ui.toast(this, "새 앱 설치 알림을 껐습니다.");
             return;
@@ -690,8 +691,9 @@ public class MainActivity extends Activity {
     private void enableWatch() {
         NewAppJob.saveBaseline(this);
         NewAppJob.schedule(this);
+        WatchService.start(this);
         getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean("watch_on", true).apply();
-        Ui.toast(this, "켰습니다. 지금부터 새로 설치되는 앱을 약 15분 안에 알려 드립니다. (설치를 막지는 못하고, 설치된 뒤에 알립니다)");
+        Ui.toast(this, "켰습니다. 새 앱이 설치되면 바로 분석 결과를 알림으로 띄웁니다. (설치를 막지는 못하고, 설치된 뒤에 알립니다)");
     }
 
     @Override
@@ -1035,7 +1037,7 @@ public class MainActivity extends Activity {
                 + "- 징후가 있어도 정상 앱일 수 있습니다. 모르는 앱만 지우세요.\n"
                 + "- 판정 이름: 권한 장악형 / 광고 도배형 / 방치형 / 한 패거리형(같은 개발사) / 설치 도우미형 / 도구·겁주기 위장형. 근거가 2개 이상 겹치면 [위험 의심]입니다.\n"
                 + "- 최근 7일 안에 내가 직접 연 앱은 [안전 후보]로 내립니다. (사용 기록 허용이 켜져 있을 때)\n"
-                + "- [더보기 > 새 앱 설치 알림]을 켜면 새 앱이 깔린 뒤 약 15분 안에 알려 줍니다.\n"
+                + "- [더보기 > 새 앱 즉시 분석 알림]을 켜면 새 앱이 깔리는 즉시 분석 결과가 화면 위 알림으로 뜹니다. 알림을 누르면 분석 팝업이 열리고 바로 삭제할 수 있습니다. (알림창에 '감시 중' 표시가 계속 보이고, 폰 절전 설정에 따라 꺼질 수 있어 15분마다 확인하는 보조 장치도 함께 켜집니다)\n"
                 + "- [더보기 > 응급 가이드]에 폰이 멈췄을 때 안전 모드 등의 순서가 있습니다.\n"
                 + "- 내가 아는 안전한 앱은 체크한 뒤 [안전 앱으로 표시]를 누르면 목록·일시 중지·삭제에서 빠집니다.\n"
                 + "- [저장공간 관리]에서 중복 사진·영상, 중복 연락처를 정리할 수 있습니다. (필요할 때만 권한을 묻습니다)\n"
