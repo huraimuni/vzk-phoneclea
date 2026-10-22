@@ -306,10 +306,34 @@ public class MainActivity extends Activity {
         if (scanning) return;
         scanning = true;
         summary.setText("앱을 분석하는 중입니다...");
+        final Runnable progress = new Runnable() {
+            @Override
+            public void run() {
+                if (!scanning) return;
+                int t = Scanner.progressTotal;
+                if (t > 0) summary.setText("앱을 분석하는 중입니다... " + Scanner.progressDone + " / " + t);
+                handler.postDelayed(this, 400);
+            }
+        };
+        handler.post(progress);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final List<AppEntry> result = Scanner.scan(MainActivity.this);
+                final List<AppEntry> result;
+                try {
+                    result = Scanner.scan(MainActivity.this);
+                } catch (final Throwable ex) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            scanning = false;
+                            summary.setText("분석 중 오류가 났습니다: " + ex.getClass().getSimpleName()
+                                    + (ex.getMessage() == null ? "" : " - " + ex.getMessage())
+                                    + "\n[전체 앱 보기]를 눌러 다시 시도해 보세요.");
+                        }
+                    });
+                    return;
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
