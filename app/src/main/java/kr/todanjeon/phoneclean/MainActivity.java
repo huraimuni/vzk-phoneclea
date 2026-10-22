@@ -111,13 +111,17 @@ public class MainActivity extends Activity {
         root.addView(Ui.header(this, "VZK 폰클린",
                 "광고로 깔린 의심 앱을 찾아 한 번에 정리합니다"));
 
+        // 글자를 크게 키워 쓰는 폰에서도 목록이 보이도록, 위쪽 안내·버튼들은 목록과 함께 스크롤되게 한다
+        LinearLayout top = new LinearLayout(this);
+        top.setOrientation(LinearLayout.VERTICAL);
+
         summary = Ui.text(this, "앱을 분석하는 중입니다...", 15, Ui.INK, true);
         summary.setPadding(Ui.dp(this, 14), Ui.dp(this, 10), Ui.dp(this, 14), Ui.dp(this, 6));
-        root.addView(summary);
+        top.addView(summary);
 
         usageHint = Ui.text(this, "", 12, Ui.GRAY, false);
         usageHint.setPadding(Ui.dp(this, 14), 0, Ui.dp(this, 14), Ui.dp(this, 2));
-        root.addView(usageHint);
+        top.addView(usageHint);
 
         btnPause = Ui.button(this, "1단계 ▸ 원클릭 전체 일시 중지", Ui.CORAL, Color.WHITE);
         btnPause.setTextSize(19);
@@ -131,13 +135,13 @@ public class MainActivity extends Activity {
         LinearLayout.LayoutParams plp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         plp.setMargins(Ui.dp(this, 11), Ui.dp(this, 2), Ui.dp(this, 11), 0);
-        root.addView(btnPause, plp);
+        top.addView(btnPause, plp);
 
         TextView pauseNote = Ui.text(this,
                 "이 앱, 시스템 앱, 키보드·홈 화면·문자·전화 앱은 빼고 모두 멈춥니다",
                 12, Ui.GRAY, false);
         pauseNote.setPadding(Ui.dp(this, 14), Ui.dp(this, 4), Ui.dp(this, 14), 0);
-        root.addView(pauseNote);
+        top.addView(pauseNote);
 
         homeBanner = Ui.text(this, "", 14, Color.WHITE, true);
         homeBanner.setBackground(Ui.round(Ui.RED, 10, this));
@@ -152,7 +156,7 @@ public class MainActivity extends Activity {
         LinearLayout.LayoutParams hlp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         hlp.setMargins(Ui.dp(this, 11), Ui.dp(this, 6), Ui.dp(this, 11), 0);
-        root.addView(homeBanner, hlp);
+        top.addView(homeBanner, hlp);
 
         LinearLayout pauseRow = new LinearLayout(this);
         pauseRow.setOrientation(LinearLayout.HORIZONTAL);
@@ -178,7 +182,7 @@ public class MainActivity extends Activity {
             }
         });
         pauseRow.addView(homeBtn);
-        root.addView(pauseRow);
+        top.addView(pauseRow);
 
         LinearLayout row1 = new LinearLayout(this);
         row1.setOrientation(LinearLayout.HORIZONTAL);
@@ -217,17 +221,19 @@ public class MainActivity extends Activity {
         btnClear.setTextSize(13);
         row1.addView(btnSelect, Ui.weight(this, 3));
         row1.addView(btnClear, Ui.weight(this, 3));
-        root.addView(row1);
+        top.addView(row1);
 
         listView = new ListView(this);
         listView.setDividerHeight(Ui.dp(this, 1));
         listView.setDivider(new android.graphics.drawable.ColorDrawable(Color.rgb(228, 224, 220)));
         adapter = new RowAdapter();
+        listView.addHeaderView(top, null, false);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position >= 0 && position < shown.size()) showDetail(shown.get(position));
+                int idx = position - listView.getHeaderViewsCount();
+                if (idx >= 0 && idx < shown.size()) showDetail(shown.get(idx));
             }
         });
         root.addView(listView, new LinearLayout.LayoutParams(
