@@ -631,7 +631,7 @@ public class MainActivity extends Activity {
     }
 
     private void showMore() {
-        final String[] items = {"응급 가이드 (폰이 멈췄을 때)", "광고·알고리즘 정리", "안전 표시한 앱 관리",
+        final String[] items = {"응급 가이드 (폰이 멈췄을 때)", "광고·알고리즘 정리", "알림 정리 (알림 비우기·끄기)", "안전 표시한 앱 관리",
                 "사용 기록 허용 (정확도 향상)",
                 watchOn() ? "새 앱 즉시 분석 알림 끄기 (감시 중)" : "새 앱 즉시 분석 알림 켜기 (감시)",
                 "결과 공유 (카카오톡 등)", "도움말"};
@@ -642,10 +642,11 @@ public class MainActivity extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == 0) startActivity(new Intent(MainActivity.this, EmergencyActivity.class));
                         else if (which == 1) startActivity(new Intent(MainActivity.this, AdsGuideActivity.class));
-                        else if (which == 2) manageSafe();
-                        else if (which == 3) openUsageSettings();
-                        else if (which == 4) toggleWatch();
-                        else if (which == 5) shareReport();
+                        else if (which == 2) startActivity(new Intent(MainActivity.this, NotifActivity.class));
+                        else if (which == 3) manageSafe();
+                        else if (which == 4) openUsageSettings();
+                        else if (which == 5) toggleWatch();
+                        else if (which == 6) shareReport();
                         else showHelp();
                     }
                 })
