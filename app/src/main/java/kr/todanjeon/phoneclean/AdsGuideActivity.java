@@ -76,13 +76,22 @@ public class AdsGuideActivity extends Activity {
                 });
 
         addStep(body, "4단계. 플레이 프로텍트 켜기",
-                "구글이 앱을 검사해 주는 기능입니다. 켜져 있는지 확인하세요. 완벽하지는 않지만 꺼 둘 이유는 없습니다.",
+                "구글이 앱을 검사해 주는 기능입니다. 켜져 있는지 확인하세요.\n"
+                        + "버튼이 바로 안 열리면: 플레이스토어 > 오른쪽 위 내 프로필 사진 > [Play 프로텍트] > 오른쪽 위 톱니바퀴.",
                 "플레이 프로텍트 열기", new Runnable() {
                     @Override
                     public void run() {
-                        Ui.openFirst(AdsGuideActivity.this,
-                                new Intent("com.google.android.gms.security.settings.VerifyAppsSettingsActivity"),
-                                new Intent(Settings.ACTION_SECURITY_SETTINGS));
+                        Intent play = getPackageManager().getLaunchIntentForPackage("com.android.vending");
+                        Intent direct = new Intent("com.google.android.gms.security.settings.VerifyAppsSettingsActivity");
+                        try {
+                            startActivity(direct);
+                        } catch (Exception e) {
+                            if (play != null) {
+                                Ui.toast(AdsGuideActivity.this, "플레이스토어가 열립니다. 프로필 사진 > Play 프로텍트를 눌러 주세요.");
+                            }
+                            Ui.openFirst(AdsGuideActivity.this, play != null ? play : new Intent(Settings.ACTION_SECURITY_SETTINGS),
+                                    new Intent(Settings.ACTION_SECURITY_SETTINGS));
+                        }
                     }
                 });
 
@@ -94,6 +103,21 @@ public class AdsGuideActivity extends Activity {
                     public void run() {
                         Ui.openFirst(AdsGuideActivity.this,
                                 new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES),
+                                new Intent(Settings.ACTION_SECURITY_SETTINGS));
+                    }
+                });
+
+        addStep(body, "6단계. 설치가 막힐 때 (삼성 폰)",
+                "삼성 폰의 [보안 위험 자동 차단]이 켜져 있으면 앱 설치 자체가 막힙니다. "
+                        + "이 앱이 대신 끌 수는 없고, 직접 끄셔야 합니다.\n"
+                        + "경로: 설정 > 보안 및 개인정보 보호 > 보안 위험 자동 차단 > 끄기. "
+                        + "(설치를 마친 뒤에는 다시 켜 두는 것이 안전합니다.)",
+                "보안 설정 열기", new Runnable() {
+                    @Override
+                    public void run() {
+                        Ui.toast(AdsGuideActivity.this, "보안 및 개인정보 보호 > 보안 위험 자동 차단을 찾아 주세요.");
+                        Ui.openFirst(AdsGuideActivity.this,
+                                new Intent(Settings.ACTION_PRIVACY_SETTINGS),
                                 new Intent(Settings.ACTION_SECURITY_SETTINGS));
                     }
                 });

@@ -258,6 +258,7 @@ public class NotifActivity extends Activity {
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Ui.toast(NotifActivity.this, "[알림 허용] 스위치 하나만 끄고 뒤로 가기를 누르세요.");
                     Intent a = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
                     a.putExtra(Settings.EXTRA_APP_PACKAGE, e.pkg);
                     Intent fb = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + e.pkg));
