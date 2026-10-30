@@ -74,4 +74,26 @@
     <string name="overlay_need">गोले और संदेश दिखाने के लिए \"अन्य ऐप्स के ऊपर दिखाएं\" की अनुमति दें।</string>
     <string name="btn_open_settings">सेटिंग्स खोलें</string>
     <string name="btn_skip">छोड़ें</string>
+    <string name="sub_title">स्क्रीन मदद सदस्यता</string>
+    <string name="sub_desc">मदद करने वाला (जो स्क्रीन देखने का अनुरोध करता है) मासिक सदस्यता लेता है। मदद पाने वाले के लिए हमेशा मुफ़्त। बेसिक क्लीनर सबके लिए मुफ़्त है।</string>
+    <string name="sub_price_btn">सदस्यता लें · %1$s / माह</string>
+    <string name="sub_active">✅ सदस्यता सक्रिय है</string>
+    <string name="sub_free_grant">🎁 ऑपरेटर ने मुफ़्त पहुँच दी है</string>
+    <string name="sub_unavailable">सदस्यता अभी उपलब्ध नहीं है। बाद में प्रयास करें।</string>
+    <string name="sub_verifying">आपकी खरीद की पुष्टि हो रही है…</string>
+    <string name="sub_need">स्क्रीन मदद के लिए सहायक की सदस्यता चाहिए।</string>
+    <string name="sub_manage">Google Play में प्रबंधित करें</string>
+    <string name="my_id_label">मेरा खाता ID (मुफ़्त पहुँच के लिए ऑपरेटर को बताएं): %1$s</string>
+    <string name="btn_copy">कॉपी</string>
+    <string name="btn_subscription">💳 सदस्यता</string>
+    <string name="btn_logs">📜 स्क्रीन शेयरिंग इतिहास</string>
+    <string name="log_title">स्क्रीन शेयरिंग इतिहास</string>
+    <string name="log_note">केवल किसने, कब और कितनी देर — यही रखा जाता है। स्क्रीन कभी रिकॉर्ड नहीं होती। रिकॉर्ड 90 दिन बाद अपने-आप हट जाते हैं।</string>
+    <string name="log_empty">कोई रिकॉर्ड नहीं।</string>
+    <string name="log_row">%1$s → %2$s
+%3$s · %4$s</string>
+    <string name="log_min">%1$d मिनट</string>
+    <string name="log_requested_only">शुरू नहीं हुई</string>
+    <string name="btn_delete">हटाएं</string>
+    <string name="btn_delete_all">सभी रिकॉर्ड हटाएं</string>
 </resources>

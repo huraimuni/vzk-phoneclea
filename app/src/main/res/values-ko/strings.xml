@@ -74,4 +74,26 @@
     <string name="overlay_need">화면에 동그라미·안내 문구가 보이려면 [다른 앱 위에 표시]를 허용해 주세요.</string>
     <string name="btn_open_settings">설정 열기</string>
     <string name="btn_skip">건너뛰기</string>
+    <string name="sub_title">화면 도움 구독</string>
+    <string name="sub_desc">화면을 보며 도와주는 사람(요청하는 쪽)이 월 구독합니다. 도움받는 사람은 항상 무료입니다. 기본 점검 기능은 모두에게 무료입니다.</string>
+    <string name="sub_price_btn">구독하기 · 월 %1$s</string>
+    <string name="sub_active">✅ 구독 중입니다</string>
+    <string name="sub_free_grant">🎁 운영자가 무료 이용을 지정했습니다</string>
+    <string name="sub_unavailable">지금은 구독을 이용할 수 없습니다. 잠시 뒤 다시 시도해 주세요.</string>
+    <string name="sub_verifying">결제를 확인하는 중…</string>
+    <string name="sub_need">화면 도움을 요청하려면 도와주는 사람의 구독이 필요합니다.</string>
+    <string name="sub_manage">Google Play에서 관리</string>
+    <string name="my_id_label">내 계정 ID (무료 이용 신청 시 운영자에게 알려 주세요): %1$s</string>
+    <string name="btn_copy">복사</string>
+    <string name="btn_subscription">💳 구독</string>
+    <string name="btn_logs">📜 화면 공유 기록</string>
+    <string name="log_title">화면 공유 기록</string>
+    <string name="log_note">누가·언제·얼마나 했는지만 남고 화면 자체는 저장되지 않습니다. 기록은 90일 뒤 자동 삭제됩니다.</string>
+    <string name="log_empty">기록이 없습니다.</string>
+    <string name="log_row">%1$s → %2$s
+%3$s · %4$s</string>
+    <string name="log_min">%1$d분</string>
+    <string name="log_requested_only">시작 안 됨</string>
+    <string name="btn_delete">삭제</string>
+    <string name="btn_delete_all">기록 전체 삭제</string>
 </resources>

@@ -169,10 +169,17 @@ public class FamilyActivity extends BaseActivity {
         }
         if (n == 0) box.addView(Ui.text(this, getString(R.string.members_empty), 14, Ui.GRAY, false));
 
+        Button sub = Ui.button(this, getString(R.string.btn_subscription), Color.WHITE, Ui.INK);
+        sub.setOnClickListener(v -> startActivity(new Intent(this, SubscribeActivity.class)));
+        LinearLayout.LayoutParams ls = lp();
+        ls.topMargin = Ui.dp(this, 22);
+        box.addView(sub, ls);
+        Button logs = Ui.button(this, getString(R.string.btn_logs), Color.WHITE, Ui.INK);
+        logs.setOnClickListener(v -> startActivity(new Intent(this, LogActivity.class)));
+        box.addView(logs, lp());
         Button lang = Ui.button(this, getString(R.string.btn_language), Color.WHITE, Ui.INK);
         lang.setOnClickListener(v -> startActivity(new Intent(this, LanguageActivity.class)));
         LinearLayout.LayoutParams l = lp();
-        l.topMargin = Ui.dp(this, 22);
         box.addView(lang, l);
         Button out = Ui.button(this, getString(R.string.btn_signout), Color.WHITE, Ui.RED);
         out.setOnClickListener(v -> {
@@ -214,9 +221,15 @@ public class FamilyActivity extends BaseActivity {
         } else if (req == null) {
             Button ask = Ui.button(this, getString(R.string.btn_ask_help), Ui.CORAL, Color.WHITE);
             ask.setTextSize(13);
-            ask.setOnClickListener(v -> startActivity(new Intent(this, ViewerActivity.class)
-                    .putExtra(ViewerActivity.EXTRA_PARENT_UID, d.getString("parentUid"))
-                    .putExtra(ViewerActivity.EXTRA_PARENT_NAME, other)));
+            ask.setOnClickListener(v -> Access.check((ok, via) -> runOnUiThread(() -> {
+                if (!ok) {
+                    startActivity(new Intent(this, SubscribeActivity.class));
+                    return;
+                }
+                startActivity(new Intent(this, ViewerActivity.class)
+                        .putExtra(ViewerActivity.EXTRA_PARENT_UID, d.getString("parentUid"))
+                        .putExtra(ViewerActivity.EXTRA_PARENT_NAME, other));
+            })));
             if ("active".equals(d.getString("status"))) row.addView(ask, Ui.weight(this, 3));
             Button rq = Ui.button(this, getString(R.string.btn_request_disconnect), Color.WHITE, Ui.RED);
             rq.setTextSize(13);

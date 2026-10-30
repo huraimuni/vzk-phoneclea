@@ -74,4 +74,26 @@ Valid for %2$d minutes, one use only. Tell it to your family or let them scan th
     <string name="overlay_need">To show circles and messages on this phone, allow \"Display over other apps\" for VZK PhoneClean.</string>
     <string name="btn_open_settings">Open settings</string>
     <string name="btn_skip">Skip</string>
+    <string name="sub_title">Screen help subscription</string>
+    <string name="sub_desc">The helper (the person who asks to see the screen) subscribes monthly. The person being helped always uses it for free. The basic cleaner is free for everyone.</string>
+    <string name="sub_price_btn">Subscribe · %1$s / month</string>
+    <string name="sub_active">✅ Subscription active</string>
+    <string name="sub_free_grant">🎁 Free access granted by the operator</string>
+    <string name="sub_unavailable">Subscription is not available right now. Please try again later.</string>
+    <string name="sub_verifying">Verifying your purchase…</string>
+    <string name="sub_need">Screen help needs a subscription for the helper.</string>
+    <string name="sub_manage">Manage in Google Play</string>
+    <string name="my_id_label">My account ID (tell the operator to get free access): %1$s</string>
+    <string name="btn_copy">Copy</string>
+    <string name="btn_subscription">💳 Subscription</string>
+    <string name="btn_logs">📜 Screen sharing history</string>
+    <string name="log_title">Screen sharing history</string>
+    <string name="log_note">Only who, when, and how long are kept. The screen itself is never recorded. Records are deleted automatically after 90 days.</string>
+    <string name="log_empty">No records.</string>
+    <string name="log_row">%1$s → %2$s
+%3$s · %4$s</string>
+    <string name="log_min">%1$d min</string>
+    <string name="log_requested_only">not started</string>
+    <string name="btn_delete">Delete</string>
+    <string name="btn_delete_all">Delete all records</string>
 </resources>

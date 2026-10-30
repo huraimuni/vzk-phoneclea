@@ -7,6 +7,7 @@
     <!-- 화면 공유 중 상대가 보낸 동그라미·안내 문구를 화면 위에 보여 주기 위한 권한(선택, 화면을 대신 조작하지 않음) -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
     <!-- 설치된 앱 목록을 읽기 위한 권한 -->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <!-- 사용자가 선택한 앱의 삭제 확인 창을 띄우기 위한 권한 -->
@@ -66,6 +67,12 @@
             android:turnScreenOn="true" />
         <activity
             android:name=".ViewerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SubscribeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LogActivity"
             android:exported="false" />
         <service
             android:name=".ShareService"

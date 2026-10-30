@@ -74,4 +74,26 @@
     <string name="overlay_need">画面に丸や案内を表示するには「他のアプリの上に重ねて表示」を許可してください。</string>
     <string name="btn_open_settings">設定を開く</string>
     <string name="btn_skip">スキップ</string>
+    <string name="sub_title">画面サポートの定期購入</string>
+    <string name="sub_desc">画面を見て助ける側（リクエストする人）が月額で購読します。助けられる側は常に無料です。基本のクリーナーは誰でも無料です。</string>
+    <string name="sub_price_btn">購読する・月 %1$s</string>
+    <string name="sub_active">✅ 購読中です</string>
+    <string name="sub_free_grant">🎁 運営者により無料で利用できます</string>
+    <string name="sub_unavailable">現在は購読できません。しばらくしてからお試しください。</string>
+    <string name="sub_verifying">購入を確認しています…</string>
+    <string name="sub_need">画面サポートの依頼には、助ける側の購読が必要です。</string>
+    <string name="sub_manage">Google Playで管理</string>
+    <string name="my_id_label">アカウントID（無料利用の申請時に運営者へ）: %1$s</string>
+    <string name="btn_copy">コピー</string>
+    <string name="btn_subscription">💳 定期購入</string>
+    <string name="btn_logs">📜 画面共有の履歴</string>
+    <string name="log_title">画面共有の履歴</string>
+    <string name="log_note">誰が・いつ・どれくらいかのみ残り、画面自体は保存されません。記録は90日後に自動削除されます。</string>
+    <string name="log_empty">記録はありません。</string>
+    <string name="log_row">%1$s → %2$s
+%3$s ・ %4$s</string>
+    <string name="log_min">%1$d分</string>
+    <string name="log_requested_only">未開始</string>
+    <string name="btn_delete">削除</string>
+    <string name="btn_delete_all">記録をすべて削除</string>
 </resources>

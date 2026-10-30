@@ -74,4 +74,26 @@ Válido %2$d minutos, un solo uso. Díselo a tu familiar o muestra el QR.</strin
     <string name="overlay_need">Para mostrar círculos y mensajes, permite \"Mostrar sobre otras apps\".</string>
     <string name="btn_open_settings">Abrir ajustes</string>
     <string name="btn_skip">Omitir</string>
+    <string name="sub_title">Suscripción de ayuda en pantalla</string>
+    <string name="sub_desc">El ayudante (quien pide ver la pantalla) paga mensualmente. La persona ayudada siempre es gratis. El limpiador básico es gratis para todos.</string>
+    <string name="sub_price_btn">Suscribirse · %1$s / mes</string>
+    <string name="sub_active">✅ Suscripción activa</string>
+    <string name="sub_free_grant">🎁 Acceso gratuito concedido por el operador</string>
+    <string name="sub_unavailable">La suscripción no está disponible ahora. Inténtalo más tarde.</string>
+    <string name="sub_verifying">Verificando tu compra…</string>
+    <string name="sub_need">La ayuda en pantalla requiere suscripción del ayudante.</string>
+    <string name="sub_manage">Administrar en Google Play</string>
+    <string name="my_id_label">Mi ID de cuenta (díselo al operador para acceso gratis): %1$s</string>
+    <string name="btn_copy">Copiar</string>
+    <string name="btn_subscription">💳 Suscripción</string>
+    <string name="btn_logs">📜 Historial de pantalla compartida</string>
+    <string name="log_title">Historial de pantalla compartida</string>
+    <string name="log_note">Solo se guarda quién, cuándo y cuánto tiempo. La pantalla nunca se graba. Los registros se borran a los 90 días.</string>
+    <string name="log_empty">Sin registros.</string>
+    <string name="log_row">%1$s → %2$s
+%3$s · %4$s</string>
+    <string name="log_min">%1$d min</string>
+    <string name="log_requested_only">no iniciada</string>
+    <string name="btn_delete">Eliminar</string>
+    <string name="btn_delete_all">Eliminar todos los registros</string>
 </resources>

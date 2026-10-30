@@ -48,5 +48,66 @@ service cloud.firestore {
       // 연결 해제·거절은 부모만.
       allow delete: if signedIn() && resource.data.parentUid == request.auth.uid;
     }
+
+    // ---- 화면 도움 권한 (서버·운영자만 쓰기) ----
+    // entitlements: Cloud Functions(관리자 권한)만 기록. 앱은 읽기만.
+    match /entitlements/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+    // grants: 운영자가 Firebase 콘솔에서 직접 작성(예: 내 가족 무료). 앱은 본인 것만 읽기.
+    match /grants/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+    // TURN 서버 설정 등: 로그인한 사용자가 읽기만
+    match /config/{doc} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    function hasAccess(uid) {
+      return (exists(/databases/$(database)/documents/grants/$(uid))
+               && get(/databases/$(database)/documents/grants/$(uid)).data.get('expiresAt', request.time) >= request.time)
+          || (exists(/databases/$(database)/documents/entitlements/$(uid))
+               && get(/databases/$(database)/documents/entitlements/$(uid)).data.get('expiresAt', request.time) > request.time);
+    }
+
+    // ---- 화면 공유 세션 ----
+    match /sessions/{sid} {
+      allow read: if signedIn() && (resource.data.parentUid == request.auth.uid || resource.data.childUid == request.auth.uid);
+
+      // 자녀(도와주는 사람)가 요청 생성: 활성 가족 연결 + 구독/무료 권한 필요
+      allow create: if signedIn()
+        && request.resource.data.childUid == request.auth.uid
+        && request.resource.data.status == 'requested'
+        && get(/databases/$(database)/documents/links/$(request.resource.data.parentUid + '_' + request.auth.uid)).data.status == 'active'
+        && hasAccess(request.auth.uid);
+
+      // 부모: 허용/거부/종료 + 연결 정보(offer). 자녀: answer·종료.
+      allow update: if signedIn() && (
+        (resource.data.parentUid == request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','offer','startedAt','endedAt','endedBy']))
+        ||
+        (resource.data.childUid == request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['answer','status','endedAt','endedBy'])
+          && request.resource.data.get('status', resource.data.status) in ['ended', resource.data.status])
+      );
+
+      // 기록 삭제는 부모만
+      allow delete: if signedIn() && resource.data.parentUid == request.auth.uid;
+
+      match /cand/{id} {
+        allow read, create: if signedIn() && (get(/databases/$(database)/documents/sessions/$(sid)).data.parentUid == request.auth.uid
+                                           || get(/databases/$(database)/documents/sessions/$(sid)).data.childUid == request.auth.uid);
+      }
+      // 안내(동그라미·문구): 자녀만 보내고 부모가 읽는다.
+      match /pings/{id} {
+        allow create: if signedIn() && get(/databases/$(database)/documents/sessions/$(sid)).data.childUid == request.auth.uid
+                      && get(/databases/$(database)/documents/sessions/$(sid)).data.status == 'active';
+        allow read: if signedIn() && (get(/databases/$(database)/documents/sessions/$(sid)).data.parentUid == request.auth.uid
+                                   || get(/databases/$(database)/documents/sessions/$(sid)).data.childUid == request.auth.uid);
+      }
+    }
   }
 }

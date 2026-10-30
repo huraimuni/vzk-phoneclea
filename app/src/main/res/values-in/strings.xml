@@ -74,4 +74,26 @@ Berlaku %2$d menit, sekali pakai. Beri tahu keluarga atau tunjukkan QR.</string>
     <string name="overlay_need">Agar lingkaran dan pesan tampil, izinkan \"Tampilkan di atas aplikasi lain\".</string>
     <string name="btn_open_settings">Buka pengaturan</string>
     <string name="btn_skip">Lewati</string>
+    <string name="sub_title">Langganan bantuan layar</string>
+    <string name="sub_desc">Pembantu (yang meminta melihat layar) berlangganan bulanan. Orang yang dibantu selalu gratis. Pembersih dasar gratis untuk semua.</string>
+    <string name="sub_price_btn">Berlangganan · %1$s / bulan</string>
+    <string name="sub_active">✅ Langganan aktif</string>
+    <string name="sub_free_grant">🎁 Akses gratis diberikan oleh operator</string>
+    <string name="sub_unavailable">Langganan belum tersedia. Coba lagi nanti.</string>
+    <string name="sub_verifying">Memverifikasi pembelian…</string>
+    <string name="sub_need">Bantuan layar memerlukan langganan pembantu.</string>
+    <string name="sub_manage">Kelola di Google Play</string>
+    <string name="my_id_label">ID akun saya (beri tahu operator untuk akses gratis): %1$s</string>
+    <string name="btn_copy">Salin</string>
+    <string name="btn_subscription">💳 Langganan</string>
+    <string name="btn_logs">📜 Riwayat berbagi layar</string>
+    <string name="log_title">Riwayat berbagi layar</string>
+    <string name="log_note">Hanya siapa, kapan, dan berapa lama yang disimpan. Layar tidak pernah direkam. Catatan dihapus otomatis setelah 90 hari.</string>
+    <string name="log_empty">Tidak ada catatan.</string>
+    <string name="log_row">%1$s → %2$s
+%3$s · %4$s</string>
+    <string name="log_min">%1$d menit</string>
+    <string name="log_requested_only">belum mulai</string>
+    <string name="btn_delete">Hapus</string>
+    <string name="btn_delete_all">Hapus semua catatan</string>
 </resources>
