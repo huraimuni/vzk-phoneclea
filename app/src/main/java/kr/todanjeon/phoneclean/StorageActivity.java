@@ -15,7 +15,7 @@ import android.widget.TextView;
 import android.content.Intent;
 
 /** 저장공간 관리 메뉴: 저장공간 현황 + 중복 사진·영상 / 중복 연락처 찾기. */
-public class StorageActivity extends Activity {
+public class StorageActivity extends BaseActivity {
 
     private TextView usage;
     private ProgressBar bar;
@@ -60,7 +60,7 @@ public class StorageActivity extends Activity {
 
         TextView note = Ui.text(this,
                 "참고\n- 이 앱은 사진·연락처 같은 개인 자료에 접근하지 않고, 저장공간 사용량만 보여 줍니다.\n"
-                        + "- 인터넷 권한이 없어서 폰 밖으로 아무것도 나가지 않습니다.",
+                        + "- 사진·연락처 등 개인 자료는 폰 밖으로 나가지 않습니다.",
                 13, Ui.GRAY, false);
         note.setLineSpacing(0, 1.2f);
         body.addView(note);

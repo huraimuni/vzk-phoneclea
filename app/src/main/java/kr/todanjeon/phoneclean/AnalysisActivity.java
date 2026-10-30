@@ -25,7 +25,7 @@ import java.util.Locale;
 import java.util.Set;
 
 /** 새로 설치된 앱 하나의 분석 결과를 팝업(대화상자 모양)으로 보여 줍니다. */
-public class AnalysisActivity extends Activity {
+public class AnalysisActivity extends BaseActivity {
 
     private LinearLayout box;
     private String pkg;

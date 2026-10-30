@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "768623371852",
+    "project_id": "vzk-phoneclean",
+    "storage_bucket": "vzk-phoneclean.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768623371852:android:1ec97a85d1b80f00ce36e9",
+        "android_client_info": {
+          "package_name": "kr.todanjeon.phoneclean"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768623371852-an8mv0ih9eibrft7tephej32heka11j7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.todanjeon.phoneclean",
+            "certificate_hash": "5aeac6c5586650562306385bfa248e88dcb73b70"
+          }
+        },
+        {
+          "client_id": "768623371852-qrq6530qnd2aov2rj4vknrk6eus7fi6l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmSl2p4whJDYIQOct90Rxb1VeehoUJkPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768623371852-qrq6530qnd2aov2rj4vknrk6eus7fi6l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

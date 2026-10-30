@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 /** 알림 정리: (1) 지금 쌓인 알림을 앱별로 비우기 (2) 앱별 알림 끄기 화면 바로 열기 */
-public class NotifActivity extends Activity {
+public class NotifActivity extends BaseActivity {
 
     private LinearLayout body;
     private LinearLayout stackBox;

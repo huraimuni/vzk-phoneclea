@@ -1,0 +1,116 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+
+    // 내 프로필: 본인만 읽고 쓰기 (권한 관련 필드 없음)
+    match /users/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
+    // 초대 코드: 만든 부모만 쓰기. 코드를 아는 사람은 한 건만 읽을 수 있고(목록 조회 불가) 만료·사용 여부는 앱과 아래 links 규칙이 확인.
+    match /invites/{code} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn() && request.resource.data.parentUid == request.auth.uid
+                    && request.resource.data.used == false
+                    && request.resource.data.expiresAt <= request.time + duration.value(15, 'm');
+      allow update: if signedIn() && resource.data.parentUid == request.auth.uid
+                    && request.resource.data.parentUid == resource.data.parentUid;
+      allow delete: if signedIn() && resource.data.parentUid == request.auth.uid;
+    }
+
+    // 가족 연결: 문서 ID = 부모UID_자녀UID
+    match /links/{linkId} {
+      allow read: if signedIn() && (resource.data.parentUid == request.auth.uid || resource.data.childUid == request.auth.uid);
+
+      // 자녀는 유효한 초대 코드가 있을 때 '대기(pending)' 요청만 만들 수 있다.
+      allow create: if signedIn()
+        && request.resource.data.childUid == request.auth.uid
+        && linkId == request.resource.data.parentUid + '_' + request.auth.uid
+        && request.resource.data.status == 'pending'
+        && exists(/databases/$(database)/documents/invites/$(request.resource.data.inviteCode))
+        && get(/databases/$(database)/documents/invites/$(request.resource.data.inviteCode)).data.parentUid == request.resource.data.parentUid
+        && get(/databases/$(database)/documents/invites/$(request.resource.data.inviteCode)).data.used == false
+        && get(/databases/$(database)/documents/invites/$(request.resource.data.inviteCode)).data.expiresAt > request.time;
+
+      // 수락·차단 등 상태 변경은 부모만. 자녀는 '해제 요청(deleteRequestedBy)'만 바꿀 수 있다.
+      allow update: if signedIn() && (
+        (resource.data.parentUid == request.auth.uid
+           && request.resource.data.parentUid == resource.data.parentUid
+           && request.resource.data.childUid == resource.data.childUid)
+        ||
+        (resource.data.childUid == request.auth.uid
+           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['deleteRequestedBy'])
+           && request.resource.data.deleteRequestedBy == request.auth.uid)
+      );
+
+      // 연결 해제·거절은 부모만.
+      allow delete: if signedIn() && resource.data.parentUid == request.auth.uid;
+    }
+
+    // ---- 화면 도움 권한 (서버·운영자만 쓰기) ----
+    // entitlements: Cloud Functions(관리자 권한)만 기록. 앱은 읽기만.
+    match /entitlements/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+    match /purchaseTokens/{k} {
+      allow read, write: if false;
+    }
+    // grants: 운영자가 Firebase 콘솔에서 직접 작성(예: 내 가족 무료). 앱은 본인 것만 읽기.
+    match /grants/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+    // TURN 서버 설정 등: 로그인한 사용자가 읽기만
+    match /config/{doc} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    function hasAccess(uid) {
+      return (exists(/databases/$(database)/documents/grants/$(uid))
+               && get(/databases/$(database)/documents/grants/$(uid)).data.get('expiresAt', request.time) >= request.time)
+          || (exists(/databases/$(database)/documents/entitlements/$(uid))
+               && get(/databases/$(database)/documents/entitlements/$(uid)).data.get('expiresAt', request.time) > request.time);
+    }
+
+    // ---- 화면 공유 세션 ----
+    match /sessions/{sid} {
+      allow read: if signedIn() && (resource.data.parentUid == request.auth.uid || resource.data.childUid == request.auth.uid);
+
+      // 자녀(도와주는 사람)가 요청 생성: 활성 가족 연결 + 구독/무료 권한 필요
+      allow create: if signedIn()
+        && request.resource.data.childUid == request.auth.uid
+        && request.resource.data.status == 'requested'
+        && get(/databases/$(database)/documents/links/$(request.resource.data.parentUid + '_' + request.auth.uid)).data.status == 'active'
+        && hasAccess(request.auth.uid);
+
+      // 부모: 허용/거부/종료 + 연결 정보(offer). 자녀: answer·종료.
+      allow update: if signedIn() && (
+        (resource.data.parentUid == request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','offer','startedAt','endedAt','endedBy']))
+        ||
+        (resource.data.childUid == request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['answer','status','endedAt','endedBy'])
+          && request.resource.data.get('status', resource.data.status) in ['ended', resource.data.status])
+      );
+
+      // 기록 삭제는 부모만
+      allow delete: if signedIn() && resource.data.parentUid == request.auth.uid;
+
+      match /cand/{id} {
+        allow read, create: if signedIn() && (get(/databases/$(database)/documents/sessions/$(sid)).data.parentUid == request.auth.uid
+                                           || get(/databases/$(database)/documents/sessions/$(sid)).data.childUid == request.auth.uid);
+      }
+      // 안내(동그라미·문구): 자녀만 보내고 부모가 읽는다.
+      match /pings/{id} {
+        allow create: if signedIn() && get(/databases/$(database)/documents/sessions/$(sid)).data.childUid == request.auth.uid
+                      && get(/databases/$(database)/documents/sessions/$(sid)).data.status == 'active';
+        allow read: if signedIn() && (get(/databases/$(database)/documents/sessions/$(sid)).data.parentUid == request.auth.uid
+                                   || get(/databases/$(database)/documents/sessions/$(sid)).data.childUid == request.auth.uid);
+      }
+    }
+  }
+}

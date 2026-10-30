@@ -2,6 +2,11 @@ plugins {
     id 'com.android.application'
 }
 
+// google-services.json 이 있을 때만 Firebase 설정을 적용한다(없어도 빌드는 되지만 로그인은 동작하지 않음)
+if (file('google-services.json').exists()) {
+    apply plugin: 'com.google.gms.google-services'
+}
+
 android {
     namespace 'kr.todanjeon.phoneclean'
     compileSdk 36
@@ -10,8 +15,10 @@ android {
         applicationId 'kr.todanjeon.phoneclean'
         minSdk 26
         targetSdk 36
-        versionCode 1
-        versionName '1.0'
+        versionCode 2
+        versionName '2.0'
+        buildConfigField 'String', 'NAVER_CLIENT_ID', '"' + (System.getenv('NAVER_CLIENT_ID') ?: '') + '"'
+        buildConfigField 'String', 'NAVER_CLIENT_SECRET', '"' + (System.getenv('NAVER_CLIENT_SECRET') ?: '') + '"'
     }
 
     signingConfigs {
@@ -43,4 +50,28 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    packaging {
+        resources {
+            excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE*', 'META-INF/NOTICE*']
+        }
+    }
+}
+
+dependencies {
+    implementation platform('com.google.firebase:firebase-bom:33.5.1')
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.firebase:firebase-functions'
+    implementation 'com.google.android.gms:play-services-auth:21.2.0'
+    implementation 'com.kakao.sdk:v2-user:2.20.6'
+    implementation 'com.navercorp.nid:oauth:5.10.0'
+    implementation 'com.google.zxing:core:3.5.3'
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+    implementation 'io.github.webrtc-sdk:android:125.6422.07'
+    implementation 'com.android.billingclient:billing:7.1.1'
 }

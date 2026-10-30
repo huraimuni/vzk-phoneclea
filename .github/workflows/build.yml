@@ -35,11 +35,16 @@ jobs:
             echo "signing=off (unsigned AAB)"
           fi
       - name: Build AAB (store) and test APK
+        env:
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
         run: |
-          if [ -n "$KEYSTORE_FILE" ]; then
-            gradle bundleRelease assembleRelease --no-daemon
-          else
-            gradle bundleRelease assembleDebug --no-daemon
+          set -o pipefail
+          if [ -n "$KEYSTORE_FILE" ]; then T="bundleRelease assembleRelease"; else T="bundleRelease assembleDebug"; fi
+          if ! gradle $T --no-daemon --console=plain 2>&1 | tee build.log; then
+            ERR=$(grep -E "error:|e: |What went wrong|Could not|FAILED|Execution failed|not found|Unresolved" -A2 build.log | head -60 | sed ':a;N;$!ba;s/%/%25/g;s/\r/%0D/g;s/\n/%0A/g')
+            echo "::error title=Gradle build errors::$ERR"
+            exit 1
           fi
       - name: Collect
         run: |

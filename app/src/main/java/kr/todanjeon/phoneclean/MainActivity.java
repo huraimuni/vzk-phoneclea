@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 
     private static final int REQ_DELETE = 100;
     private static final String PREFS = "phoneclean";
@@ -88,6 +88,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!Lang.isChosen(this)) {
+            startActivity(new Intent(this, LanguageActivity.class));
+            finish();
+            return;
+        }
         CrashLog.install(getApplicationContext());
         loadSafe();
         buildUi();
@@ -688,7 +693,7 @@ public class MainActivity extends Activity {
     }
 
     private void showMore() {
-        final String[] items = {"응급 가이드 (폰이 멈췄을 때)", "광고·알고리즘 정리", "알림 정리 (알림 비우기·끄기)", "안전 표시한 앱 관리",
+        final String[] items = {getString(R.string.home_family_btn), getString(R.string.btn_language), "응급 가이드 (폰이 멈췄을 때)", "광고·알고리즘 정리", "알림 정리 (알림 비우기·끄기)", "안전 표시한 앱 관리",
                 watchOn() ? "새 앱 설치 알림 끄기" : "새 앱 설치 알림 켜기 (15분마다 확인)",
                 "결과 공유 (카카오톡 등)", "오류 보고·건의하기", "도움말"};
         new AlertDialog.Builder(this)
@@ -696,12 +701,14 @@ public class MainActivity extends Activity {
                 .setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) startActivity(new Intent(MainActivity.this, EmergencyActivity.class));
-                        else if (which == 1) startActivity(new Intent(MainActivity.this, AdsGuideActivity.class));
-                        else if (which == 2) startActivity(new Intent(MainActivity.this, NotifActivity.class));
-                        else if (which == 3) manageSafe();
-                        else if (which == 4) toggleWatch();
-                        else if (which == 5) shareReport();
+                        if (which == 0) startActivity(new Intent(MainActivity.this, Auth.uid() == null ? LoginActivity.class : FamilyActivity.class));
+                        else if (which == 1) startActivity(new Intent(MainActivity.this, LanguageActivity.class));
+                        else if (which == 2) startActivity(new Intent(MainActivity.this, EmergencyActivity.class));
+                        else if (which == 3) startActivity(new Intent(MainActivity.this, AdsGuideActivity.class));
+                        else if (which == 4) startActivity(new Intent(MainActivity.this, NotifActivity.class));
+                        else if (which == 5) manageSafe();
+                        else if (which == 6) toggleWatch();
+                        else if (which == 7) shareReport();
                         else if (which == items.length - 2) showFeedback();
                         else showHelp();
                     }
@@ -1090,11 +1097,21 @@ public class MainActivity extends Activity {
                 + "- 폰에 원래 들어 있던 기본 앱(출고 시 설치)은 의심 목록에서 뺍니다.\n"
                 + "- 일시 중지는 백그라운드 실행을 끄는 임시 조치입니다. 앱이 다시 켜질 수 있고, 지금 화면에 떠 있는 앱은 못 끌 수 있습니다.\n"
                 + "- 앱을 몰래 지우지 않습니다. 삭제는 항상 확인 창에서 직접 누릅니다.\n"
-                + "- 인터넷 권한이 없어서, 점검 결과가 밖으로 나가지 않습니다.\n"
+                + "- 점검 결과(앱 목록·사진·연락처 등)는 밖으로 보내지 않습니다. 인터넷은 로그인·가족 연결·화면 공유에만 씁니다.\n"
                 + "- 개인이 만든 무료 도구이며, 판단과 책임은 사용자 본인에게 있습니다.\n\n"
+                + "\n[v2 새 기능: 가족 연결 · 화면 도움]\n"
+                + "- [더보기 > 가족 연결 · 화면 도움]에서 로그인(한국: 카카오·네이버·구글 / 해외: 구글)합니다. 로그인 없이도 기본 점검 기능은 모두 쓸 수 있습니다.\n"
+                + "- 도움받는 분이 [초대 코드 만들기]를 누르면 6자리 코드와 QR이 나옵니다(10분, 1회용). 도와주는 가족이 코드를 입력하거나 QR을 찍으면 요청이 가고, 받는 분이 [수락]해야 연결됩니다.\n"
+                + "- 연결 해제·차단은 도움받는 분만 할 수 있습니다. 도와주는 쪽은 [연결 해제 요청]만 보낼 수 있습니다.\n"
+                + "- 도와주는 분이 [화면 보여달라고 요청]을 누르면, 받는 분 폰에 큰 [허용/거부] 화면이 뜹니다. 허용해야만 화면이 전달되고, 공유 중에는 상단 알림에 '화면 공유 중'이 계속 보이며 [중지]로 언제든 끝낼 수 있습니다(최대 15분 후 자동 종료).\n"
+                + "- 화면은 녹화·저장되지 않고 상대에게만 바로 전달됩니다. 폰을 대신 조작할 수는 없고, 도와주는 분이 영상을 누르면 받는 분 화면에 동그라미가, 정해진 문구 버튼을 누르면 큰 글씨 안내가 잠깐 보입니다.\n"
+                + "- 은행·경찰·검찰·모르는 사람이 화면 공유를 요구하면 보이스피싱입니다. 내가 부탁한 가족일 때만 허용하세요.\n"
+                + "- 화면 도움 요청은 도와주는 분의 월 구독이 필요합니다(도움받는 분은 무료, 기본 점검 기능도 무료). 운영자가 지정한 가족은 무료입니다.\n"
+                + "- [화면 공유 기록]에서 누가·언제·얼마나 했는지만 볼 수 있고(90일 뒤 자동 삭제), 받는 분이 직접 지울 수 있습니다.\n"
+                + "- 언어: 한국어·English·日本語·Español·Português·Bahasa Indonesia·हिन्दी (더보기 > 언어 변경)\n\n"
                 + "문의는 카페 게시판으로만 받습니다.";
         new AlertDialog.Builder(this)
-                .setTitle("VZK 폰클린 v1.0")
+                .setTitle("VZK 폰클린 v" + BuildConfig.VERSION_NAME)
                 .setMessage(msg)
                 .setPositiveButton("확인", null)
                 .setNeutralButton("카페 열기", new DialogInterface.OnClickListener() {
@@ -1113,7 +1130,7 @@ public class MainActivity extends Activity {
                 .setTitle("지난번에 앱이 오류로 꺼졌습니다")
                 .setMessage("불편을 드려 죄송합니다. 오류 내용을 보내 주시면 고치는 데 큰 도움이 됩니다.\n"
                         + "오류 내용에는 앱 이름이나 개인 정보가 들어 있지 않고, 기종·안드로이드 버전·오류 문구만 있습니다. "
-                        + "이 앱은 인터넷 권한이 없어서 자동으로 보내지 않고, 직접 보내기를 누르셨을 때만 공유됩니다.")
+                        + "이 앱은 오류 내용을 자동으로 보내지 않고, 직접 보내기를 누르셨을 때만 공유됩니다.")
                 .setPositiveButton("오류 내용 보내기", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface d, int w) {

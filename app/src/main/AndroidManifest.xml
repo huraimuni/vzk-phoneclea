@@ -2,7 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- 설치된 앱 목록을 읽기 위한 권한. 인터넷 권한은 일부러 넣지 않았습니다(점검 결과가 밖으로 나가지 않음). -->
+    <!-- 인터넷: 로그인·가족 연결·화면 공유에만 사용합니다. 앱 점검 결과는 밖으로 보내지 않습니다. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 화면 공유 중 상대가 보낸 동그라미·안내 문구를 화면 위에 보여 주기 위한 권한(선택, 화면을 대신 조작하지 않음) -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+    <!-- 설치된 앱 목록을 읽기 위한 권한 -->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <!-- 사용자가 선택한 앱의 삭제 확인 창을 띄우기 위한 권한 -->
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
@@ -15,8 +21,12 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!-- 상시 감시 모드(선택): 새 앱 설치를 바로 알려 주기 위한 상시 실행 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- 화면 공유(부모가 [허용]을 눌렀을 때만 동작) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
 
     <application
+        android:name=".App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="VZK 폰클린"
@@ -31,6 +41,43 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".LanguageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FamilyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ConsentActivity"
+            android:exported="false"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true" />
+        <activity
+            android:name=".ViewerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SubscribeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LogActivity"
+            android:exported="false" />
+        <service
+            android:name=".ShareService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="oauth" android:scheme="kakaof8898377c9756b28f0d527714d44467e" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".AdsGuideActivity"
             android:exported="false" />
