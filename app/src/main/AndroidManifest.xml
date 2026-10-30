@@ -4,6 +4,8 @@
 
     <!-- 인터넷: 로그인·가족 연결·화면 공유에만 사용합니다. 앱 점검 결과는 밖으로 보내지 않습니다. -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 화면 공유 중 상대가 보낸 동그라미·안내 문구를 화면 위에 보여 주기 위한 권한(선택, 화면을 대신 조작하지 않음) -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 설치된 앱 목록을 읽기 위한 권한 -->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />

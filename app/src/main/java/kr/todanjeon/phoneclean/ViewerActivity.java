@@ -51,6 +51,7 @@ public class ViewerActivity extends BaseActivity {
     private PeerConnection pc;
     private ListenerRegistration l1, l2;
     private boolean answered, ended;
+    private int vw = 0, vh = 0;
 
     @Override
     protected void onCreate(Bundle b) {
@@ -68,7 +69,16 @@ public class ViewerActivity extends BaseActivity {
         FrameLayout root = new FrameLayout(this);
         root.setBackgroundColor(Color.BLACK);
         view = new SurfaceViewRenderer(this);
-        view.init(egl.getEglBaseContext(), null);
+        view.init(egl.getEglBaseContext(), new RendererCommon.RendererEvents() {
+            @Override public void onFirstFrameRendered() { }
+            @Override public void onFrameResolutionChanged(int w, int hh, int rot) {
+                if (rot == 90 || rot == 270) { vw = hh; vh = w; } else { vw = w; vh = hh; }
+            }
+        });
+        view.setOnTouchListener((v, ev) -> {
+            if (ev.getAction() == android.view.MotionEvent.ACTION_UP) sendCircle(ev.getX(), ev.getY());
+            return true;
+        });
         view.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
         root.addView(view, new FrameLayout.LayoutParams(-1, -1));
 
@@ -86,6 +96,26 @@ public class ViewerActivity extends BaseActivity {
                 endSession();
             }
         });
+        // 안내 문구 버튼(아래쪽 가로 스크롤)
+        android.widget.HorizontalScrollView hs = new android.widget.HorizontalScrollView(this);
+        LinearLayout bar = new LinearLayout(this);
+        int[] ids = {R.string.phrase_tap, R.string.phrase_back, R.string.phrase_scroll,
+                R.string.phrase_wait, R.string.phrase_ok, R.string.phrase_nothing};
+        for (int i = 0; i < ids.length; i++) {
+            final int idx = i;
+            Button pb = Ui.button(this, getString(ids[i]), Color.argb(230, 32, 40, 66), Color.WHITE);
+            pb.setTextSize(13);
+            pb.setOnClickListener(v -> {
+                Map<String, Object> m2 = new HashMap<>();
+                m2.put("kind", "say");
+                m2.put("phrase", idx);
+                m2.put("at", Timestamp.now());
+                if (ref != null) ref.collection("pings").add(m2);
+            });
+            bar.addView(pb, Ui.weight(this, 3));
+        }
+        hs.addView(bar);
+        root.addView(hs, new FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM));
         setContentView(root);
 
         String sid = UUID.randomUUID().toString().replace("-", "").substring(0, 20);
@@ -183,6 +213,23 @@ public class ViewerActivity extends BaseActivity {
                 }
             });
         }));
+    }
+
+    /** 터치 위치를 '영상 안에서의 비율(0~1)'로 바꿔 보낸다(해상도가 달라도 같은 자리에 표시됨). */
+    private void sendCircle(float tx, float ty) {
+        if (ref == null || vw == 0 || vh == 0) return;
+        float W = view.getWidth(), H = view.getHeight();
+        float s = Math.min(W / vw, H / vh);
+        float dw = vw * s, dh = vh * s;
+        float ox = (W - dw) / 2f, oy = (H - dh) / 2f;
+        float x = (tx - ox) / dw, y = (ty - oy) / dh;
+        if (x < 0 || x > 1 || y < 0 || y > 1) return;
+        Map<String, Object> m = new HashMap<>();
+        m.put("kind", "circle");
+        m.put("x", (double) x);
+        m.put("y", (double) y);
+        m.put("at", Timestamp.now());
+        ref.collection("pings").add(m);
     }
 
     private void endSession() {

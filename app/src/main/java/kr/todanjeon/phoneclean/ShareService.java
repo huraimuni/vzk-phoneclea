@@ -66,6 +66,8 @@ public class ShareService extends Service {
     private VideoSource source;
     private ListenerRegistration l1, l2;
     private boolean ended;
+    private Guide guide;
+    private ListenerRegistration l3;
 
     @Override
     public IBinder onBind(Intent i) {
@@ -88,6 +90,7 @@ public class ShareService extends Service {
         }
         startFg(helper == null ? "" : helper);
         running = true;
+        guide = new Guide(this);
         db = FirebaseFirestore.getInstance();
         ref = db.collection("sessions").document(sid);
         start(data);
@@ -183,6 +186,25 @@ public class ShareService extends Service {
                 pc.setRemoteDescription(new Sdp(), new SessionDescription(SessionDescription.Type.ANSWER, ans));
             }
         });
+        l3 = ref.collection("pings").addSnapshotListener((qs, e) -> {
+            if (qs == null) return;
+            for (DocumentChange dc : qs.getDocumentChanges()) {
+                if (dc.getType() != DocumentChange.Type.ADDED) continue;
+                // 접속 이전의 오래된 안내는 무시(3초 이내 것만)
+                com.google.firebase.Timestamp ts = dc.getDocument().getTimestamp("at");
+                if (ts != null && System.currentTimeMillis() - ts.toDate().getTime() > 10_000) continue;
+                String kind = dc.getDocument().getString("kind");
+                if ("circle".equals(kind)) {
+                    Double x = dc.getDocument().getDouble("x"), y = dc.getDocument().getDouble("y");
+                    if (x != null && y != null && x >= 0 && x <= 1 && y >= 0 && y <= 1) guide.circle(x.floatValue(), y.floatValue());
+                } else if ("say".equals(kind)) {
+                    Long id = dc.getDocument().getLong("phrase");
+                    int[] ids = {R.string.phrase_tap, R.string.phrase_back, R.string.phrase_scroll,
+                            R.string.phrase_wait, R.string.phrase_ok, R.string.phrase_nothing};
+                    if (id != null && id >= 0 && id < ids.length) guide.say(getString(ids[id.intValue()]));
+                }
+            }
+        });
         l2 = ref.collection("cand").addSnapshotListener((qs, e) -> {
             if (qs == null || pc == null) return;
             for (DocumentChange dc : qs.getDocumentChanges()) {
@@ -212,6 +234,8 @@ public class ShareService extends Service {
     private void cleanup() {
         try { if (l1 != null) l1.remove(); } catch (Throwable ignored) { }
         try { if (l2 != null) l2.remove(); } catch (Throwable ignored) { }
+        try { if (l3 != null) l3.remove(); } catch (Throwable ignored) { }
+        try { if (guide != null) guide.clear(); } catch (Throwable ignored) { }
         try { if (capturer != null) { capturer.stopCapture(); capturer.dispose(); } } catch (Throwable ignored) { }
         try { if (pc != null) pc.close(); } catch (Throwable ignored) { }
         try { if (source != null) source.dispose(); } catch (Throwable ignored) { }

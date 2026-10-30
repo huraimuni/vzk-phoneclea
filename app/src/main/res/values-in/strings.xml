@@ -64,4 +64,14 @@ Berlaku %2$d menit, sekali pakai. Beri tahu keluarga atau tunjukkan QR.</string>
     <string name="viewer_connecting">Menghubungkan…</string>
     <string name="btn_end">Akhiri</string>
     <string name="need_nonactive">Hanya keluarga terhubung yang dapat meminta bantuan layar.</string>
+    <string name="phrase_tap">Ketuk di sini</string>
+    <string name="phrase_back">Tekan tombol Kembali</string>
+    <string name="phrase_scroll">Gulir ke bawah perlahan</string>
+    <string name="phrase_wait">Mohon tunggu sebentar</string>
+    <string name="phrase_ok">Bagus, itu benar!</string>
+    <string name="phrase_nothing">Jangan ketuk apa pun dulu</string>
+    <string name="viewer_hint">Ketuk video untuk menampilkan lingkaran di layar mereka.</string>
+    <string name="overlay_need">Agar lingkaran dan pesan tampil, izinkan \"Tampilkan di atas aplikasi lain\".</string>
+    <string name="btn_open_settings">Buka pengaturan</string>
+    <string name="btn_skip">Lewati</string>
 </resources>

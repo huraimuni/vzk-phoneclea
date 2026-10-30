@@ -64,4 +64,14 @@ Válido %2$d minutos, un solo uso. Díselo a tu familiar o muestra el QR.</strin
     <string name="viewer_connecting">Conectando…</string>
     <string name="btn_end">Terminar</string>
     <string name="need_nonactive">Solo la familia conectada puede pedir ayuda en pantalla.</string>
+    <string name="phrase_tap">Toca aquí</string>
+    <string name="phrase_back">Pulsa el botón Atrás</string>
+    <string name="phrase_scroll">Desliza hacia abajo despacio</string>
+    <string name="phrase_wait">Espera un momento</string>
+    <string name="phrase_ok">¡Muy bien, eso es!</string>
+    <string name="phrase_nothing">No toques nada todavía</string>
+    <string name="viewer_hint">Toca el video para mostrar un círculo en su pantalla.</string>
+    <string name="overlay_need">Para mostrar círculos y mensajes, permite \"Mostrar sobre otras apps\".</string>
+    <string name="btn_open_settings">Abrir ajustes</string>
+    <string name="btn_skip">Omitir</string>
 </resources>

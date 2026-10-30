@@ -64,4 +64,14 @@
     <string name="viewer_connecting">接続中…</string>
     <string name="btn_end">終了</string>
     <string name="need_nonactive">接続済みの家族だけが画面サポートを依頼できます。</string>
+    <string name="phrase_tap">ここをタップしてください</string>
+    <string name="phrase_back">戻るボタンを押してください</string>
+    <string name="phrase_scroll">ゆっくり下にスクロールしてください</string>
+    <string name="phrase_wait">少々お待ちください</string>
+    <string name="phrase_ok">はい、できました！</string>
+    <string name="phrase_nothing">まだ何も押さないでください</string>
+    <string name="viewer_hint">映像をタップすると相手の画面に丸が表示されます。</string>
+    <string name="overlay_need">画面に丸や案内を表示するには「他のアプリの上に重ねて表示」を許可してください。</string>
+    <string name="btn_open_settings">設定を開く</string>
+    <string name="btn_skip">スキップ</string>
 </resources>

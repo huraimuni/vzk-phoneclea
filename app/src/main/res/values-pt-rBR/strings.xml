@@ -64,4 +64,14 @@ Válido por %2$d minutos, uso único. Passe ao familiar ou mostre o QR.</string>
     <string name="viewer_connecting">Conectando…</string>
     <string name="btn_end">Encerrar</string>
     <string name="need_nonactive">Apenas a família conectada pode pedir ajuda de tela.</string>
+    <string name="phrase_tap">Toque aqui</string>
+    <string name="phrase_back">Toque no botão Voltar</string>
+    <string name="phrase_scroll">Role a tela para baixo devagar</string>
+    <string name="phrase_wait">Aguarde um momento</string>
+    <string name="phrase_ok">Isso mesmo, muito bem!</string>
+    <string name="phrase_nothing">Ainda não toque em nada</string>
+    <string name="viewer_hint">Toque no vídeo para mostrar um círculo na tela dele.</string>
+    <string name="overlay_need">Para exibir círculos e mensagens, permita \"Sobrepor a outros apps\".</string>
+    <string name="btn_open_settings">Abrir configurações</string>
+    <string name="btn_skip">Pular</string>
 </resources>

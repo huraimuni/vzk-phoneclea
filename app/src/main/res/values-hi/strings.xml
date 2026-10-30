@@ -64,4 +64,14 @@
     <string name="viewer_connecting">कनेक्ट हो रहा है…</string>
     <string name="btn_end">समाप्त</string>
     <string name="need_nonactive">केवल जुड़े परिवार वाले ही स्क्रीन मदद मांग सकते हैं।</string>
+    <string name="phrase_tap">यहाँ दबाएं</string>
+    <string name="phrase_back">वापस बटन दबाएं</string>
+    <string name="phrase_scroll">धीरे-धीरे नीचे स्क्रॉल करें</string>
+    <string name="phrase_wait">कृपया थोड़ा इंतज़ार करें</string>
+    <string name="phrase_ok">बहुत बढ़िया, यही सही है!</string>
+    <string name="phrase_nothing">अभी कुछ न दबाएं</string>
+    <string name="viewer_hint">वीडियो पर दबाएं तो उनकी स्क्रीन पर गोला दिखेगा।</string>
+    <string name="overlay_need">गोले और संदेश दिखाने के लिए \"अन्य ऐप्स के ऊपर दिखाएं\" की अनुमति दें।</string>
+    <string name="btn_open_settings">सेटिंग्स खोलें</string>
+    <string name="btn_skip">छोड़ें</string>
 </resources>

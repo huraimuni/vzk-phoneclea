@@ -24,6 +24,7 @@ public class ConsentActivity extends BaseActivity {
     private static final int RC_PROJ = 501;
     private String sid, name;
     private DocumentReference ref;
+    private boolean askedOverlay;
 
     @Override
     protected void onCreate(Bundle b) {
@@ -71,14 +72,29 @@ public class ConsentActivity extends BaseActivity {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MediaProjectionManager mpm = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-                startActivityForResult(mpm.createScreenCaptureIntent(), RC_PROJ);
+                if (!Guide.allowed(ConsentActivity.this) && !askedOverlay) {
+                    askedOverlay = true;
+                    new android.app.AlertDialog.Builder(ConsentActivity.this)
+                            .setMessage(R.string.overlay_need)
+                            .setPositiveButton(R.string.btn_open_settings, (d, w2) -> startActivity(new Intent(
+                                    android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                    android.net.Uri.parse("package:" + getPackageName()))))
+                            .setNegativeButton(R.string.btn_skip, (d, w2) -> startProjection())
+                            .show();
+                    return;
+                }
+                startProjection();
             }
         });
         row.addView(no, Ui.weight(this, 4));
         row.addView(ok, Ui.weight(this, 4));
         root.addView(row);
         setContentView(root);
+    }
+
+    private void startProjection() {
+        MediaProjectionManager mpm = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        startActivityForResult(mpm.createScreenCaptureIntent(), RC_PROJ);
     }
 
     @Override
