@@ -48,4 +48,20 @@
     <string name="confirm_block">%1$s 님을 차단할까요? 다시 요청할 수 없게 됩니다.</string>
     <string name="version_line">VZK 폰클린 v%1$s</string>
     <string name="need_login_first">먼저 로그인해 주세요.</string>
+    <string name="share_channel">화면 공유</string>
+    <string name="share_ongoing">📢 화면 공유 중입니다</string>
+    <string name="share_ongoing_sub">보는 사람: %1$s · 끝내려면 [중지]를 누르세요</string>
+    <string name="share_stop">중지</string>
+    <string name="consent_title">%1$s 님이 내 화면을 보려고 합니다</string>
+    <string name="consent_warn">⚠ 내가 이 사람에게 도움을 부탁했을 때만 허용하세요. 은행·경찰·검찰·모르는 사람이 화면 공유를 요구하면 보이스피싱입니다. 절대 허용하지 마세요.</string>
+    <string name="consent_privacy">화면은 이 사람에게만 바로 전달되고 녹화·저장되지 않습니다. 비밀번호·은행 앱이 보일 수 있으니 먼저 닫아 두세요. 언제든 중지할 수 있고, 최대 15분 후 자동으로 끝납니다.</string>
+    <string name="btn_allow">허용</string>
+    <string name="btn_deny">거부</string>
+    <string name="btn_ask_help">🖥 화면 보여달라고 요청</string>
+    <string name="viewer_waiting">%1$s 님이 허용하기를 기다리는 중…</string>
+    <string name="viewer_denied">요청이 거절되었거나 끝났습니다.</string>
+    <string name="viewer_ended">화면 공유가 끝났습니다.</string>
+    <string name="viewer_connecting">연결 중…</string>
+    <string name="btn_end">종료</string>
+    <string name="need_nonactive">연결된 가족만 화면 도움을 요청할 수 있습니다.</string>
 </resources>

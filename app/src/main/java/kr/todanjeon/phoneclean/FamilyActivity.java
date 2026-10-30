@@ -44,7 +44,8 @@ public class FamilyActivity extends BaseActivity {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final List<DocumentSnapshot> asParent = new ArrayList<>();
     private final List<DocumentSnapshot> asChild = new ArrayList<>();
-    private ListenerRegistration l1, l2;
+    private ListenerRegistration l1, l2, l3;
+    private final java.util.Set<String> shown = new java.util.HashSet<>();
     private LinearLayout box;
     private String code, codeExpiresText;
 
@@ -75,6 +76,17 @@ public class FamilyActivity extends BaseActivity {
         l2 = db.collection("links").whereEqualTo("childUid", me).addSnapshotListener((snap, e) -> {
             if (snap != null) fill(asChild, snap);
         });
+        // 자녀가 보낸 화면 공유 요청이 오면 큰 허용/거부 화면을 띄운다(이 화면이 열려 있을 때).
+        l3 = db.collection("sessions").whereEqualTo("parentUid", me).whereEqualTo("status", "requested")
+                .addSnapshotListener((snap, e) -> {
+                    if (snap == null) return;
+                    for (DocumentSnapshot d : snap.getDocuments()) {
+                        if (!shown.add(d.getId())) continue;
+                        startActivity(new Intent(this, ConsentActivity.class)
+                                .putExtra(ConsentActivity.EXTRA_SESSION, d.getId())
+                                .putExtra(ConsentActivity.EXTRA_NAME, nz(d.getString("childName"))));
+                    }
+                });
         render();
     }
 
@@ -89,6 +101,7 @@ public class FamilyActivity extends BaseActivity {
         super.onDestroy();
         if (l1 != null) l1.remove();
         if (l2 != null) l2.remove();
+        if (l3 != null) l3.remove();
     }
 
     // ------------------------------------------------------------------ 화면
@@ -199,6 +212,12 @@ public class FamilyActivity extends BaseActivity {
                 row.addView(bl, Ui.weight(this, 3));
             }
         } else if (req == null) {
+            Button ask = Ui.button(this, getString(R.string.btn_ask_help), Ui.CORAL, Color.WHITE);
+            ask.setTextSize(13);
+            ask.setOnClickListener(v -> startActivity(new Intent(this, ViewerActivity.class)
+                    .putExtra(ViewerActivity.EXTRA_PARENT_UID, d.getString("parentUid"))
+                    .putExtra(ViewerActivity.EXTRA_PARENT_NAME, other)));
+            if ("active".equals(d.getString("status"))) row.addView(ask, Ui.weight(this, 3));
             Button rq = Ui.button(this, getString(R.string.btn_request_disconnect), Color.WHITE, Ui.RED);
             rq.setTextSize(13);
             rq.setOnClickListener(v -> d.getReference().update("deleteRequestedBy", Auth.uid()));

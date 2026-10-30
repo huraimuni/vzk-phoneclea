@@ -48,4 +48,20 @@
     <string name="confirm_block">%1$s को ब्लॉक करें? वे दोबारा अनुरोध नहीं भेज पाएंगे।</string>
     <string name="version_line">VZK PhoneClean v%1$s</string>
     <string name="need_login_first">पहले साइन इन करें।</string>
+    <string name="share_channel">स्क्रीन शेयरिंग</string>
+    <string name="share_ongoing">📢 आपकी स्क्रीन साझा हो रही है</string>
+    <string name="share_ongoing_sub">देखने वाले: %1$s · बंद करने के लिए रोकें दबाएं</string>
+    <string name="share_stop">रोकें</string>
+    <string name="consent_title">%1$s आपकी स्क्रीन देखना चाहते हैं</string>
+    <string name="consent_warn">⚠ केवल तभी अनुमति दें जब आपने इस व्यक्ति से मदद मांगी हो। ठग स्क्रीन शेयर करने को कह सकते हैं। अजनबी, बैंक या पुलिस के कहने पर कभी अनुमति न दें।</string>
+    <string name="consent_privacy">आपकी स्क्रीन सीधे इसी व्यक्ति को जाती है, रिकॉर्ड या सेव नहीं होती। पहले पासवर्ड और बैंक ऐप बंद कर लें। आप कभी भी रोक सकते हैं (अधिकतम 15 मिनट)।</string>
+    <string name="btn_allow">अनुमति दें</string>
+    <string name="btn_deny">अस्वीकार</string>
+    <string name="btn_ask_help">🖥 उनकी स्क्रीन देखने का अनुरोध</string>
+    <string name="viewer_waiting">%1$s की अनुमति का इंतज़ार…</string>
+    <string name="viewer_denied">अनुरोध अस्वीकार या समाप्त हो गया।</string>
+    <string name="viewer_ended">स्क्रीन शेयरिंग समाप्त हुई।</string>
+    <string name="viewer_connecting">कनेक्ट हो रहा है…</string>
+    <string name="btn_end">समाप्त</string>
+    <string name="need_nonactive">केवल जुड़े परिवार वाले ही स्क्रीन मदद मांग सकते हैं।</string>
 </resources>

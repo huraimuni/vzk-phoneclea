@@ -48,4 +48,20 @@
     <string name="confirm_block">%1$s さんをブロックしますか？再リクエストできなくなります。</string>
     <string name="version_line">VZK フォンクリーン v%1$s</string>
     <string name="need_login_first">先にログインしてください。</string>
+    <string name="share_channel">画面共有</string>
+    <string name="share_ongoing">📢 画面を共有中です</string>
+    <string name="share_ongoing_sub">閲覧者: %1$s ・終了は[停止]を押す</string>
+    <string name="share_stop">停止</string>
+    <string name="consent_title">%1$s さんがあなたの画面を見ようとしています</string>
+    <string name="consent_warn">⚠ あなたが相談した相手の場合のみ許可してください。銀行・警察・見知らぬ人が画面共有を求めたら詐欺です。絶対に許可しないでください。</string>
+    <string name="consent_privacy">画面はこの人にだけ直接送られ、録画・保存されません。パスワードや銀行アプリが見えることがあるので先に閉じてください。いつでも停止でき、最大15分で自動終了します。</string>
+    <string name="btn_allow">許可</string>
+    <string name="btn_deny">拒否</string>
+    <string name="btn_ask_help">🖥 画面を見せてもらう</string>
+    <string name="viewer_waiting">%1$s さんの許可を待っています…</string>
+    <string name="viewer_denied">リクエストは拒否されたか終了しました。</string>
+    <string name="viewer_ended">画面共有が終了しました。</string>
+    <string name="viewer_connecting">接続中…</string>
+    <string name="btn_end">終了</string>
+    <string name="need_nonactive">接続済みの家族だけが画面サポートを依頼できます。</string>
 </resources>

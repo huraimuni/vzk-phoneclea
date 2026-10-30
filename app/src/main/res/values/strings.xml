@@ -48,4 +48,20 @@ Valid for %2$d minutes, one use only. Tell it to your family or let them scan th
     <string name="confirm_block">Block %1$s? They will not be able to send requests again.</string>
     <string name="version_line">VZK PhoneClean v%1$s</string>
     <string name="need_login_first">Please sign in first.</string>
+    <string name="share_channel">Screen sharing</string>
+    <string name="share_ongoing">📢 Your screen is being shared</string>
+    <string name="share_ongoing_sub">Viewing: %1$s · Tap Stop to end</string>
+    <string name="share_stop">Stop</string>
+    <string name="consent_title">%1$s wants to see your screen</string>
+    <string name="consent_warn">⚠ Only allow if YOU asked this person for help. Scammers (voice phishing) may ask you to share your screen. Never share if a stranger, bank, police or prosecutor asked you to.</string>
+    <string name="consent_privacy">Your screen is sent directly to this person and is not recorded or stored. Passwords and banking apps may be visible, so close them first. You can stop at any time (max 15 minutes).</string>
+    <string name="btn_allow">ALLOW</string>
+    <string name="btn_deny">DENY</string>
+    <string name="btn_ask_help">🖥 Ask to see their screen</string>
+    <string name="viewer_waiting">Waiting for %1$s to allow…</string>
+    <string name="viewer_denied">The request was declined or ended.</string>
+    <string name="viewer_ended">Screen sharing ended.</string>
+    <string name="viewer_connecting">Connecting…</string>
+    <string name="btn_end">End</string>
+    <string name="need_nonactive">Only connected family can request screen help.</string>
 </resources>

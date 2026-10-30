@@ -48,4 +48,20 @@ Válido por %2$d minutos, uso único. Passe ao familiar ou mostre o QR.</string>
     <string name="confirm_block">Bloquear %1$s? Essa pessoa não poderá enviar novas solicitações.</string>
     <string name="version_line">VZK PhoneClean v%1$s</string>
     <string name="need_login_first">Entre primeiro.</string>
+    <string name="share_channel">Compartilhamento de tela</string>
+    <string name="share_ongoing">📢 Sua tela está sendo compartilhada</string>
+    <string name="share_ongoing_sub">Vendo: %1$s · Toque em Parar para encerrar</string>
+    <string name="share_stop">Parar</string>
+    <string name="consent_title">%1$s quer ver a sua tela</string>
+    <string name="consent_warn">⚠ Permita somente se VOCÊ pediu ajuda a esta pessoa. Golpistas podem pedir para compartilhar a tela. Nunca permita se um desconhecido, banco ou polícia pedir.</string>
+    <string name="consent_privacy">Sua tela vai direto a essa pessoa e não é gravada nem armazenada. Feche antes senhas e apps de banco. Você pode parar a qualquer momento (máx. 15 minutos).</string>
+    <string name="btn_allow">PERMITIR</string>
+    <string name="btn_deny">RECUSAR</string>
+    <string name="btn_ask_help">🖥 Pedir para ver a tela</string>
+    <string name="viewer_waiting">Aguardando %1$s permitir…</string>
+    <string name="viewer_denied">A solicitação foi recusada ou encerrada.</string>
+    <string name="viewer_ended">O compartilhamento terminou.</string>
+    <string name="viewer_connecting">Conectando…</string>
+    <string name="btn_end">Encerrar</string>
+    <string name="need_nonactive">Apenas a família conectada pode pedir ajuda de tela.</string>
 </resources>

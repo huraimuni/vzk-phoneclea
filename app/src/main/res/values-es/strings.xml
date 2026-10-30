@@ -48,4 +48,20 @@ Válido %2$d minutos, un solo uso. Díselo a tu familiar o muestra el QR.</strin
     <string name="confirm_block">¿Bloquear a %1$s? No podrá volver a enviar solicitudes.</string>
     <string name="version_line">VZK PhoneClean v%1$s</string>
     <string name="need_login_first">Inicia sesión primero.</string>
+    <string name="share_channel">Compartir pantalla</string>
+    <string name="share_ongoing">📢 Se está compartiendo tu pantalla</string>
+    <string name="share_ongoing_sub">Viendo: %1$s · Pulsa Detener para terminar</string>
+    <string name="share_stop">Detener</string>
+    <string name="consent_title">%1$s quiere ver tu pantalla</string>
+    <string name="consent_warn">⚠ Permite solo si TÚ pediste ayuda a esta persona. Los estafadores (vishing) pueden pedirte compartir pantalla. Nunca lo hagas si te lo pide un desconocido, banco o policía.</string>
+    <string name="consent_privacy">Tu pantalla se envía solo a esta persona y no se graba ni se guarda. Cierra antes las contraseñas y apps bancarias. Puedes detenerlo cuando quieras (máx. 15 minutos).</string>
+    <string name="btn_allow">PERMITIR</string>
+    <string name="btn_deny">RECHAZAR</string>
+    <string name="btn_ask_help">🖥 Pedir ver su pantalla</string>
+    <string name="viewer_waiting">Esperando que %1$s lo permita…</string>
+    <string name="viewer_denied">La solicitud fue rechazada o terminó.</string>
+    <string name="viewer_ended">La pantalla compartida terminó.</string>
+    <string name="viewer_connecting">Conectando…</string>
+    <string name="btn_end">Terminar</string>
+    <string name="need_nonactive">Solo la familia conectada puede pedir ayuda en pantalla.</string>
 </resources>

@@ -48,4 +48,20 @@ Berlaku %2$d menit, sekali pakai. Beri tahu keluarga atau tunjukkan QR.</string>
     <string name="confirm_block">Blokir %1$s? Mereka tidak dapat mengirim permintaan lagi.</string>
     <string name="version_line">VZK PhoneClean v%1$s</string>
     <string name="need_login_first">Silakan masuk terlebih dahulu.</string>
+    <string name="share_channel">Berbagi layar</string>
+    <string name="share_ongoing">📢 Layar Anda sedang dibagikan</string>
+    <string name="share_ongoing_sub">Penonton: %1$s · Ketuk Hentikan untuk mengakhiri</string>
+    <string name="share_stop">Hentikan</string>
+    <string name="consent_title">%1$s ingin melihat layar Anda</string>
+    <string name="consent_warn">⚠ Izinkan hanya jika ANDA yang meminta bantuan orang ini. Penipu bisa meminta Anda berbagi layar. Jangan izinkan jika orang asing, bank, atau polisi yang meminta.</string>
+    <string name="consent_privacy">Layar dikirim langsung ke orang ini dan tidak direkam atau disimpan. Tutup dulu kata sandi dan aplikasi bank. Anda dapat menghentikan kapan saja (maks. 15 menit).</string>
+    <string name="btn_allow">IZINKAN</string>
+    <string name="btn_deny">TOLAK</string>
+    <string name="btn_ask_help">🖥 Minta lihat layarnya</string>
+    <string name="viewer_waiting">Menunggu %1$s mengizinkan…</string>
+    <string name="viewer_denied">Permintaan ditolak atau berakhir.</string>
+    <string name="viewer_ended">Berbagi layar berakhir.</string>
+    <string name="viewer_connecting">Menghubungkan…</string>
+    <string name="btn_end">Akhiri</string>
+    <string name="need_nonactive">Hanya keluarga terhubung yang dapat meminta bantuan layar.</string>
 </resources>

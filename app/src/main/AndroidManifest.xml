@@ -28,6 +28,8 @@
     <!-- 상시 감시 모드(선택): 새 앱 설치를 바로 알려 주기 위한 상시 실행 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <!-- 화면 공유(부모가 [허용]을 눌렀을 때만 동작) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application
@@ -55,6 +57,18 @@
         <activity
             android:name=".FamilyActivity"
             android:exported="false" />
+        <activity
+            android:name=".ConsentActivity"
+            android:exported="false"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true" />
+        <activity
+            android:name=".ViewerActivity"
+            android:exported="false" />
+        <service
+            android:name=".ShareService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
