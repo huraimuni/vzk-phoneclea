@@ -2,7 +2,7 @@ name: Build APK
 
 on:
   push:
-    branches: [main]
+    branches: [main, v2-dev]
     tags: ['v*']
   workflow_dispatch:
 
@@ -36,6 +36,9 @@ jobs:
             echo "signing=off (temporary debug key, updates need uninstall first)"
           fi
       - name: Build APK
+        env:
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
         run: |
           if [ -n "$KEYSTORE_FILE" ]; then
             gradle assembleRelease --no-daemon
