@@ -84,7 +84,10 @@ public class SubscribeActivity extends BaseActivity implements PurchasesUpdatedL
         bc.startConnection(new BillingClientStateListener() {
             @Override
             public void onBillingSetupFinished(BillingResult r) {
-                if (r.getResponseCode() == BillingClient.BillingResponseCode.OK) query();
+                if (r.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    query();
+                    restore();
+                }
             }
 
             @Override
@@ -115,6 +118,22 @@ public class SubscribeActivity extends BaseActivity implements PurchasesUpdatedL
                         buy.setEnabled(true);
                     });
                 });
+    }
+
+    /** 앱을 지우고 다시 깔았거나 새 폰일 때: 이 구글 계정의 기존 구독을 찾아 서버에서 다시 확인한다. */
+    private void restore() {
+        bc.queryPurchasesAsync(com.android.billingclient.api.QueryPurchasesParams.newBuilder()
+                .setProductType(BillingClient.ProductType.SUBS).build(), (br, list) -> {
+            if (list == null) return;
+            for (Purchase p : list) {
+                if (p.getPurchaseState() != Purchase.PurchaseState.PURCHASED) continue;
+                Map<String, Object> m = new HashMap<>();
+                m.put("purchaseToken", p.getPurchaseToken());
+                m.put("productId", p.getProducts().get(0));
+                FirebaseFunctions.getInstance(Auth.REGION).getHttpsCallable("verifyPurchase").call(m)
+                        .addOnSuccessListener(x -> refreshState());
+            }
+        });
     }
 
     private void launch() {
