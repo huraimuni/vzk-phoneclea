@@ -54,6 +54,13 @@ async function applyPurchase(api, token, expectUid) {
   const buyer = d.externalAccountIdentifiers && d.externalAccountIdentifiers.obfuscatedExternalAccountId;
   const uid = buyer || expectUid;           // 결제는 구매자 계정에 묶는다
   if (expectUid && buyer && buyer !== expectUid) throw new HttpsError('permission-denied', 'account mismatch');
+  // 한 구독(토큰)은 한 계정에만 연결된다. 다른 계정이 같은 구매를 쓰려 하면 거부(중복·공유 방지)
+  const key = require('crypto').createHash('sha256').update(token).digest('hex');
+  const tref = admin.firestore().collection('purchaseTokens').doc(key);
+  const tsnap = await tref.get();
+  if (tsnap.exists && tsnap.data().uid !== uid) throw new HttpsError('already-exists', 'already used by another account');
+  // 같은 계정이 새 토큰으로 다시 구매하는 경우도 이미 유효한 구독이 있으면 갱신만 한다(권한은 계정당 1개 문서)
+  await tref.set({ uid, updatedAt: admin.firestore.FieldValue.serverTimestamp() }, { merge: true });
   const active = ['SUBSCRIPTION_STATE_ACTIVE', 'SUBSCRIPTION_STATE_IN_GRACE_PERIOD'].includes(d.subscriptionState);
   const expiry = new Date(item.expiryTime);
   if (active && d.acknowledgementState === 'ACKNOWLEDGEMENT_STATE_PENDING') {

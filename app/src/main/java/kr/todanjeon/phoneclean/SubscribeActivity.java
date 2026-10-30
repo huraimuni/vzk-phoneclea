@@ -34,6 +34,8 @@ public class SubscribeActivity extends BaseActivity implements PurchasesUpdatedL
     private ProductDetails details;
     private TextView state;
     private Button buy;
+    private volatile boolean subscribed;
+    private volatile String priceText;
 
     @Override
     protected void onCreate(Bundle b) {
@@ -98,8 +100,10 @@ public class SubscribeActivity extends BaseActivity implements PurchasesUpdatedL
 
     private void refreshState() {
         Access.check((ok, via) -> runOnUiThread(() -> {
+            subscribed = ok;
             if (ok) state.setText("grant".equals(via) ? R.string.sub_free_grant : R.string.sub_active);
             else state.setText(R.string.sub_need);
+            updateBuy();
         }));
     }
 
@@ -113,10 +117,8 @@ public class SubscribeActivity extends BaseActivity implements PurchasesUpdatedL
                     List<ProductDetails.SubscriptionOfferDetails> offers = details.getSubscriptionOfferDetails();
                     if (offers == null || offers.isEmpty()) return;
                     final String price = offers.get(0).getPricingPhases().getPricingPhaseList().get(0).getFormattedPrice();
-                    runOnUiThread(() -> {
-                        buy.setText(getString(R.string.sub_price_btn, price));
-                        buy.setEnabled(true);
-                    });
+                    priceText = price;
+                    runOnUiThread(this::updateBuy);
                 });
     }
 
@@ -136,7 +138,19 @@ public class SubscribeActivity extends BaseActivity implements PurchasesUpdatedL
         });
     }
 
+    /** 이미 구독 중이거나 운영자 무료 지정이면 구매 버튼을 막는다(중복 구독 방지). */
+    private void updateBuy() {
+        if (subscribed) {
+            buy.setEnabled(false);
+            buy.setText(R.string.sub_active);
+        } else if (priceText != null) {
+            buy.setText(getString(R.string.sub_price_btn, priceText));
+            buy.setEnabled(true);
+        }
+    }
+
     private void launch() {
+        if (subscribed) return;
         if (details == null || details.getSubscriptionOfferDetails() == null) return;
         BillingFlowParams.ProductDetailsParams pd = BillingFlowParams.ProductDetailsParams.newBuilder()
                 .setProductDetails(details)

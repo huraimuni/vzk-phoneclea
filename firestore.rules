@@ -55,6 +55,9 @@ service cloud.firestore {
       allow read: if signedIn() && request.auth.uid == uid;
       allow write: if false;
     }
+    match /purchaseTokens/{k} {
+      allow read, write: if false;
+    }
     // grants: 운영자가 Firebase 콘솔에서 직접 작성(예: 내 가족 무료). 앱은 본인 것만 읽기.
     match /grants/{uid} {
       allow read: if signedIn() && request.auth.uid == uid;
