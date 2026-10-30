@@ -40,13 +40,18 @@ jobs:
           NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
         run: |
+          set -o pipefail
           if [ -n "$KEYSTORE_FILE" ]; then
-            gradle assembleRelease --no-daemon
-            cp app/build/outputs/apk/release/app-release.apk VZK_PhoneClean_v1.0.apk
+            T=assembleRelease; O=app/build/outputs/apk/release/app-release.apk
           else
-            gradle assembleDebug --no-daemon
-            cp app/build/outputs/apk/debug/app-debug.apk VZK_PhoneClean_v1.0.apk
+            T=assembleDebug; O=app/build/outputs/apk/debug/app-debug.apk
           fi
+          if ! gradle $T --no-daemon --console=plain 2>&1 | tee build.log; then
+            ERR=$(grep -E "error:|e: |What went wrong|Could not|FAILED|Execution failed|not found|Unresolved" -A2 build.log | head -60 | sed ':a;N;$!ba;s/%/%25/g;s/\r/%0D/g;s/\n/%0A/g')
+            echo "::error title=Gradle build errors::$ERR"
+            exit 1
+          fi
+          cp $O VZK_PhoneClean_v1.0.apk
       - uses: actions/upload-artifact@v4
         with:
           name: VZK-PhoneClean-APK
