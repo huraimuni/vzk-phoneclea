@@ -137,7 +137,7 @@ final class Auth {
             d.fail("token");
             return;
         }
-        FirebaseFunctions.getInstanceFor(REGION).getHttpsCallable(fn)
+        FirebaseFunctions.getInstance(REGION).getHttpsCallable(fn)
                 .call(Collections.singletonMap("accessToken", accessToken))
                 .addOnSuccessListener(r -> {
                     Map<String, Object> m = (Map<String, Object>) r.getData();
