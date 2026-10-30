@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 
     private static final int REQ_DELETE = 100;
     private static final String PREFS = "phoneclean";
@@ -88,6 +88,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!Lang.isChosen(this)) {
+            startActivity(new Intent(this, LanguageActivity.class));
+            finish();
+            return;
+        }
         CrashLog.install(getApplicationContext());
         loadSafe();
         buildUi();
@@ -690,7 +695,7 @@ public class MainActivity extends Activity {
     }
 
     private void showMore() {
-        final String[] items = {"응급 가이드 (폰이 멈췄을 때)", "광고·알고리즘 정리", "알림 정리 (알림 비우기·끄기)", "안전 표시한 앱 관리",
+        final String[] items = {getString(R.string.home_family_btn), getString(R.string.btn_language), "응급 가이드 (폰이 멈췄을 때)", "광고·알고리즘 정리", "알림 정리 (알림 비우기·끄기)", "안전 표시한 앱 관리",
                 "사용 기록 허용 (정확도 향상)",
                 watchOn() ? "새 앱 즉시 분석 알림 끄기 (감시 중)" : "새 앱 즉시 분석 알림 켜기 (감시)",
                 "결과 공유 (카카오톡 등)", "오류 보고·건의하기", "도움말"};
@@ -699,13 +704,15 @@ public class MainActivity extends Activity {
                 .setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) startActivity(new Intent(MainActivity.this, EmergencyActivity.class));
-                        else if (which == 1) startActivity(new Intent(MainActivity.this, AdsGuideActivity.class));
-                        else if (which == 2) startActivity(new Intent(MainActivity.this, NotifActivity.class));
-                        else if (which == 3) manageSafe();
-                        else if (which == 4) openUsageSettings();
-                        else if (which == 5) toggleWatch();
-                        else if (which == 6) shareReport();
+                        if (which == 0) startActivity(new Intent(MainActivity.this, Auth.uid() == null ? LoginActivity.class : FamilyActivity.class));
+                        else if (which == 1) startActivity(new Intent(MainActivity.this, LanguageActivity.class));
+                        else if (which == 2) startActivity(new Intent(MainActivity.this, EmergencyActivity.class));
+                        else if (which == 3) startActivity(new Intent(MainActivity.this, AdsGuideActivity.class));
+                        else if (which == 4) startActivity(new Intent(MainActivity.this, NotifActivity.class));
+                        else if (which == 5) manageSafe();
+                        else if (which == 6) openUsageSettings();
+                        else if (which == 7) toggleWatch();
+                        else if (which == 8) shareReport();
                         else if (which == items.length - 2) showFeedback();
                         else showHelp();
                     }
@@ -1113,11 +1120,11 @@ public class MainActivity extends Activity {
                 + "- 폰에 원래 들어 있던 기본 앱(출고 시 설치)은 의심 목록에서 뺍니다.\n"
                 + "- 일시 중지는 백그라운드 실행을 끄는 임시 조치입니다. 앱이 다시 켜질 수 있고, 지금 화면에 떠 있는 앱은 못 끌 수 있습니다.\n"
                 + "- 앱을 몰래 지우지 않습니다. 삭제는 항상 확인 창에서 직접 누릅니다.\n"
-                + "- 인터넷 권한이 없어서, 점검 결과가 밖으로 나가지 않습니다.\n"
+                + "- 점검 결과(앱 목록·사진·연락처 등)는 밖으로 보내지 않습니다. 인터넷은 로그인·가족 연결·화면 공유에만 씁니다.\n"
                 + "- 개인이 만든 무료 도구이며, 판단과 책임은 사용자 본인에게 있습니다.\n\n"
                 + "문의는 카페 게시판으로만 받습니다.";
         new AlertDialog.Builder(this)
-                .setTitle("VZK 폰클린 v1.0")
+                .setTitle("VZK 폰클린 v" + BuildConfig.VERSION_NAME)
                 .setMessage(msg)
                 .setPositiveButton("확인", null)
                 .setNeutralButton("카페 열기", new DialogInterface.OnClickListener() {
@@ -1136,7 +1143,7 @@ public class MainActivity extends Activity {
                 .setTitle("지난번에 앱이 오류로 꺼졌습니다")
                 .setMessage("불편을 드려 죄송합니다. 오류 내용을 보내 주시면 고치는 데 큰 도움이 됩니다.\n"
                         + "오류 내용에는 앱 이름이나 개인 정보가 들어 있지 않고, 기종·안드로이드 버전·오류 문구만 있습니다. "
-                        + "이 앱은 인터넷 권한이 없어서 자동으로 보내지 않고, 직접 보내기를 누르셨을 때만 공유됩니다.")
+                        + "이 앱은 오류 내용을 자동으로 보내지 않고, 직접 보내기를 누르셨을 때만 공유됩니다.")
                 .setPositiveButton("오류 내용 보내기", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface d, int w) {

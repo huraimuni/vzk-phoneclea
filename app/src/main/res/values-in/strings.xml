@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lang_title">Pilih bahasa</string>
+    <string name="lang_hint">Anda dapat mengubahnya nanti di Pengaturan.</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Batal</string>
+    <string name="btn_back">Kembali</string>
+    <string name="btn_accept">Terima</string>
+    <string name="btn_reject">Tolak</string>
+    <string name="btn_remove">Putuskan</string>
+    <string name="btn_block">Blokir</string>
+    <string name="home_family_btn">👪 Koneksi keluarga &amp; bantuan layar</string>
+    <string name="login_title">Masuk</string>
+    <string name="login_desc">Masuk untuk memakai koneksi keluarga. Pembersih dasar dapat dipakai tanpa masuk.</string>
+    <string name="btn_google">Lanjutkan dengan Google</string>
+    <string name="btn_kakao">Lanjutkan dengan Kakao</string>
+    <string name="btn_naver">Lanjutkan dengan Naver</string>
+    <string name="login_more">Lihat opsi masuk lain</string>
+    <string name="login_failed">Gagal masuk: %1$s</string>
+    <string name="login_unavailable">Metode masuk ini belum tersedia di versi ini.</string>
+    <string name="signed_in_as">Masuk sebagai %1$s</string>
+    <string name="btn_signout">Keluar</string>
+    <string name="btn_language">🌐 Bahasa</string>
+    <string name="family_title">Koneksi keluarga</string>
+    <string name="family_intro">Hubungkan dengan anggota keluarga tepercaya agar dapat melihat layar Anda hanya dengan izin Anda dan menunjukkan apa yang harus diketuk. Anda selalu yang memutuskan: setiap koneksi dan berbagi layar memerlukan persetujuan Anda.</string>
+    <string name="parent_section">Saya ingin dibantu</string>
+    <string name="child_section">Saya ingin membantu</string>
+    <string name="btn_make_code">Buat kode undangan</string>
+    <string name="code_valid">Kode: %1$s
+Berlaku %2$d menit, sekali pakai. Beri tahu keluarga atau tunjukkan QR.</string>
+    <string name="btn_enter_code">Masukkan kode</string>
+    <string name="btn_scan_qr">Pindai QR</string>
+    <string name="code_hint">Kode undangan (6 digit)</string>
+    <string name="err_code_invalid">Kode tidak valid atau sudah kedaluwarsa.</string>
+    <string name="err_generic">Terjadi kesalahan: %1$s</string>
+    <string name="request_sent">Permintaan terkirim. Menunggu persetujuan %1$s.</string>
+    <string name="pending_title">Menunggu persetujuan Anda</string>
+    <string name="confirm_accept">Izinkan %1$s terhubung sebagai pembantu keluarga? Terima hanya orang yang Anda kenal.</string>
+    <string name="members_title">Keluarga terhubung</string>
+    <string name="members_empty">Belum ada yang terhubung.</string>
+    <string name="role_helper">Pembantu</string>
+    <string name="role_helped">Dibantu</string>
+    <string name="status_blocked">Diblokir</string>
+    <string name="btn_request_disconnect">Minta putus koneksi</string>
+    <string name="disconnect_requested">Permintaan putus dikirim. Menunggu persetujuan pihak lain.</string>
+    <string name="disconnect_incoming">%1$s meminta untuk memutus koneksi.</string>
+    <string name="confirm_remove">Putuskan koneksi dengan %1$s? Untuk menghubungkan lagi perlu undangan dan persetujuan baru.</string>
+    <string name="confirm_block">Blokir %1$s? Mereka tidak dapat mengirim permintaan lagi.</string>
+    <string name="version_line">VZK PhoneClean v%1$s</string>
+    <string name="need_login_first">Silakan masuk terlebih dahulu.</string>
+</resources>

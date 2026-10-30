@@ -16,7 +16,7 @@ import android.widget.TextView;
  * 광고·알고리즘 정리 안내 화면.
  * 구글 계정 설정은 앱이 대신 바꿀 수 없어서, 해당 화면까지 바로 이동시키고 순서를 안내합니다.
  */
-public class AdsGuideActivity extends Activity {
+public class AdsGuideActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

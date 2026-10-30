@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lang_title">Choose your language</string>
+    <string name="lang_hint">You can change this later in Settings.</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_back">Back</string>
+    <string name="btn_accept">Accept</string>
+    <string name="btn_reject">Reject</string>
+    <string name="btn_remove">Remove</string>
+    <string name="btn_block">Block</string>
+    <string name="home_family_btn">👪 Family connection &amp; screen help</string>
+    <string name="login_title">Sign in</string>
+    <string name="login_desc">Sign in to use family connection. The basic cleaner works without signing in.</string>
+    <string name="btn_google">Continue with Google</string>
+    <string name="btn_kakao">Continue with Kakao</string>
+    <string name="btn_naver">Continue with Naver</string>
+    <string name="login_more">Show other sign-in options</string>
+    <string name="login_failed">Sign-in failed: %1$s</string>
+    <string name="login_unavailable">This sign-in method is not set up in this build.</string>
+    <string name="signed_in_as">Signed in as %1$s</string>
+    <string name="btn_signout">Sign out</string>
+    <string name="btn_language">🌐 Language</string>
+    <string name="family_title">Family connection</string>
+    <string name="family_intro">Connect with a family member you trust, so they can see your screen with your permission and point out what to tap. You always decide: every connection and every screen sharing needs your approval.</string>
+    <string name="parent_section">I want to be helped</string>
+    <string name="child_section">I want to help someone</string>
+    <string name="btn_make_code">Create invite code</string>
+    <string name="code_valid">Code: %1$s
+Valid for %2$d minutes, one use only. Tell it to your family or let them scan the QR.</string>
+    <string name="btn_enter_code">Enter code</string>
+    <string name="btn_scan_qr">Scan QR</string>
+    <string name="code_hint">Invite code (6 digits)</string>
+    <string name="err_code_invalid">The code is invalid or has expired.</string>
+    <string name="err_generic">Something went wrong: %1$s</string>
+    <string name="request_sent">Request sent. Waiting for approval from %1$s.</string>
+    <string name="pending_title">Waiting for your approval</string>
+    <string name="confirm_accept">Allow %1$s to connect as your family helper? Only accept people you know.</string>
+    <string name="members_title">Connected family</string>
+    <string name="members_empty">No one is connected yet.</string>
+    <string name="role_helper">Helper</string>
+    <string name="role_helped">Being helped</string>
+    <string name="status_blocked">Blocked</string>
+    <string name="btn_request_disconnect">Request disconnection</string>
+    <string name="disconnect_requested">Disconnection requested. Waiting for the other person to accept.</string>
+    <string name="disconnect_incoming">%1$s asked to disconnect.</string>
+    <string name="confirm_remove">Remove %1$s? You can reconnect only with a new invite and approval.</string>
+    <string name="confirm_block">Block %1$s? They will not be able to send requests again.</string>
+    <string name="version_line">VZK PhoneClean v%1$s</string>
+    <string name="need_login_first">Please sign in first.</string>
+</resources>

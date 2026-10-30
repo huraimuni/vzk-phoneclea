@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lang_title">Elige tu idioma</string>
+    <string name="lang_hint">Puedes cambiarlo más tarde en Ajustes.</string>
+    <string name="btn_ok">Aceptar</string>
+    <string name="btn_cancel">Cancelar</string>
+    <string name="btn_back">Atrás</string>
+    <string name="btn_accept">Aceptar</string>
+    <string name="btn_reject">Rechazar</string>
+    <string name="btn_remove">Desconectar</string>
+    <string name="btn_block">Bloquear</string>
+    <string name="home_family_btn">👪 Conexión familiar y ayuda en pantalla</string>
+    <string name="login_title">Iniciar sesión</string>
+    <string name="login_desc">Inicia sesión para usar la conexión familiar. El limpiador básico funciona sin iniciar sesión.</string>
+    <string name="btn_google">Continuar con Google</string>
+    <string name="btn_kakao">Continuar con Kakao</string>
+    <string name="btn_naver">Continuar con Naver</string>
+    <string name="login_more">Ver otras opciones</string>
+    <string name="login_failed">Error al iniciar sesión: %1$s</string>
+    <string name="login_unavailable">Este método no está disponible en esta versión.</string>
+    <string name="signed_in_as">Sesión iniciada como %1$s</string>
+    <string name="btn_signout">Cerrar sesión</string>
+    <string name="btn_language">🌐 Idioma</string>
+    <string name="family_title">Conexión familiar</string>
+    <string name="family_intro">Conecta con un familiar de confianza para que vea tu pantalla solo con tu permiso y te indique qué tocar. Tú decides siempre: cada conexión y cada pantalla compartida requiere tu aprobación.</string>
+    <string name="parent_section">Quiero recibir ayuda</string>
+    <string name="child_section">Quiero ayudar a alguien</string>
+    <string name="btn_make_code">Crear código de invitación</string>
+    <string name="code_valid">Código: %1$s
+Válido %2$d minutos, un solo uso. Díselo a tu familiar o muestra el QR.</string>
+    <string name="btn_enter_code">Introducir código</string>
+    <string name="btn_scan_qr">Escanear QR</string>
+    <string name="code_hint">Código de invitación (6 dígitos)</string>
+    <string name="err_code_invalid">El código no es válido o ha caducado.</string>
+    <string name="err_generic">Algo salió mal: %1$s</string>
+    <string name="request_sent">Solicitud enviada. Esperando la aprobación de %1$s.</string>
+    <string name="pending_title">Solicitudes pendientes</string>
+    <string name="confirm_accept">¿Permitir que %1$s se conecte como tu ayudante familiar? Acepta solo a personas que conozcas.</string>
+    <string name="members_title">Familia conectada</string>
+    <string name="members_empty">Aún no hay nadie conectado.</string>
+    <string name="role_helper">Ayudante</string>
+    <string name="role_helped">Ayudado</string>
+    <string name="status_blocked">Bloqueado</string>
+    <string name="btn_request_disconnect">Solicitar desconexión</string>
+    <string name="disconnect_requested">Desconexión solicitada. Esperando la aceptación de la otra persona.</string>
+    <string name="disconnect_incoming">%1$s pidió desconectarse.</string>
+    <string name="confirm_remove">¿Desconectar a %1$s? Para reconectar se necesita una nueva invitación y aprobación.</string>
+    <string name="confirm_block">¿Bloquear a %1$s? No podrá volver a enviar solicitudes.</string>
+    <string name="version_line">VZK PhoneClean v%1$s</string>
+    <string name="need_login_first">Inicia sesión primero.</string>
+</resources>

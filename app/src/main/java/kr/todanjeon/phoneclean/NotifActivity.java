@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 /** 알림 정리: (1) 지금 쌓인 알림을 앱별로 비우기 (2) 앱별 알림 끄기 화면 바로 열기 */
-public class NotifActivity extends Activity {
+public class NotifActivity extends BaseActivity {
 
     private LinearLayout body;
     private LinearLayout stackBox;
@@ -130,7 +130,7 @@ public class NotifActivity extends Activity {
         if (!listenerGranted()) {
             TextView t = Ui.text(this, "쌓인 알림을 앱별로 한 번에 비우려면 [알림 접근] 허용이 필요합니다.\n"
                     + "- 이 앱은 알림 내용을 읽지 않고, 어느 앱이 몇 개 보냈는지만 셉니다.\n"
-                    + "- 인터넷 권한이 없어서 밖으로 나가지 않습니다.\n"
+                    + "- 알림 내용은 밖으로 나가지 않습니다.\n"
                     + "- 이 권한은 악성 앱도 노리는 권한이라, 쓰고 나면 다시 꺼 두기를 권합니다.", 14, Ui.INK, false);
             t.setLineSpacing(0, 1.2f);
             stackBox.addView(t);

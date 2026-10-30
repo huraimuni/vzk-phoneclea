@@ -12,7 +12,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 /** 폰이 멈춰서 조작이 안 될 때의 응급 순서 안내. */
-public class EmergencyActivity extends Activity {
+public class EmergencyActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

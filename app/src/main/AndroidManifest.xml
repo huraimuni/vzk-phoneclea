@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- 설치된 앱 목록을 읽기 위한 권한. 인터넷 권한은 일부러 넣지 않았습니다(점검 결과가 밖으로 나가지 않음). -->
+    <!-- 인터넷: 로그인·가족 연결·화면 공유에만 사용합니다. 앱 점검 결과는 밖으로 보내지 않습니다. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 설치된 앱 목록을 읽기 위한 권한 -->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <!-- 사용자가 선택한 앱의 삭제 확인 창을 띄우기 위한 권한 -->
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
@@ -28,6 +31,7 @@
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application
+        android:name=".App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="VZK 폰클린"
@@ -42,6 +46,25 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".LanguageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FamilyActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="oauth" android:scheme="kakaof8898377c9756b28f0d527714d44467e" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".AdsGuideActivity"
             android:exported="false" />

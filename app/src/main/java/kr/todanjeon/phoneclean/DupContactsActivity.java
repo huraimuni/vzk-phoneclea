@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 /** 같은 전화번호가 들어 있는 연락처를 묶어서 보여 주고, 남길 1개 빼고 삭제합니다. */
-public class DupContactsActivity extends Activity {
+public class DupContactsActivity extends BaseActivity {
 
     private static final int REQ_PERM = 21;
 

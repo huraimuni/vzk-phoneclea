@@ -48,7 +48,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /** 같은 내용으로 보이는 사진·영상을 묶어서 보여 주고, 남길 1개 빼고 휴지통으로 보냅니다. */
-public class DupMediaActivity extends Activity {
+public class DupMediaActivity extends BaseActivity {
 
     private static final int REQ_PERM = 11;
     private static final int REQ_TRASH = 12;

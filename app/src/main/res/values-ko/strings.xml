@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lang_title">언어를 선택하세요</string>
+    <string name="lang_hint">나중에 설정에서 바꿀 수 있습니다.</string>
+    <string name="btn_ok">확인</string>
+    <string name="btn_cancel">취소</string>
+    <string name="btn_back">뒤로</string>
+    <string name="btn_accept">수락</string>
+    <string name="btn_reject">거절</string>
+    <string name="btn_remove">연결 해제</string>
+    <string name="btn_block">차단</string>
+    <string name="home_family_btn">👪 가족 연결 · 화면 도움</string>
+    <string name="login_title">로그인</string>
+    <string name="login_desc">가족 연결 기능을 쓰려면 로그인이 필요합니다. 기본 점검 기능은 로그인 없이 쓸 수 있습니다.</string>
+    <string name="btn_google">구글로 계속하기</string>
+    <string name="btn_kakao">카카오로 계속하기</string>
+    <string name="btn_naver">네이버로 계속하기</string>
+    <string name="login_more">다른 로그인 방식 보기</string>
+    <string name="login_failed">로그인에 실패했습니다: %1$s</string>
+    <string name="login_unavailable">이 빌드에서는 이 로그인 방식을 쓸 수 없습니다.</string>
+    <string name="signed_in_as">%1$s 님으로 로그인됨</string>
+    <string name="btn_signout">로그아웃</string>
+    <string name="btn_language">🌐 언어 변경</string>
+    <string name="family_title">가족 연결</string>
+    <string name="family_intro">믿을 수 있는 가족과 연결하면, 내가 허락했을 때만 화면을 보여 주고 어디를 누를지 알려 받을 수 있습니다. 연결도, 화면 공유도 항상 내가 허락해야 시작됩니다.</string>
+    <string name="parent_section">도움을 받는 사람 (부모님)</string>
+    <string name="child_section">도와주는 사람 (자녀)</string>
+    <string name="btn_make_code">초대 코드 만들기</string>
+    <string name="code_valid">코드: %1$s
+%2$d분 동안, 한 번만 쓸 수 있습니다. 가족에게 알려 주거나 QR을 보여 주세요.</string>
+    <string name="btn_enter_code">코드 입력</string>
+    <string name="btn_scan_qr">QR 스캔</string>
+    <string name="code_hint">초대 코드 (6자리)</string>
+    <string name="err_code_invalid">코드가 맞지 않거나 시간이 지났습니다.</string>
+    <string name="err_generic">문제가 생겼습니다: %1$s</string>
+    <string name="request_sent">연결 요청을 보냈습니다. %1$s 님의 수락을 기다립니다.</string>
+    <string name="pending_title">수락을 기다리는 요청</string>
+    <string name="confirm_accept">%1$s 님을 가족 도우미로 연결할까요? 아는 사람만 수락하세요.</string>
+    <string name="members_title">연결된 가족</string>
+    <string name="members_empty">아직 연결된 사람이 없습니다.</string>
+    <string name="role_helper">도와주는 사람</string>
+    <string name="role_helped">도움받는 사람</string>
+    <string name="status_blocked">차단됨</string>
+    <string name="btn_request_disconnect">연결 해제 요청</string>
+    <string name="disconnect_requested">해제를 요청했습니다. 상대방의 수락을 기다립니다.</string>
+    <string name="disconnect_incoming">%1$s 님이 연결 해제를 요청했습니다.</string>
+    <string name="confirm_remove">%1$s 님과의 연결을 끊을까요? 다시 연결하려면 새 초대와 수락이 필요합니다.</string>
+    <string name="confirm_block">%1$s 님을 차단할까요? 다시 요청할 수 없게 됩니다.</string>
+    <string name="version_line">VZK 폰클린 v%1$s</string>
+    <string name="need_login_first">먼저 로그인해 주세요.</string>
+</resources>
