@@ -350,5 +350,7 @@
 "새 버전이 있습니다": "Hay una nueva versión",
 "현재 v%s → 최신 v%s\n\n받으러 갈까요?": "Actual v%s → última v%s\n\n¿Ir a descargarla?",
 "받으러 가기": "Descargar",
-"로그인 중입니다... 잠시만 기다려 주세요": "Iniciando sesión... espera un momento"
+"로그인 중입니다... 잠시만 기다려 주세요": "Iniciando sesión... espera un momento",
+"로그인하시겠어요? (선택)": "¿Iniciar sesión? (opcional)",
+"앱 점검과 정리는 로그인 없이 모두 쓸 수 있습니다.\n가족 연결·화면 도움을 쓰려면 로그인이 필요합니다. 나중에 [더보기 > 가족 연결]에서도 할 수 있습니다.": "La revisión y limpieza funcionan sin iniciar sesión.\nPara la conexión familiar y la ayuda en pantalla se necesita iniciar sesión. También puedes hacerlo luego en [Más > Conexión familiar]."
 }
