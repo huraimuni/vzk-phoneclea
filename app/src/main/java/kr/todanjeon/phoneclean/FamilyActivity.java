@@ -242,7 +242,7 @@ public class FamilyActivity extends BaseActivity {
     // ------------------------------------------------------------------ 동작
     private void makeCode(final int attempt) {
         SecureRandom r = new SecureRandom();
-        final String c = String.format("%06d", r.nextInt(1000000));
+        final String c = String.format("%08d", r.nextInt(100000000));
         long now = System.currentTimeMillis();
         Map<String, Object> m = new HashMap<>();
         m.put("parentUid", Auth.uid());
@@ -275,7 +275,7 @@ public class FamilyActivity extends BaseActivity {
 
     /** 자녀: 코드로 연결 요청을 만든다(수락 전에는 아무 권한이 없다). */
     private void join(final String c) {
-        if (c.length() != 6) {
+        if (c.length() != 8) {
             Ui.toast(this, getString(R.string.err_code_invalid));
             return;
         }

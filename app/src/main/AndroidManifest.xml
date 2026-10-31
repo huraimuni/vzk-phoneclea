@@ -48,6 +48,9 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
+            android:name=".AdminActivity"
+            android:exported="false" />
+        <activity
             android:name=".FamilyActivity"
             android:exported="false" />
         <activity

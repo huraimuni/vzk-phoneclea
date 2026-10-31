@@ -36,6 +36,11 @@ if __name__=='__main__':
     items=json.load(open('/tmp/s2/items.json'))
     res,idxs=load_idx(items)
     res.update(load_extra())
+    FIX=[('6-digit','8-digit'),('6桁','8桁'),('6 dígitos','8 dígitos'),('6 digit','8 digit'),('6 अंकों','8 अंकों'),('6자리','8자리')]
+    def fx(t):
+        for a,b in FIX: t=t.replace(a,b)
+        return t
+    res={(fx(k) if k.startswith('이 앱은 무엇을') else k):([fx(x) for x in v] if k.startswith('이 앱은 무엇을') else v) for k,v in res.items()}
     os.makedirs('app/src/main/assets/tr',exist_ok=True)
     for li,l in enumerate(LANGS):
         d={ko:v[li] for ko,v in res.items()}

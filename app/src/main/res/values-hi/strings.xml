@@ -30,7 +30,7 @@
 %2$d मिनट तक मान्य, केवल एक बार। परिवार को बताएं या QR दिखाएं।</string>
     <string name="btn_enter_code">कोड दर्ज करें</string>
     <string name="btn_scan_qr">QR स्कैन करें</string>
-    <string name="code_hint">आमंत्रण कोड (6 अंक)</string>
+    <string name="code_hint">आमंत्रण कोड (8 अंक)</string>
     <string name="err_code_invalid">कोड अमान्य है या समय समाप्त हो गया है।</string>
     <string name="err_generic">कुछ गड़बड़ हुई: %1$s</string>
     <string name="request_sent">अनुरोध भेजा गया। %1$s की मंज़ूरी का इंतज़ार है।</string>

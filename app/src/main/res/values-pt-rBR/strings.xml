@@ -30,7 +30,7 @@
 Válido por %2$d minutos, uso único. Passe ao familiar ou mostre o QR.</string>
     <string name="btn_enter_code">Digitar código</string>
     <string name="btn_scan_qr">Ler QR</string>
-    <string name="code_hint">Código de convite (6 dígitos)</string>
+    <string name="code_hint">Código de convite (8 dígitos)</string>
     <string name="err_code_invalid">O código é inválido ou expirou.</string>
     <string name="err_generic">Algo deu errado: %1$s</string>
     <string name="request_sent">Solicitação enviada. Aguardando a aprovação de %1$s.</string>

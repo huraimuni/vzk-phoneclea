@@ -520,6 +520,7 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         resumed = true;
+        Admin.refresh();
         if (Scanner.hasUsageAccess(this) != lastUsageState && !scanning && !all.isEmpty()) startScan();
         if (cbKeep != null && cbKeep.isChecked()) {
             handler.removeCallbacks(keepTask);
@@ -689,14 +690,25 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showMore() {
-        final String[] items = {getString(R.string.home_family_btn), getString(R.string.btn_language), Tr.t("응급 가이드 (폰이 멈췄을 때)"), Tr.t("광고·알고리즘 정리"), Tr.t("알림 정리 (알림 비우기·끄기)"), Tr.t("안전 표시한 앱 관리"),
+        final String[] base = {getString(R.string.home_family_btn), getString(R.string.btn_language), Tr.t("응급 가이드 (폰이 멈췄을 때)"), Tr.t("광고·알고리즘 정리"), Tr.t("알림 정리 (알림 비우기·끄기)"), Tr.t("안전 표시한 앱 관리"),
                 watchOn() ? Tr.t("새 앱 설치 알림 끄기") : Tr.t("새 앱 설치 알림 켜기 (15분마다 확인)"),
                 Tr.t("결과 공유 (카카오톡 등)"), Tr.t("오류 보고·건의하기"), Tr.t("도움말")};
+        final boolean adm = Admin.is;
+        final String[] items = new String[base.length + (adm ? 1 : 0)];
+        for (int i = 0; i < base.length; i++) items[i + (adm ? 1 : 0)] = base[i];
+        if (adm) items[0] = "👑 관리자";
         new AlertDialog.Builder(this)
                 .setTitle(Tr.t("더보기"))
                 .setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if (adm) {
+                            if (which == 0) {
+                                startActivity(new Intent(MainActivity.this, AdminActivity.class));
+                                return;
+                            }
+                            which = which - 1;
+                        }
                         if (which == 0) startActivity(new Intent(MainActivity.this, Auth.uid() == null ? LoginActivity.class : FamilyActivity.class));
                         else if (which == 1) startActivity(new Intent(MainActivity.this, LanguageActivity.class));
                         else if (which == 2) startActivity(new Intent(MainActivity.this, EmergencyActivity.class));
@@ -705,7 +717,7 @@ public class MainActivity extends BaseActivity {
                         else if (which == 5) manageSafe();
                         else if (which == 6) toggleWatch();
                         else if (which == 7) shareReport();
-                        else if (which == items.length - 2) showFeedback();
+                        else if (which == base.length - 2) showFeedback();
                         else showHelp();
                     }
                 })
@@ -1098,7 +1110,7 @@ public class MainActivity extends BaseActivity {
                 + "- 개인이 만든 무료 도구이며, 판단과 책임은 사용자 본인에게 있습니다.\n\n"
                 + "\n[v2 새 기능: 가족 연결 · 화면 도움]\n"
                 + "- [더보기 > 가족 연결 · 화면 도움]에서 로그인(한국: 카카오·네이버·구글 / 해외: 구글)합니다. 로그인 없이도 기본 점검 기능은 모두 쓸 수 있습니다.\n"
-                + "- 도움받는 분이 [초대 코드 만들기]를 누르면 6자리 코드와 QR이 나옵니다(10분, 1회용). 도와주는 가족이 코드를 입력하거나 QR을 찍으면 요청이 가고, 받는 분이 [수락]해야 연결됩니다.\n"
+                + "- 도움받는 분이 [초대 코드 만들기]를 누르면 8자리 코드와 QR이 나옵니다(10분, 1회용). 도와주는 가족이 코드를 입력하거나 QR을 찍으면 요청이 가고, 받는 분이 [수락]해야 연결됩니다.\n"
                 + "- 연결 해제·차단은 도움받는 분만 할 수 있습니다. 도와주는 쪽은 [연결 해제 요청]만 보낼 수 있습니다.\n"
                 + "- 도와주는 분이 [화면 보여달라고 요청]을 누르면, 받는 분 폰에 큰 [허용/거부] 화면이 뜹니다. 허용해야만 화면이 전달되고, 공유 중에는 상단 알림에 '화면 공유 중'이 계속 보이며 [중지]로 언제든 끝낼 수 있습니다(최대 15분 후 자동 종료).\n"
                 + "- 화면은 녹화·저장되지 않고 상대에게만 바로 전달됩니다. 폰을 대신 조작할 수는 없고, 도와주는 분이 영상을 누르면 받는 분 화면에 동그라미가, 정해진 문구 버튼을 누르면 큰 글씨 안내가 잠깐 보입니다.\n"
@@ -1162,7 +1174,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showFeedback() {
-        final String[] items = {Tr.t("오류 내용 보내기 (카톡·문자 등으로 공유)"), Tr.t("건의하기 (카페 게시판 열기)")};
+        final String[] base = {Tr.t("오류 내용 보내기 (카톡·문자 등으로 공유)"), Tr.t("건의하기 (카페 게시판 열기)")};
         new AlertDialog.Builder(this)
                 .setTitle(Tr.t("오류 보고·건의하기"))
                 .setItems(items, new DialogInterface.OnClickListener() {

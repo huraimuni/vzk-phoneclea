@@ -30,7 +30,7 @@
 Válido %2$d minutos, un solo uso. Díselo a tu familiar o muestra el QR.</string>
     <string name="btn_enter_code">Introducir código</string>
     <string name="btn_scan_qr">Escanear QR</string>
-    <string name="code_hint">Código de invitación (6 dígitos)</string>
+    <string name="code_hint">Código de invitación (8 dígitos)</string>
     <string name="err_code_invalid">El código no es válido o ha caducado.</string>
     <string name="err_generic">Algo salió mal: %1$s</string>
     <string name="request_sent">Solicitud enviada. Esperando la aprobación de %1$s.</string>
