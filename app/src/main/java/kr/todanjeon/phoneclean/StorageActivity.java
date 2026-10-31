@@ -28,7 +28,7 @@ public class StorageActivity extends BaseActivity {
         root.setOrientation(LinearLayout.VERTICAL);
         Ui.fit(root);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, Tr.t("저장공간 관리"), "저장공간 사용량을 보고 정리하러 갑니다"));
+        root.addView(Ui.header(this, Tr.t("저장공간 관리"), Tr.t("저장공간 사용량을 보고 정리하러 갑니다")));
 
         ScrollView sv = new ScrollView(this);
         LinearLayout body = new LinearLayout(this);
@@ -46,10 +46,10 @@ public class StorageActivity extends BaseActivity {
         blp.setMargins(0, Ui.dp(this, 6), 0, Ui.dp(this, 14));
         body.addView(bar, blp);
 
-        addCard(body, "저장공간 정리",
-                "폰이 제공하는 저장공간 화면에서 큰 파일, 안 쓰는 앱, 중복 파일을 확인하고 정리할 수 있습니다. "
-                        + "삼성 폰은 [설정 > 배터리 및 디바이스 케어 > 저장공간]에서도 볼 수 있습니다.",
-                "폰 저장공간 화면 열기", Ui.CORAL, new Runnable() {
+        addCard(body, Tr.t("저장공간 정리"),
+                Tr.t("폰이 제공하는 저장공간 화면에서 큰 파일, 안 쓰는 앱, 중복 파일을 확인하고 정리할 수 있습니다. "
+                        + "삼성 폰은 [설정 > 배터리 및 디바이스 케어 > 저장공간]에서도 볼 수 있습니다."),
+                Tr.t("폰 저장공간 화면 열기"), Ui.CORAL, new Runnable() {
                     @Override
                     public void run() {
                         Ui.openFirst(StorageActivity.this,
@@ -59,8 +59,8 @@ public class StorageActivity extends BaseActivity {
                 });
 
         TextView note = Ui.text(this,
-                "참고\n- 이 앱은 사진·연락처 같은 개인 자료에 접근하지 않고, 저장공간 사용량만 보여 줍니다.\n"
-                        + "- 사진·연락처 등 개인 자료는 폰 밖으로 나가지 않습니다.",
+                Tr.t("참고\n- 이 앱은 사진·연락처 같은 개인 자료에 접근하지 않고, 저장공간 사용량만 보여 줍니다.\n"
+                        + "- 사진·연락처 등 개인 자료는 폰 밖으로 나가지 않습니다."),
                 13, Ui.GRAY, false);
         note.setLineSpacing(0, 1.2f);
         body.addView(note);
@@ -93,7 +93,7 @@ public class StorageActivity extends BaseActivity {
             long total = fs.getTotalBytes();
             long free = fs.getAvailableBytes();
             long used = total - free;
-            usage.setText(Tr.f("저장공간  사용 %s / 전체 %s  (남은 %s)", fmt(used), fmt(total), fmt(free)));
+            usage.setText(Tr.f(Tr.t("저장공간  사용 %s / 전체 %s  (남은 %s)"), fmt(used), fmt(total), fmt(free)));
             bar.setProgress(total > 0 ? (int) (used * 1000 / total) : 0);
         } catch (Exception e) {
             usage.setText(Tr.t("저장공간 정보를 읽지 못했습니다."));

@@ -46,7 +46,7 @@ public class NotifActivity extends BaseActivity {
         root.setOrientation(LinearLayout.VERTICAL);
         Ui.fit(root);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, Tr.t("알림 정리"), "알림이 자꾸 뜨는 앱을 찾아 끕니다"));
+        root.addView(Ui.header(this, Tr.t("알림 정리"), Tr.t("알림이 자꾸 뜨는 앱을 찾아 끕니다")));
 
         ScrollView sv = new ScrollView(this);
         body = new LinearLayout(this);
@@ -56,7 +56,7 @@ public class NotifActivity extends BaseActivity {
         root.addView(sv, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
         setContentView(root);
 
-        body.addView(Ui.text(this, "앱별 알림 끄기", 17, Ui.CORAL_DARK, true));
+        body.addView(Ui.text(this, Tr.t("앱별 알림 끄기"), 17, Ui.CORAL_DARK, true));
         TextView d = Ui.text(this, Tr.t("알림이 자꾸 뜨는 앱의 [알림 끄기]를 누르면 그 앱의 알림 설정 화면이 열립니다. "
                 + "거기서 스위치를 끄세요. 이 앱이 대신 꺼 줄 수는 없습니다. 의심 순으로 보여 드립니다."), 14, Ui.INK, false);
         d.setLineSpacing(0, 1.2f);

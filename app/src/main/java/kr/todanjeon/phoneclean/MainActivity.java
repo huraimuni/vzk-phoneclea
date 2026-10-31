@@ -385,7 +385,7 @@ public class MainActivity extends BaseActivity {
             else if (e.level() == AppEntry.LEVEL_WARN) warn++;
             if (!onlySuspicious || e.level() >= AppEntry.LEVEL_WARN) shown.add(e);
         }
-        summary.setText(Tr.f("직접 설치한 앱 %d개 중 위험 의심 %d개 / 주의 %d개", all.size(), high, warn));
+        summary.setText(Tr.f(Tr.t("직접 설치한 앱 %d개 중 위험 의심 %d개 / 주의 %d개"), all.size(), high, warn));
         btnFilter.setText(onlySuspicious ? Tr.t("전체 앱 보기") : Tr.t("의심 앱만 보기"));
         updateHomeBanner();
         usageHint.setVisibility(View.GONE);
@@ -395,7 +395,7 @@ public class MainActivity extends BaseActivity {
     private void refreshList() {
         adapter.notifyDataSetChanged();
         int n = selected.size();
-        btnDelete.setText(n == 0 ? Tr.t("2단계 ▸ 선택한 앱 삭제") : Tr.f("2단계 ▸ 선택한 앱 %d개 삭제", n));
+        btnDelete.setText(n == 0 ? Tr.t("2단계 ▸ 선택한 앱 삭제") : Tr.f(Tr.t("2단계 ▸ 선택한 앱 %d개 삭제"), n));
     }
 
     private int levelColor(AppEntry e) {
@@ -490,7 +490,7 @@ public class MainActivity extends BaseActivity {
                     if (i > 0) sb.append("\n");
                     sb.append("- ").append(e.reasons.get(i));
                 }
-                if (e.reasons.size() > 2) sb.append(Tr.f("\n외 %d건", e.reasons.size() - 2));
+                if (e.reasons.size() > 2) sb.append(Tr.f(Tr.t("\n외 %d건"), e.reasons.size() - 2));
                 why.setText(sb.toString());
             }
             try {
@@ -507,7 +507,7 @@ public class MainActivity extends BaseActivity {
                     if (((CheckBox) v).isChecked()) selected.add(e.pkg);
                     else selected.remove(e.pkg);
                     int n = selected.size();
-                    btnDelete.setText(n == 0 ? Tr.t("2단계 ▸ 선택한 앱 삭제") : Tr.f("2단계 ▸ 선택한 앱 %d개 삭제", n));
+                    btnDelete.setText(n == 0 ? Tr.t("2단계 ▸ 선택한 앱 삭제") : Tr.f(Tr.t("2단계 ▸ 선택한 앱 %d개 삭제"), n));
                 }
             });
             return row;
@@ -581,7 +581,7 @@ public class MainActivity extends BaseActivity {
         refreshList();
         new AlertDialog.Builder(this)
                 .setTitle(Tr.t("일시 중지 명령을 보냈습니다"))
-                .setMessage(Tr.f("직접 설치한 앱 %d개의 백그라운드 실행을 멈추게 했습니다. (시스템 앱, 안전 표시한 앱, 키보드·홈 화면·문자·전화 앱은 제외)\n\n폰이 조금 가벼워졌는지 확인해 보세요. 이건 임시 조치라서, 앱이 다시 켜질 수 있습니다. 카톡 같은 앱은 새 알림이 오면 다시 켜집니다. 다시 느려지면 한 번 더 누르세요.\n\n다음 단계로 지울 앱을 고르시겠어요?", pkgs.size()))
+                .setMessage(Tr.f(Tr.t("직접 설치한 앱 %d개의 백그라운드 실행을 멈추게 했습니다. (시스템 앱, 안전 표시한 앱, 키보드·홈 화면·문자·전화 앱은 제외)\n\n폰이 조금 가벼워졌는지 확인해 보세요. 이건 임시 조치라서, 앱이 다시 켜질 수 있습니다. 카톡 같은 앱은 새 알림이 오면 다시 켜집니다. 다시 느려지면 한 번 더 누르세요.\n\n다음 단계로 지울 앱을 고르시겠어요?"), pkgs.size()))
                 .setPositiveButton(Tr.t("삭제할 앱 고르기"), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -632,7 +632,7 @@ public class MainActivity extends BaseActivity {
             }
         });
         applyFilter();
-        Ui.toast(this, Tr.f(safe ? "%d개 앱을 안전한 앱으로 표시했습니다." : "%d개 앱을 안전 표시에서 뺐습니다.", pkgs.size()));
+        Ui.toast(this, Tr.f(safe ? Tr.t("%d개 앱을 안전한 앱으로 표시했습니다.") : Tr.t("%d개 앱을 안전 표시에서 뺐습니다."), pkgs.size()));
     }
 
     private void markSelectedSafe() {
@@ -642,7 +642,7 @@ public class MainActivity extends BaseActivity {
         }
         final List<String> pkgs = new ArrayList<>(selected);
         new AlertDialog.Builder(this)
-                .setTitle(Tr.f("%d개를 안전한 앱으로 표시할까요?", pkgs.size()))
+                .setTitle(Tr.f(Tr.t("%d개를 안전한 앱으로 표시할까요?"), pkgs.size()))
                 .setMessage(Tr.t("내가 알고 쓰는 앱만 표시하세요.\n표시한 앱은 의심 목록에서 빠지고, 일시 중지와 삭제 대상에서도 제외됩니다. "
                         + "[더보기 > 안전 표시한 앱 관리]에서 언제든 되돌릴 수 있습니다."))
                 .setPositiveButton(Tr.t("안전 표시"), new DialogInterface.OnClickListener() {
@@ -690,7 +690,7 @@ public class MainActivity extends BaseActivity {
 
     private void showMore() {
         final String[] items = {getString(R.string.home_family_btn), getString(R.string.btn_language), Tr.t("응급 가이드 (폰이 멈췄을 때)"), Tr.t("광고·알고리즘 정리"), Tr.t("알림 정리 (알림 비우기·끄기)"), Tr.t("안전 표시한 앱 관리"),
-                watchOn() ? "새 앱 설치 알림 끄기" : "새 앱 설치 알림 켜기 (15분마다 확인)",
+                watchOn() ? Tr.t("새 앱 설치 알림 끄기") : Tr.t("새 앱 설치 알림 켜기 (15분마다 확인)"),
                 Tr.t("결과 공유 (카카오톡 등)"), Tr.t("오류 보고·건의하기"), Tr.t("도움말")};
         new AlertDialog.Builder(this)
                 .setTitle(Tr.t("더보기"))
@@ -735,7 +735,7 @@ public class MainActivity extends BaseActivity {
         NewAppJob.saveBaseline(this);
         NewAppJob.schedule(this);
         getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean("watch_on", true).apply();
-        Ui.toast(this, "켰습니다. 새 앱이 설치되면 15분 안에 분석 결과를 알림으로 알려 드립니다. (설치를 막지는 못하고, 설치된 뒤에 알립니다)");
+        Ui.toast(this, Tr.t("켰습니다. 새 앱이 설치되면 15분 안에 분석 결과를 알림으로 알려 드립니다. (설치를 막지는 못하고, 설치된 뒤에 알립니다)"));
     }
 
     @Override
@@ -749,7 +749,7 @@ public class MainActivity extends BaseActivity {
 
     /** 앱 서버로 아무것도 보내지 않는다. 질문 글을 복사해 주고 네이버 AI(클로바X)를 브라우저로 연다. */
     private void askAi(AppEntry e) {
-        String q = Tr.f("안드로이드 앱 '%s' (패키지명: %s)이 안전한 앱인가요? 유튜브 광고를 누르다가 설치된 것 같은데, 지워도 되는지 알려 주세요.", e.label, e.pkg);
+        String q = Tr.f(Tr.t("안드로이드 앱 '%s' (패키지명: %s)이 안전한 앱인가요? 유튜브 광고를 누르다가 설치된 것 같은데, 지워도 되는지 알려 주세요."), e.label, e.pkg);
         try {
             ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             cm.setPrimaryClip(ClipData.newPlainText(Tr.t("질문"), q));
@@ -772,7 +772,7 @@ public class MainActivity extends BaseActivity {
         String raw = Scanner.homePackage(getPackageManager());
         if (raw != null && !Scanner.isSystemPkg(getPackageManager(), raw)) {
             String name = labelOf(raw);
-            homeBanner.setText(Tr.f("홈 화면이 폰 기본 앱이 아닌 [%s](으)로 바뀌어 있습니다.\n눌러서 기본 홈으로 되돌리기", name));
+            homeBanner.setText(Tr.f(Tr.t("홈 화면이 폰 기본 앱이 아닌 [%s](으)로 바뀌어 있습니다.\n눌러서 기본 홈으로 되돌리기"), name));
             homeBanner.setVisibility(View.VISIBLE);
         } else {
             homeBanner.setVisibility(View.GONE);
@@ -937,9 +937,9 @@ public class MainActivity extends BaseActivity {
                 shownCount++;
             }
         }
-        if (shownCount > 8) names.append(Tr.f("외 %d개\n", shownCount - 8));
+        if (shownCount > 8) names.append(Tr.f(Tr.t("외 %d개\n"), shownCount - 8));
         new AlertDialog.Builder(this)
-                .setTitle(Tr.f("%d개 앱을 삭제할까요?", pkgs.size()))
+                .setTitle(Tr.f(Tr.t("%d개 앱을 삭제할까요?"), pkgs.size()))
                 .setMessage(names
                         + Tr.t("\n앱마다 안드로이드의 삭제 확인 창이 하나씩 뜹니다. 그때마다 [확인]을 눌러 주세요.\n내가 쓰는 앱이 섞여 있지 않은지 한 번 더 보세요."))
                 .setPositiveButton(Tr.t("삭제 시작"), new DialogInterface.OnClickListener() {
@@ -1009,7 +1009,7 @@ public class MainActivity extends BaseActivity {
         StringBuilder sb = new StringBuilder();
         for (String p : bad) sb.append("- ").append(labelOf(p)).append("\n");
         new AlertDialog.Builder(this)
-                .setTitle(Tr.f("삭제되지 않은 앱 %d개", bad.size()))
+                .setTitle(Tr.f(Tr.t("삭제되지 않은 앱 %d개"), bad.size()))
                 .setMessage(sb
                         + Tr.t("\n삭제 확인 창에서 [취소]를 눌렀거나, 앱이 스스로를 지키고 있는 경우입니다.\n\n[기기 관리자]나 [접근성]으로 등록된 앱은 그 권한을 먼저 끄고 나서 삭제해야 합니다.\n1) 아래 [기기 관리자 설정]이나 [접근성 설정]에서 해당 앱을 끄기\n2) 앱 정보를 열어 [삭제] 누르기\n그래도 안 지워지면 폰을 안전 모드로 켜서 삭제해 보세요."))
                 .setPositiveButton(Tr.t("앱 정보 열기"), new DialogInterface.OnClickListener() {
@@ -1064,7 +1064,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showHelp() {
-        String msg = "이 앱은 무엇을 하나요?\n"
+        String msg = Tr.t("이 앱은 무엇을 하나요?\n"
                 + "내 폰에 직접 설치된 앱을 훑어서, 광고로 깔린 앱에서 흔한 징후(출처, 설치 시기, 위험한 권한 등)를 찾아 보여 줍니다.\n\n"
                 + "사용 순서\n"
                 + "폰이 너무 느려서 조작이 안 될 때\n"
@@ -1099,9 +1099,9 @@ public class MainActivity extends BaseActivity {
                 + "- 화면 도움 요청은 도와주는 분의 월 구독이 필요합니다(도움받는 분은 무료, 기본 점검 기능도 무료). 운영자가 지정한 가족은 무료입니다.\n"
                 + "- [화면 공유 기록]에서 누가·언제·얼마나 했는지만 볼 수 있고(90일 뒤 자동 삭제), 받는 분이 직접 지울 수 있습니다.\n"
                 + "- 언어: 한국어·English·日本語·Español·Português·Bahasa Indonesia·हिन्दी (더보기 > 언어 변경)\n\n"
-                + "문의는 카페 게시판으로만 받습니다.";
+                + "문의는 카페 게시판으로만 받습니다.");
         new AlertDialog.Builder(this)
-                .setTitle(Tr.f("VZK 폰클린 v%s", BuildConfig.VERSION_NAME))
+                .setTitle(Tr.f(Tr.t("VZK 폰클린 v%s"), BuildConfig.VERSION_NAME))
                 .setMessage(msg)
                 .setPositiveButton(Tr.t("확인"), null)
                 .setNeutralButton(Tr.t("카페 열기"), new DialogInterface.OnClickListener() {
