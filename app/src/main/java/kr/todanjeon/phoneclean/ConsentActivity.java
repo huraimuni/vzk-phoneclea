@@ -24,7 +24,8 @@ public class ConsentActivity extends BaseActivity {
     private static final int RC_PROJ = 501;
     private String sid, name;
     private DocumentReference ref;
-    private boolean askedOverlay;
+    private boolean askedOverlay, waitingOverlay;
+    private com.google.firebase.firestore.ListenerRegistration watch;
 
     @Override
     protected void onCreate(Bundle b) {
@@ -38,6 +39,12 @@ public class ConsentActivity extends BaseActivity {
         }
         if (name == null) name = "?";
         ref = FirebaseFirestore.getInstance().collection("sessions").document(sid);
+        StandbyService.clearRequestNotification(this);
+        // 자녀가 요청을 취소/종료하면 이 화면도 자동으로 닫는다.
+        watch = ref.addSnapshotListener((d, e) -> {
+            if (d != null && d.exists() && !"requested".equals(d.getString("status")) && !ShareService.running && !waitingOverlay
+                    && !projecting) finish();
+        });
 
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
@@ -73,14 +80,13 @@ public class ConsentActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (!Guide.allowed(ConsentActivity.this) && !askedOverlay) {
+                    // 설정 화면으로 바로 보낸다. 돌아오면 onResume에서 자동으로 이어서 진행한다.
                     askedOverlay = true;
-                    new android.app.AlertDialog.Builder(ConsentActivity.this)
-                            .setMessage(R.string.overlay_need)
-                            .setPositiveButton(R.string.btn_open_settings, (d, w2) -> startActivity(new Intent(
-                                    android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                    android.net.Uri.parse("package:" + getPackageName()))))
-                            .setNegativeButton(R.string.btn_skip, (d, w2) -> startProjection())
-                            .show();
+                    waitingOverlay = true;
+                    Ui.toast(ConsentActivity.this, getString(R.string.overlay_need));
+                    startActivity(new Intent(
+                            android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            android.net.Uri.parse("package:" + getPackageName())));
                     return;
                 }
                 startProjection();
@@ -92,15 +98,43 @@ public class ConsentActivity extends BaseActivity {
         setContentView(root);
     }
 
+    private boolean projecting;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (waitingOverlay) {
+            waitingOverlay = false;
+            // 설정에서 돌아왔으면(허용했든 아니든) 이어서 화면 공유 허용 창으로 간다.
+            startProjection();
+        }
+    }
+
     private void startProjection() {
+        if (projecting) return;
+        projecting = true;
         MediaProjectionManager mpm = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        startActivityForResult(mpm.createScreenCaptureIntent(), RC_PROJ);
+        Intent it;
+        if (Build.VERSION.SDK_INT >= 34) {
+            // 안드로이드 14 이상: '한 앱'이 아니라 '전체 화면'이 기본(그것만 선택 가능)으로 나온다.
+            it = mpm.createScreenCaptureIntent(android.media.projection.MediaProjectionConfig.createConfigForDefaultDisplay());
+        } else {
+            it = mpm.createScreenCaptureIntent();   // 안드로이드 13 이하는 원래 전체 화면 공유
+        }
+        startActivityForResult(it, RC_PROJ);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (watch != null) watch.remove();
     }
 
     @Override
     protected void onActivityResult(int req, int res, Intent data) {
         super.onActivityResult(req, res, data);
         if (req != RC_PROJ) return;
+        projecting = false;
         if (res == RESULT_OK && data != null) {
             Intent s = new Intent(this, ShareService.class)
                     .putExtra(ShareService.EXTRA_SESSION, sid)

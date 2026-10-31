@@ -44,8 +44,7 @@ public class FamilyActivity extends BaseActivity {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final List<DocumentSnapshot> asParent = new ArrayList<>();
     private final List<DocumentSnapshot> asChild = new ArrayList<>();
-    private ListenerRegistration l1, l2, l3;
-    private final java.util.Set<String> shown = new java.util.HashSet<>();
+    private ListenerRegistration l1, l2;
     private LinearLayout box;
     private String code, codeExpiresText;
 
@@ -76,23 +75,20 @@ public class FamilyActivity extends BaseActivity {
         l2 = db.collection("links").whereEqualTo("childUid", me).addSnapshotListener((snap, e) -> {
             if (snap != null) fill(asChild, snap);
         });
-        // 자녀가 보낸 화면 공유 요청이 오면 큰 허용/거부 화면을 띄운다(이 화면이 열려 있을 때).
-        l3 = db.collection("sessions").whereEqualTo("parentUid", me).whereEqualTo("status", "requested")
-                .addSnapshotListener((snap, e) -> {
-                    if (snap == null) return;
-                    for (DocumentSnapshot d : snap.getDocuments()) {
-                        if (!shown.add(d.getId())) continue;
-                        startActivity(new Intent(this, ConsentActivity.class)
-                                .putExtra(ConsentActivity.EXTRA_SESSION, d.getId())
-                                .putExtra(ConsentActivity.EXTRA_NAME, nz(d.getString("childName"))));
-                    }
-                });
+        // 화면 공유·업데이트 요청은 대기 서비스가 앱을 닫아도 받는다.
+        StandbyService.ensure(this);
         render();
     }
 
     private void fill(List<DocumentSnapshot> to, QuerySnapshot snap) {
         to.clear();
         to.addAll(snap.getDocuments());
+        if (to == asParent) {
+            boolean any = false;
+            for (DocumentSnapshot d : to) if ("active".equals(d.getString("status"))) any = true;
+            StandbyService.setParent(this, any);
+            if (any) StandbyService.ensure(this);
+        }
         render();
     }
 
@@ -101,7 +97,12 @@ public class FamilyActivity extends BaseActivity {
         super.onDestroy();
         if (l1 != null) l1.remove();
         if (l2 != null) l2.remove();
-        if (l3 != null) l3.remove();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        render();   // 설정에서 돌아왔을 때 권한 상태를 다시 표시
     }
 
     // ------------------------------------------------------------------ 화면
@@ -123,6 +124,7 @@ public class FamilyActivity extends BaseActivity {
             qr.setImageBitmap(qr("vzk://join?c=" + code, Ui.dp(this, 190)));
             box.addView(qr, new LinearLayout.LayoutParams(Ui.dp(this, 190), Ui.dp(this, 190)));
         }
+        box.addView(standbyBox());
         List<DocumentSnapshot> pend = new ArrayList<>();
         for (DocumentSnapshot d : asParent) if ("pending".equals(d.getString("status"))) pend.add(d);
         if (!pend.isEmpty()) {
@@ -231,6 +233,10 @@ public class FamilyActivity extends BaseActivity {
                         .putExtra(ViewerActivity.EXTRA_PARENT_NAME, other));
             })));
             if ("active".equals(d.getString("status"))) row.addView(ask, Ui.weight(this, 3));
+            Button up = Ui.button(this, getString(R.string.btn_ask_update), Ui.NAVY, Color.WHITE);
+            up.setTextSize(13);
+            up.setOnClickListener(v -> requestUpdate(d, other));
+            if ("active".equals(d.getString("status"))) row.addView(up, Ui.weight(this, 3));
             Button rq = Ui.button(this, getString(R.string.btn_request_disconnect), Color.WHITE, Ui.RED);
             rq.setTextSize(13);
             rq.setOnClickListener(v -> d.getReference().update("deleteRequestedBy", Auth.uid()));
@@ -240,6 +246,49 @@ public class FamilyActivity extends BaseActivity {
     }
 
     // ------------------------------------------------------------------ 동작
+    /** 대기 모드 켜기/끄기와 [다른 앱 위에 표시] 허용 상태 */
+    private View standbyBox() {
+        LinearLayout b = new LinearLayout(this);
+        b.setOrientation(LinearLayout.VERTICAL);
+        b.setPadding(0, Ui.dp(this, 10), 0, Ui.dp(this, 4));
+        final boolean on = getSharedPreferences(StandbyService.PREFS, MODE_PRIVATE).getBoolean(StandbyService.KEY_ON, true);
+        Button t = Ui.button(this, getString(on ? R.string.standby_btn_off : R.string.standby_btn_on), on ? Color.WHITE : Ui.GREEN, on ? Ui.INK : Color.WHITE);
+        t.setTextSize(14);
+        t.setOnClickListener(v -> {
+            StandbyService.setOn(this, !on);
+            render();
+        });
+        b.addView(t, lp());
+        b.addView(Ui.text(this, getString(on ? R.string.standby_state_on : R.string.standby_state_off), 13, Ui.GRAY, false));
+        if (on && !Guide.allowed(this)) {
+            TextView w = Ui.text(this, getString(R.string.overlay_standby_need), 13, Ui.AMBER, true);
+            w.setPadding(0, Ui.dp(this, 8), 0, Ui.dp(this, 2));
+            b.addView(w);
+            Button o = Ui.button(this, getString(R.string.btn_open_settings), Ui.CORAL, Color.WHITE);
+            o.setTextSize(14);
+            o.setOnClickListener(v -> startActivity(new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    android.net.Uri.parse("package:" + getPackageName()))));
+            b.addView(o, lp());
+        }
+        return b;
+    }
+
+    /** 자녀: 연결된 부모 폰에 '앱 업데이트' 요청을 보낸다. 부모 폰에 [업데이트] 버튼이 뜬다. */
+    private void requestUpdate(DocumentSnapshot link, String parentName) {
+        Map<String, Object> m = new HashMap<>();
+        m.put("kind", "update");
+        m.put("parentUid", link.getString("parentUid"));
+        m.put("childUid", Auth.uid());
+        m.put("childName", Auth.myName(this));
+        m.put("parentName", parentName);
+        m.put("status", "requested");
+        m.put("createdAt", FieldValue.serverTimestamp());
+        String sid = java.util.UUID.randomUUID().toString().replace("-", "").substring(0, 20);
+        db.collection("sessions").document(sid).set(m)
+                .addOnSuccessListener(x -> Ui.toast(this, getString(R.string.update_req_sent, parentName)))
+                .addOnFailureListener(e -> Ui.toast(this, getString(R.string.err_generic, Auth.msg(e))));
+    }
+
     private void makeCode(final int attempt) {
         SecureRandom r = new SecureRandom();
         final String c = String.format("%08d", r.nextInt(100000000));

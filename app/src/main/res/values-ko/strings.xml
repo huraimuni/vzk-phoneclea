@@ -98,4 +98,22 @@
     <string name="btn_delete_all">기록 전체 삭제</string>
     <string name="app_name">VZK 폰클린</string>
     <string name="app_name_notif">VZK 폰클린 알림 정리</string>
+    <string name="standby_channel">도움 요청 대기</string>
+    <string name="request_channel">도움 요청</string>
+    <string name="standby_on_title">도움 요청 대기 중</string>
+    <string name="standby_on_sub">가족이 화면 보기·앱 업데이트를 요청할 수 있어요. 허용은 항상 내가 결정합니다.</string>
+    <string name="req_update_title">%1$s 님이 앱 업데이트를 요청했습니다</string>
+    <string name="req_share_title">%1$s 님이 내 화면을 보려고 합니다</string>
+    <string name="req_tap_to_open">눌러서 열기</string>
+    <string name="update_req_title">%1$s 님이 앱 업데이트를 요청했습니다</string>
+    <string name="update_req_sub">현재 버전 v%1$s\n아래 큰 버튼을 누르면 새 버전을 받는 화면으로 갑니다.</string>
+    <string name="btn_update_now">업데이트</string>
+    <string name="btn_later">나중에</string>
+    <string name="btn_ask_update">⬆ 앱 업데이트 요청</string>
+    <string name="update_req_sent">%1$s 님에게 업데이트 요청을 보냈습니다.</string>
+    <string name="standby_btn_on">대기 모드 켜기 (앱을 꺼도 요청 받기)</string>
+    <string name="standby_btn_off">대기 모드 끄기</string>
+    <string name="standby_state_on">대기 중: 앱을 닫아도 요청이 바로 뜹니다.</string>
+    <string name="standby_state_off">꺼짐: 앱이 열려 있을 때만 요청을 받습니다.</string>
+    <string name="overlay_standby_need">앱을 닫았을 때도 바로 뜨게 하려면 [다른 앱 위에 표시]를 한 번 허용해 주세요.</string>
 </resources>

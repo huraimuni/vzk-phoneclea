@@ -69,6 +69,19 @@
             android:showWhenLocked="true"
             android:turnScreenOn="true" />
         <activity
+            android:name=".UpdateRequestActivity"
+            android:exported="false"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true" />
+        <service
+            android:name=".StandbyService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="screen_help_request_standby" />
+        </service>
+        <activity
             android:name=".ViewerActivity"
             android:exported="false" />
         <activity

@@ -16,5 +16,6 @@ public class BootReceiver extends BroadcastReceiver {
             }
         } catch (Exception ignored) {
         }
+        StandbyService.ensure(context);
     }
 }

@@ -58,7 +58,41 @@ final class Updater {
         }).start();
     }
 
-    private static void open(Activity a) {
+    /** 요청받은 업데이트: 새 버전이 있으면 묻지 않고 바로 받는 화면(스토어/내려받기)으로 보낸다. */
+    static void now(final Activity a, final Runnable after) {
+        Ui.toast(a, Tr.t("업데이트를 확인하는 중입니다..."));
+        new Thread(() -> {
+            int code = -1;
+            try {
+                URL u = new URL("https://raw.githubusercontent.com/huraimuni/vzk-phoneclea/" + BuildConfig.UPDATE_BRANCH + "/app/build.gradle");
+                HttpURLConnection c = (HttpURLConnection) u.openConnection();
+                c.setConnectTimeout(8000);
+                c.setReadTimeout(8000);
+                BufferedReader r = new BufferedReader(new InputStreamReader(c.getInputStream(), "UTF-8"));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = r.readLine()) != null && sb.length() < 20000) sb.append(line).append('\n');
+                r.close();
+                Matcher m1 = Pattern.compile("versionCode\\s+(\\d+)").matcher(sb);
+                if (m1.find()) code = Integer.parseInt(m1.group(1));
+            } catch (Throwable ignored) {
+            }
+            final int fc = code;
+            a.runOnUiThread(() -> {
+                if (a.isFinishing()) return;
+                if (fc < 0) {
+                    Ui.toast(a, Tr.t("업데이트 정보를 가져오지 못했습니다. 인터넷 연결을 확인해 주세요."));
+                } else if (fc <= BuildConfig.VERSION_CODE) {
+                    Ui.toast(a, Tr.f("최신 버전입니다. (v%s)", BuildConfig.VERSION_NAME));
+                } else {
+                    open(a);
+                }
+                if (after != null) after.run();
+            });
+        }).start();
+    }
+
+    static void open(Activity a) {
         String installer = null;
         try {
             installer = a.getPackageManager().getInstallerPackageName(a.getPackageName());

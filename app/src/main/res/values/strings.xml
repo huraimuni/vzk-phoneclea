@@ -98,4 +98,22 @@ Valid for %2$d minutes, one use only. Tell it to your family or let them scan th
     <string name="btn_delete_all">Delete all records</string>
     <string name="app_name">VZK PhoneClean</string>
     <string name="app_name_notif">VZK PhoneClean Notifications</string>
+    <string name="standby_channel">Standby for help requests</string>
+    <string name="request_channel">Help requests</string>
+    <string name="standby_on_title">Ready to receive help requests</string>
+    <string name="standby_on_sub">Family can ask to see your screen or update the app. You always decide.</string>
+    <string name="req_update_title">%1$s asked you to update the app</string>
+    <string name="req_share_title">%1$s wants to see your screen</string>
+    <string name="req_tap_to_open">Tap to open</string>
+    <string name="update_req_title">%1$s asked you to update the app</string>
+    <string name="update_req_sub">Current version v%1$s. Tap the big button to get the new version.</string>
+    <string name="btn_update_now">UPDATE</string>
+    <string name="btn_later">Later</string>
+    <string name="btn_ask_update">⬆ Ask to update app</string>
+    <string name="update_req_sent">Update request sent to %1$s.</string>
+    <string name="standby_btn_on">Turn on standby (receive requests while app is closed)</string>
+    <string name="standby_btn_off">Turn off standby</string>
+    <string name="standby_state_on">Standby is ON: requests pop up even when the app is closed.</string>
+    <string name="standby_state_off">Standby is OFF: requests are only received while the app is open.</string>
+    <string name="overlay_standby_need">To pop up instantly when the app is closed, allow \"Display over other apps\" once.</string>
 </resources>
