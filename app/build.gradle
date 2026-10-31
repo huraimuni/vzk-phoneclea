@@ -19,6 +19,8 @@ android {
         versionName '2.2'
         buildConfigField 'String', 'NAVER_CLIENT_ID', '"' + (System.getenv('NAVER_CLIENT_ID') ?: '') + '"'
         buildConfigField 'String', 'NAVER_CLIENT_SECRET', '"' + (System.getenv('NAVER_CLIENT_SECRET') ?: '') + '"'
+        buildConfigField 'String', 'UPDATE_BRANCH', '"store"'
+        buildConfigField 'String', 'UPDATE_URL', '"https://github.com/huraimuni/vzk-phoneclea/releases/tag/store-test"'
     }
 
     signingConfigs {
