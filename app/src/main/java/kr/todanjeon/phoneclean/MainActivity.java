@@ -692,7 +692,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showMore() {
-        final String[] base = {getString(R.string.home_family_btn), getString(R.string.btn_language), Tr.t("응급 가이드 (폰이 멈췄을 때)"), Tr.t("광고·알고리즘 정리"), Tr.t("알림 정리 (알림 비우기·끄기)"), Tr.t("안전 표시한 앱 관리"),
+        final String[] base = {getString(R.string.home_family_btn), getString(R.string.btn_language), Tr.t("내 계정"), Tr.t("응급 가이드 (폰이 멈췄을 때)"), Tr.t("광고·알고리즘 정리"), Tr.t("알림 정리 (알림 비우기·끄기)"), Tr.t("안전 표시한 앱 관리"),
                 Tr.t("사용 기록 허용 (정확도 향상)"),
                 watchOn() ? Tr.t("새 앱 즉시 분석 알림 끄기 (감시 중)") : Tr.t("새 앱 즉시 분석 알림 켜기 (감시)"),
                 Tr.t("결과 공유 (카카오톡 등)"), Tr.t("오류 보고·건의하기"), Tr.t("도움말")};
@@ -714,13 +714,14 @@ public class MainActivity extends BaseActivity {
                         }
                         if (which == 0) startActivity(new Intent(MainActivity.this, Auth.uid() == null ? LoginActivity.class : FamilyActivity.class));
                         else if (which == 1) startActivity(new Intent(MainActivity.this, LanguageActivity.class));
-                        else if (which == 2) startActivity(new Intent(MainActivity.this, EmergencyActivity.class));
-                        else if (which == 3) startActivity(new Intent(MainActivity.this, AdsGuideActivity.class));
-                        else if (which == 4) startActivity(new Intent(MainActivity.this, NotifActivity.class));
-                        else if (which == 5) manageSafe();
-                        else if (which == 6) openUsageSettings();
-                        else if (which == 7) toggleWatch();
-                        else if (which == 8) shareReport();
+                        else if (which == 2) startActivity(new Intent(MainActivity.this, AccountActivity.class));
+                        else if (which == 3) startActivity(new Intent(MainActivity.this, EmergencyActivity.class));
+                        else if (which == 4) startActivity(new Intent(MainActivity.this, AdsGuideActivity.class));
+                        else if (which == 5) startActivity(new Intent(MainActivity.this, NotifActivity.class));
+                        else if (which == 6) manageSafe();
+                        else if (which == 7) openUsageSettings();
+                        else if (which == 8) toggleWatch();
+                        else if (which == 9) shareReport();
                         else if (which == base.length - 2) showFeedback();
                         else showHelp();
                     }
