@@ -181,11 +181,11 @@ public class NotifActivity extends BaseActivity {
         }
         int total = 0;
         for (int v : counts.values()) total += v;
-        stackBox.addView(Ui.text(this, Tr.f("앱 %d개에서 알림 %d개가 쌓여 있습니다.", counts.size(), total), 15, Ui.INK, true));
+        stackBox.addView(Ui.text(this, Tr.f(Tr.t("앱 %d개에서 알림 %d개가 쌓여 있습니다."), counts.size(), total), 15, Ui.INK, true));
         final Set<String> choose = new HashSet<>(counts.keySet());
         for (final Map.Entry<String, Integer> en : counts.entrySet()) {
             CheckBox cb = new CheckBox(this);
-            cb.setText(labelOf(en.getKey()) + Tr.f("  (%d개)", en.getValue()));
+            cb.setText(labelOf(en.getKey()) + Tr.f(Tr.t("  (%d개)"), en.getValue()));
             cb.setTextSize(15);
             cb.setChecked(true);
             cb.setOnCheckedChangeListener(new android.widget.CompoundButton.OnCheckedChangeListener() {
@@ -216,7 +216,7 @@ public class NotifActivity extends BaseActivity {
                     }
                 } catch (Exception ignored) {
                 }
-                Ui.toast(NotifActivity.this, Tr.f("%d개를 비웠습니다.", n));
+                Ui.toast(NotifActivity.this, Tr.f(Tr.t("%d개를 비웠습니다."), n));
                 renderStack();
             }
         });

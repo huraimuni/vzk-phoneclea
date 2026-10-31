@@ -342,7 +342,7 @@ public class DupMediaActivity extends BaseActivity {
             for (Item it : g) it.group = gi;
             groups.add(g);
             Item first = g.get(0);
-            rows.add(Tr.f(first.video ? "영상 %d묶음 · %d개 · 파일 하나당 %s" : "사진 %d묶음 · %d개 · 파일 하나당 %s", gi + 1, g.size(), StorageActivity.fmt(first.size)));
+            rows.add(Tr.f(first.video ? Tr.t("영상 %d묶음 · %d개 · 파일 하나당 %s") : Tr.t("사진 %d묶음 · %d개 · 파일 하나당 %s"), gi + 1, g.size(), StorageActivity.fmt(first.size)));
             rows.addAll(g);
             waste += first.size * (g.size() - 1);
             gi++;
@@ -351,7 +351,7 @@ public class DupMediaActivity extends BaseActivity {
         if (groups.isEmpty()) {
             summary.setText(Tr.t("중복으로 보이는 사진·영상이 없습니다."));
         } else {
-            summary.setText(Tr.f("중복 %d묶음 · 모두 정리하면 약 %s 확보", groups.size(), StorageActivity.fmt(waste)));
+            summary.setText(Tr.f(Tr.t("중복 %d묶음 · 모두 정리하면 약 %s 확보"), groups.size(), StorageActivity.fmt(waste)));
         }
         adapter.notifyDataSetChanged();
         updateButtons();
@@ -367,7 +367,7 @@ public class DupMediaActivity extends BaseActivity {
 
     private void updateButtons() {
         int n = checked.size();
-        btnDelete.setText(n == 0 ? Tr.t("선택한 파일 휴지통으로") : Tr.f("선택한 %d개 휴지통으로", n));
+        btnDelete.setText(n == 0 ? Tr.t("선택한 파일 휴지통으로") : Tr.f(Tr.t("선택한 %d개 휴지통으로"), n));
     }
 
     private final class RowAdapter extends BaseAdapter {
@@ -538,7 +538,7 @@ public class DupMediaActivity extends BaseActivity {
             }
         }
         new AlertDialog.Builder(this)
-                .setTitle(Tr.f("%d개를 휴지통으로 보낼까요?", checked.size()))
+                .setTitle(Tr.f(Tr.t("%d개를 휴지통으로 보낼까요?"), checked.size()))
                 .setMessage(Tr.t("갤러리 휴지통에 30일 동안 보관되어서 그 안에는 되살릴 수 있습니다.\n"
                         + "묶음마다 남길 파일이 맞는지 한 번 더 확인하세요."))
                 .setPositiveButton(Tr.t("휴지통으로"), new DialogInterface.OnClickListener() {

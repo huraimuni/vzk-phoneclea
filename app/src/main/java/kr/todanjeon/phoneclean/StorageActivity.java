@@ -100,7 +100,7 @@ public class StorageActivity extends BaseActivity {
             long total = fs.getTotalBytes();
             long free = fs.getAvailableBytes();
             long used = total - free;
-            usage.setText(Tr.f("저장공간  사용 %s / 전체 %s  (남은 %s)", fmt(used), fmt(total), fmt(free)));
+            usage.setText(Tr.f(Tr.t("저장공간  사용 %s / 전체 %s  (남은 %s)"), fmt(used), fmt(total), fmt(free)));
             bar.setProgress(total > 0 ? (int) (used * 1000 / total) : 0);
         } catch (Exception e) {
             usage.setText(Tr.t("저장공간 정보를 읽지 못했습니다."));

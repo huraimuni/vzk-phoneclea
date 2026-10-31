@@ -256,13 +256,13 @@ public class DupContactsActivity extends BaseActivity {
         int gi = 0;
         for (List<Info> g : groups) {
             for (Info i : g) i.group = gi;
-            rows.add(Tr.f("중복 묶음 %d  (%d명)", gi + 1, g.size()));
+            rows.add(Tr.f(Tr.t("중복 묶음 %d  (%d명)"), gi + 1, g.size()));
             rows.addAll(g);
             gi++;
         }
         applyRecommended();
         summary.setText(groups.isEmpty() ? Tr.t("같은 번호가 겹치는 연락처가 없습니다.")
-                : Tr.f("중복 %d묶음 (연락처 %d건)", groups.size(), countItems()));
+                : Tr.f(Tr.t("중복 %d묶음 (연락처 %d건)"), groups.size(), countItems()));
         adapter.notifyDataSetChanged();
         updateButtons();
     }
@@ -283,7 +283,7 @@ public class DupContactsActivity extends BaseActivity {
 
     private void updateButtons() {
         int n = checked.size();
-        btnDelete.setText(n == 0 ? Tr.t("선택한 연락처 삭제") : Tr.f("선택한 %d건 삭제", n));
+        btnDelete.setText(n == 0 ? Tr.t("선택한 연락처 삭제") : Tr.f(Tr.t("선택한 %d건 삭제"), n));
     }
 
     private final class RowAdapter extends BaseAdapter {
@@ -403,9 +403,9 @@ public class DupContactsActivity extends BaseActivity {
             if (shown < 8) names.append("- ").append(i.name).append("\n");
             shown++;
         }
-        if (shown > 8) names.append(Tr.f("외 %d건\n", shown - 8));
+        if (shown > 8) names.append(Tr.f(Tr.t("외 %d건\n"), shown - 8));
         new AlertDialog.Builder(this)
-                .setTitle(Tr.f("%d건을 삭제할까요?", checked.size()))
+                .setTitle(Tr.f(Tr.t("%d건을 삭제할까요?"), checked.size()))
                 .setMessage(names
                         + Tr.t("\n삭제하면 되돌릴 수 없고, 그 연락처에만 있던 메모·다른 번호도 함께 사라집니다.\n남길 연락처에 필요한 정보가 다 들어 있는지 확인하세요."))
                 .setPositiveButton(Tr.t("삭제"), new DialogInterface.OnClickListener() {
@@ -431,7 +431,7 @@ public class DupContactsActivity extends BaseActivity {
                 fail++;
             }
         }
-        Ui.toast(this, Tr.f(fail > 0 ? "%1$d건 삭제, %2$d건 실패. 다시 찾아봅니다." : "%1$d건 삭제. 다시 찾아봅니다.", ok, fail));
+        Ui.toast(this, Tr.f(fail > 0 ? Tr.t("%1$d건 삭제, %2$d건 실패. 다시 찾아봅니다.") : Tr.t("%1$d건 삭제. 다시 찾아봅니다."), ok, fail));
         startScan();
     }
 }

@@ -59,7 +59,7 @@ final class Alerts {
 
         Notification.Builder b = new Notification.Builder(c, CHANNEL)
                 .setSmallIcon(android.R.drawable.stat_sys_warning)
-                .setContentTitle(Tr.f("새 앱이 설치됐어요: %s", e.label))
+                .setContentTitle(Tr.f(Tr.t("새 앱이 설치됐어요: %s"), e.label))
                 .setContentText(shortText)
                 .setStyle(new Notification.BigTextStyle().bigText(sb.toString()))
                 .setContentIntent(pi)

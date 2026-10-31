@@ -383,7 +383,7 @@ final class Scanner {
             } else if (installer.contains("packageinstaller")) {
                 e.installerText = Tr.t("파일 설치 (브라우저·파일앱 등에서 직접 설치)");
             } else {
-                e.installerText = Tr.f("다른 설치 프로그램 (%s)", installer);
+                e.installerText = Tr.f(Tr.t("다른 설치 프로그램 (%s)"), installer);
             }
 
             e.accEnabled = accSet.contains(ai.packageName);
@@ -414,7 +414,7 @@ final class Scanner {
             if (sideload && !preloaded) {
                 score += 3;
                 hard++;
-                e.reasons.add(Tr.f("플레이스토어·갤럭시 스토어가 아닌 곳에서 설치됨 [%s]", e.installerText));
+                e.reasons.add(Tr.f(Tr.t("플레이스토어·갤럭시 스토어가 아닌 곳에서 설치됨 [%s]"), e.installerText));
             }
 
             if (e.isHome) {
@@ -502,7 +502,7 @@ final class Scanner {
             if (e.adCount >= 3) {
                 score += 2;
                 hard++;
-                e.reasons.add(Tr.f("광고 프로그램(SDK)이 %d종 들어 있음", e.adCount));
+                e.reasons.add(Tr.f(Tr.t("광고 프로그램(SDK)이 %d종 들어 있음"), e.adCount));
             } else if (e.adCount == 2) {
                 score += 1;
                 e.reasons.add(Tr.t("광고 프로그램(SDK)이 2종 들어 있음"));
@@ -579,7 +579,7 @@ final class Scanner {
             }
             if (near >= 5) {
                 a.score += 1;
-                a.reasons.add(Tr.f("비슷한 시기에 앱이 %d개 몰려서 설치됨", near));
+                a.reasons.add(Tr.f(Tr.t("비슷한 시기에 앱이 %d개 몰려서 설치됨"), near));
             }
         }
 
@@ -601,7 +601,7 @@ final class Scanner {
                     a.clustered = true;
                     a.score += 2;
                     a.hard++;
-                    a.reasons.add(Tr.f("같은 개발사(서명)가 만든 앱이 %d개 설치돼 있음", l.size()));
+                    a.reasons.add(Tr.f(Tr.t("같은 개발사(서명)가 만든 앱이 %d개 설치돼 있음"), l.size()));
                 }
             }
         }
