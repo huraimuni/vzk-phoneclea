@@ -49,6 +49,7 @@ public class ScamActivity extends BaseActivity {
         root.addView(sv, new LinearLayout.LayoutParams(-1, 0, 1f));
         setContentView(root);
         buildCall();
+        buildCallCheck();
         buildText();
         buildPhone();
         handleShare(getIntent());
@@ -133,6 +134,43 @@ public class ScamActivity extends BaseActivity {
     }
 
     // ------------------------------------------------------------ 2. 의심 문자·링크
+    private Button callCheckBtn;
+
+    /** 통화가 끝나면 연락처에 없는 번호만 검색 알림으로 알려 준다(전체 기능판). */
+    private void buildCallCheck() {
+        section("📲 통화 후 번호 확인 알림");
+        body.addView(Ui.text(this, "모르는 번호(연락처에 없는 번호)로 전화가 걸려 와서 끝나면, 그 번호를 검색해 볼 수 있는 알림을 띄웁니다. 번호는 폰 밖으로 보내지 않고, 알림을 눌렀을 때만 검색창이 열립니다.", 14, Ui.GRAY, false));
+        callCheckBtn = Ui.button(this, "", Ui.GREEN, Color.WHITE);
+        callCheckBtn.setOnClickListener(v -> {
+            if (CallCheck.on(this)) {
+                CallCheck.setOn(this, false);
+                updateCallCheck();
+            } else if (CallCheck.granted(this)) {
+                CallCheck.setOn(this, true);
+                updateCallCheck();
+            } else {
+                requestPermissions(CallCheck.perms(), 71);
+            }
+        });
+        body.addView(callCheckBtn, lp(8));
+        updateCallCheck();
+    }
+
+    private void updateCallCheck() {
+        boolean on = CallCheck.on(this) && CallCheck.granted(this);
+        callCheckBtn.setText(on ? "통화 후 번호 확인: 켜짐 (끄기)" : "통화 후 번호 확인 켜기");
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int code, String[] perms, int[] res) {
+        super.onRequestPermissionsResult(code, perms, res);
+        if (code == 71) {
+            if (CallCheck.granted(this)) CallCheck.setOn(this, true);
+            else Ui.toast(this, "통화 기록·연락처·알림 권한을 모두 허용해야 켤 수 있습니다.");
+            updateCallCheck();
+        }
+    }
+
     private void buildText() {
         section("💬 의심 문자·링크 점검");
         body.addView(Ui.text(this, "받은 문자를 아래에 붙여 넣거나, 문자 앱에서 [공유]로 이 앱에 보내세요. 문자 내용은 폰 밖으로 나가지 않습니다. 링크는 누르지 마세요.", 14, Ui.GRAY, false));
