@@ -1174,7 +1174,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showFeedback() {
-        final String[] base = {Tr.t("오류 내용 보내기 (카톡·문자 등으로 공유)"), Tr.t("건의하기 (카페 게시판 열기)")};
+        final String[] items = {Tr.t("오류 내용 보내기 (카톡·문자 등으로 공유)"), Tr.t("건의하기 (카페 게시판 열기)")};
         new AlertDialog.Builder(this)
                 .setTitle(Tr.t("오류 보고·건의하기"))
                 .setItems(items, new DialogInterface.OnClickListener() {
