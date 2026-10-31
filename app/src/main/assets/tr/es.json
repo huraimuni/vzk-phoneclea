@@ -340,5 +340,7 @@
 "계정을 삭제할까요?": "¿Eliminar tu cuenta?",
 "내 계정 정보와 가족 연결이 삭제되며 되돌릴 수 없습니다.": "Se eliminarán los datos de tu cuenta y las conexiones familiares. No se puede deshacer.",
 "계정을 삭제했습니다.": "Cuenta eliminada.",
-"삭제하지 못했습니다. 로그아웃 후 다시 로그인한 뒤 시도해 주세요.": "No se pudo eliminar. Cierra sesión, vuelve a entrar e inténtalo de nuevo."
+"삭제하지 못했습니다. 로그아웃 후 다시 로그인한 뒤 시도해 주세요.": "No se pudo eliminar. Cierra sesión, vuelve a entrar e inténtalo de nuevo.",
+"⚪ 로그아웃 상태 · 눌러서 로그인": "⚪ Sin sesión · Toca para iniciar sesión",
+"🟢 로그인됨: %s · 내 계정": "🟢 Sesión iniciada: %s · Mi cuenta"
 }

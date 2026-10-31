@@ -340,5 +340,7 @@
 "계정을 삭제할까요?": "Delete your account?",
 "내 계정 정보와 가족 연결이 삭제되며 되돌릴 수 없습니다.": "Your account info and family links will be deleted. This cannot be undone.",
 "계정을 삭제했습니다.": "Account deleted.",
-"삭제하지 못했습니다. 로그아웃 후 다시 로그인한 뒤 시도해 주세요.": "Couldn't delete. Sign out, sign in again, then retry."
+"삭제하지 못했습니다. 로그아웃 후 다시 로그인한 뒤 시도해 주세요.": "Couldn't delete. Sign out, sign in again, then retry.",
+"⚪ 로그아웃 상태 · 눌러서 로그인": "⚪ Signed out · Tap to sign in",
+"🟢 로그인됨: %s · 내 계정": "🟢 Signed in: %s · My account"
 }

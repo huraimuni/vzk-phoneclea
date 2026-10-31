@@ -340,5 +340,7 @@
 "계정을 삭제할까요?": "Hapus akun Anda?",
 "내 계정 정보와 가족 연결이 삭제되며 되돌릴 수 없습니다.": "Info akun dan koneksi keluarga akan dihapus dan tidak dapat dikembalikan.",
 "계정을 삭제했습니다.": "Akun dihapus.",
-"삭제하지 못했습니다. 로그아웃 후 다시 로그인한 뒤 시도해 주세요.": "Gagal menghapus. Keluar, masuk lagi, lalu coba lagi."
+"삭제하지 못했습니다. 로그아웃 후 다시 로그인한 뒤 시도해 주세요.": "Gagal menghapus. Keluar, masuk lagi, lalu coba lagi.",
+"⚪ 로그아웃 상태 · 눌러서 로그인": "⚪ Belum masuk · Ketuk untuk masuk",
+"🟢 로그인됨: %s · 내 계정": "🟢 Masuk: %s · Akun saya"
 }
