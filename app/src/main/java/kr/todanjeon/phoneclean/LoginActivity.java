@@ -21,6 +21,11 @@ public class LoginActivity extends BaseActivity {
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(Ui.BG);
         root.addView(Ui.header(this, getString(R.string.login_title), getString(R.string.login_desc)));
+        busyBar = Ui.text(this, Tr.t("로그인 중입니다... 잠시만 기다려 주세요"), 14, Color.WHITE, true);
+        busyBar.setBackgroundColor(Ui.AMBER);
+        busyBar.setPadding(Ui.dp(this, 14), Ui.dp(this, 9), Ui.dp(this, 14), Ui.dp(this, 9));
+        busyBar.setVisibility(View.GONE);
+        root.addView(busyBar);
         box = new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);
         box.setPadding(Ui.dp(this, 16), Ui.dp(this, 14), Ui.dp(this, 16), Ui.dp(this, 14));
@@ -29,6 +34,13 @@ public class LoginActivity extends BaseActivity {
         root.addView(sv, new LinearLayout.LayoutParams(-1, 0, 1f));
         setContentView(root);
         render();
+        Auth.warmUp();
+    }
+
+    private TextView busyBar;
+
+    private void busy(boolean on) {
+        if (busyBar != null) busyBar.setVisibility(on ? View.VISIBLE : View.GONE);
     }
 
     private void render() {
@@ -38,6 +50,7 @@ public class LoginActivity extends BaseActivity {
             add(Ui.button(this, getString(R.string.btn_kakao), Color.rgb(254, 229, 0), Color.BLACK), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    busy(true);
                     Auth.kakao(LoginActivity.this, done);
                 }
             });
@@ -48,6 +61,7 @@ public class LoginActivity extends BaseActivity {
                         Ui.toast(LoginActivity.this, getString(R.string.login_unavailable));
                         return;
                     }
+                    busy(true);
                     Auth.naver(LoginActivity.this, done);
                 }
             });
@@ -55,6 +69,7 @@ public class LoginActivity extends BaseActivity {
         add(Ui.button(this, getString(R.string.btn_google), Color.WHITE, Ui.INK), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                busy(true);
                 Auth.google(LoginActivity.this);
             }
         });
@@ -105,6 +120,7 @@ public class LoginActivity extends BaseActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    busy(false);
                     Ui.toast(LoginActivity.this, getString(R.string.login_failed, msg));
                 }
             });

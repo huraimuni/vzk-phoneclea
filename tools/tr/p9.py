@@ -33,4 +33,5 @@ T = {
 "현재 v%s → 최신 v%s\n\n받으러 갈까요?": ["Current v%s → latest v%s\n\nGo get it?","現在 v%s → 最新 v%s\n\n入手しますか？","Actual v%s → última v%s\n\n¿Ir a descargarla?","Atual v%s → mais recente v%s\n\nQuer baixar?","Saat ini v%s → terbaru v%s\n\nUnduh sekarang?","वर्तमान v%s → नवीनतम v%s\n\nडाउनलोड करें?"],
 "나중에": ["Later","あとで","Más tarde","Depois","Nanti","बाद में"],
 "받으러 가기": ["Get it","入手する","Descargar","Baixar","Unduh","डाउनलोड करें"],
+"로그인 중입니다... 잠시만 기다려 주세요": ["Signing in... please wait","ログイン中です... しばらくお待ちください","Iniciando sesión... espera un momento","Entrando... aguarde um momento","Sedang masuk... mohon tunggu","साइन इन हो रहा है... कृपया प्रतीक्षा करें"],
 }

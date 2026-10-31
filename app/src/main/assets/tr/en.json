@@ -349,5 +349,6 @@
 "최신 버전입니다. (v%s)": "You're up to date. (v%s)",
 "새 버전이 있습니다": "A new version is available",
 "현재 v%s → 최신 v%s\n\n받으러 갈까요?": "Current v%s → latest v%s\n\nGo get it?",
-"받으러 가기": "Get it"
+"받으러 가기": "Get it",
+"로그인 중입니다... 잠시만 기다려 주세요": "Signing in... please wait"
 }
