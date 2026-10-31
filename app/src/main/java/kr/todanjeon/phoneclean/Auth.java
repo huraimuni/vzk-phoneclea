@@ -131,6 +131,16 @@ final class Auth {
     }
 
     // ------------------------------------------------------------ 공통
+    /** 로그인 화면을 열 때 서버 함수를 미리 깨워 첫 로그인 지연(콜드 스타트)을 줄인다. 실패해도 무시. */
+    static void warmUp() {
+        try {
+            FirebaseFunctions f = FirebaseFunctions.getInstance(REGION);
+            f.getHttpsCallable("kakaoLogin").call(Collections.singletonMap("warm", "1"));
+            f.getHttpsCallable("naverLogin").call(Collections.singletonMap("warm", "1"));
+        } catch (Throwable ignored) {
+        }
+    }
+
     @SuppressWarnings("unchecked")
     private static void exchange(final Context c, String fn, String accessToken, final String provider, final Done d) {
         if (accessToken == null) {
