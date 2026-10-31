@@ -103,7 +103,20 @@ public class MainActivity extends BaseActivity {
         if (!sp.getBoolean("seen_help", false)) {
             sp.edit().putBoolean("seen_help", true).apply();
             showHelp();
+        } else if (!sp.getBoolean("seen_login_prompt", false) && Auth.uid() == null) {
+            sp.edit().putBoolean("seen_login_prompt", true).apply();
+            offerLogin();
         }
+    }
+
+    /** 처음 한 번만: 가족 연결·화면 도움을 쓰려면 로그인이 필요하다고 안내(선택, 건너뛰기 가능). */
+    private void offerLogin() {
+        new AlertDialog.Builder(this)
+                .setTitle(Tr.t("로그인하시겠어요? (선택)"))
+                .setMessage(Tr.t("앱 점검과 정리는 로그인 없이 모두 쓸 수 있습니다.\n가족 연결·화면 도움을 쓰려면 로그인이 필요합니다. 나중에 [더보기 > 가족 연결]에서도 할 수 있습니다."))
+                .setNegativeButton(Tr.t("나중에"), null)
+                .setPositiveButton(Tr.t("로그인"), (d, w) -> startActivity(new Intent(this, LoginActivity.class)))
+                .show();
     }
 
     // ---------------------------------------------------------------- UI
