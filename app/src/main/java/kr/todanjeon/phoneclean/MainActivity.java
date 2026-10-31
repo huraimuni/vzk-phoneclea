@@ -731,10 +731,15 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showMore() {
-        final String[] base = {getString(R.string.home_family_btn), getString(R.string.btn_language), Tr.t("내 계정"), Tr.t("응급 가이드 (폰이 멈췄을 때)"), Tr.t("광고·알고리즘 정리"), Tr.t("알림 정리 (알림 비우기·끄기)"), Tr.t("안전 표시한 앱 관리"),
+        final String[] base0 = {getString(R.string.home_family_btn), getString(R.string.btn_language), Tr.t("내 계정"), Tr.t("응급 가이드 (폰이 멈췄을 때)"), Tr.t("광고·알고리즘 정리"), Tr.t("알림 정리 (알림 비우기·끄기)"), Tr.t("안전 표시한 앱 관리"),
                 Tr.t("사용 기록 허용 (정확도 향상)"),
                 watchOn() ? Tr.t("새 앱 즉시 분석 알림 끄기 (감시 중)") : Tr.t("새 앱 즉시 분석 알림 켜기 (감시)"),
                 Tr.t("결과 공유 (카카오톡 등)"), Tr.t("오류 보고·건의하기"), Tr.t("업데이트 확인"), Tr.t("도움말")};
+        final boolean scam = Lang.useNaver(this);
+        java.util.ArrayList<String> bl = new java.util.ArrayList<>(java.util.Arrays.asList(base0));
+        if (scam) bl.add(3, "🛡 보이스피싱·스미싱 점검");
+        final String[] base = bl.toArray(new String[0]);
+        final int baseN = base.length - (scam ? 1 : 0);
         final boolean adm = Admin.is;
         final String[] items = new String[base.length + (adm ? 1 : 0)];
         for (int i = 0; i < base.length; i++) items[i + (adm ? 1 : 0)] = base[i];
@@ -751,6 +756,13 @@ public class MainActivity extends BaseActivity {
                             }
                             which = which - 1;
                         }
+                        if (scam) {
+                            if (which == 3) {
+                                startActivity(new Intent(MainActivity.this, ScamActivity.class));
+                                return;
+                            }
+                            if (which > 3) which = which - 1;
+                        }
                         if (which == 0) startActivity(new Intent(MainActivity.this, Auth.uid() == null ? LoginActivity.class : FamilyActivity.class));
                         else if (which == 1) startActivity(new Intent(MainActivity.this, LanguageActivity.class));
                         else if (which == 2) startActivity(new Intent(MainActivity.this, AccountActivity.class));
@@ -761,8 +773,8 @@ public class MainActivity extends BaseActivity {
                         else if (which == 7) openUsageSettings();
                         else if (which == 8) toggleWatch();
                         else if (which == 9) shareReport();
-                        else if (which == base.length - 3) showFeedback();
-                        else if (which == base.length - 2) Updater.check(MainActivity.this);
+                        else if (which == baseN - 3) showFeedback();
+                        else if (which == baseN - 2) Updater.check(MainActivity.this);
                         else showHelp();
                     }
                 })
