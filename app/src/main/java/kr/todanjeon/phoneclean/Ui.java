@@ -123,4 +123,9 @@ final class Ui {
     static void center(TextView t) {
         t.setGravity(Gravity.CENTER);
     }
+
+    /** 이 브랜치에서는 화면 여백 처리가 필요 없다(스토어 브랜치와 코드 공유용). */
+    static View fit(View v) {
+        return v;
+    }
 }
