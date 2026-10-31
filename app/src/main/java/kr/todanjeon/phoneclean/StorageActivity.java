@@ -27,7 +27,7 @@ public class StorageActivity extends BaseActivity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, "저장공간 관리", "겹치는 사진·영상과 연락처를 찾아 정리합니다"));
+        root.addView(Ui.header(this, Tr.t("저장공간 관리"), Tr.t("겹치는 사진·영상과 연락처를 찾아 정리합니다")));
 
         ScrollView sv = new ScrollView(this);
         LinearLayout body = new LinearLayout(this);
@@ -45,20 +45,20 @@ public class StorageActivity extends BaseActivity {
         blp.setMargins(0, Ui.dp(this, 6), 0, Ui.dp(this, 14));
         body.addView(bar, blp);
 
-        addCard(body, "중복 사진·영상",
-                "같은 내용인데 여러 번 저장된 사진과 영상을 묶어서 보여 줍니다. "
-                        + "남길 파일 1개만 빼고 나머지를 휴지통으로 보낼 수 있습니다. (휴지통 30일 보관, 안드로이드 11 이상)",
-                "중복 사진·영상 찾기", Ui.CORAL, new Runnable() {
+        addCard(body, Tr.t("중복 사진·영상"),
+                Tr.t("같은 내용인데 여러 번 저장된 사진과 영상을 묶어서 보여 줍니다. "
+                        + "남길 파일 1개만 빼고 나머지를 휴지통으로 보낼 수 있습니다. (휴지통 30일 보관, 안드로이드 11 이상)"),
+                Tr.t("중복 사진·영상 찾기"), Ui.CORAL, new Runnable() {
                     @Override
                     public void run() {
                         startActivity(new Intent(StorageActivity.this, DupMediaActivity.class));
                     }
                 });
 
-        addCard(body, "중복 연락처",
-                "같은 전화번호가 여러 연락처에 들어 있는 경우를 묶어서 보여 줍니다. "
-                        + "삭제하면 되돌릴 수 없으니, 먼저 구글 연락처 앱에서 내보내기(백업)를 해 두세요.",
-                "중복 연락처 찾기", Ui.GREEN, new Runnable() {
+        addCard(body, Tr.t("중복 연락처"),
+                Tr.t("같은 전화번호가 여러 연락처에 들어 있는 경우를 묶어서 보여 줍니다. "
+                        + "삭제하면 되돌릴 수 없으니, 먼저 구글 연락처 앱에서 내보내기(백업)를 해 두세요."),
+                Tr.t("중복 연락처 찾기"), Ui.GREEN, new Runnable() {
                     @Override
                     public void run() {
                         startActivity(new Intent(StorageActivity.this, DupContactsActivity.class));
@@ -66,13 +66,13 @@ public class StorageActivity extends BaseActivity {
                 });
 
         TextView note = Ui.text(this,
-                "참고\n- 같은 파일인지는 파일 크기와 내용 일부를 비교해서 추정합니다. 지우기 전에 미리보기로 꼭 확인하세요.\n"
-                        + "- 사진·연락처는 밖으로 보내지 않습니다.",
+                Tr.t("참고\n- 같은 파일인지는 파일 크기와 내용 일부를 비교해서 추정합니다. 지우기 전에 미리보기로 꼭 확인하세요.\n"
+                        + "- 사진·연락처는 밖으로 보내지 않습니다."),
                 13, Ui.GRAY, false);
         note.setLineSpacing(0, 1.2f);
         body.addView(note);
 
-        Button back = Ui.button(this, "돌아가기", Ui.NAVY, Color.WHITE);
+        Button back = Ui.button(this, Tr.t("돌아가기"), Ui.NAVY, Color.WHITE);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, Ui.dp(this, 14), 0, 0);
@@ -100,10 +100,10 @@ public class StorageActivity extends BaseActivity {
             long total = fs.getTotalBytes();
             long free = fs.getAvailableBytes();
             long used = total - free;
-            usage.setText("저장공간  사용 " + fmt(used) + " / 전체 " + fmt(total) + "  (남은 " + fmt(free) + ")");
+            usage.setText(Tr.f("저장공간  사용 %s / 전체 %s  (남은 %s)", fmt(used), fmt(total), fmt(free)));
             bar.setProgress(total > 0 ? (int) (used * 1000 / total) : 0);
         } catch (Exception e) {
-            usage.setText("저장공간 정보를 읽지 못했습니다.");
+            usage.setText(Tr.t("저장공간 정보를 읽지 못했습니다."));
         }
     }
 

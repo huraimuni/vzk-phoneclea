@@ -41,14 +41,14 @@ public class WatchService extends Service {
         super.onCreate();
         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (nm != null) {
-            nm.createNotificationChannel(new NotificationChannel(CH, "감시 중 표시", NotificationManager.IMPORTANCE_LOW));
+            nm.createNotificationChannel(new NotificationChannel(CH, Tr.t("감시 중 표시"), NotificationManager.IMPORTANCE_LOW));
         }
         Intent open = new Intent(this, MainActivity.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0, open, PendingIntent.FLAG_IMMUTABLE);
         Notification n = new Notification.Builder(this, CH)
                 .setSmallIcon(android.R.drawable.stat_sys_warning)
-                .setContentTitle("VZK 폰클린 감시 중")
-                .setContentText("새 앱이 설치되면 바로 분석해서 알려 드립니다")
+                .setContentTitle(Tr.t("VZK 폰클린 감시 중"))
+                .setContentText(Tr.t("새 앱이 설치되면 바로 분석해서 알려 드립니다"))
                 .setContentIntent(pi)
                 .setOngoing(true)
                 .build();

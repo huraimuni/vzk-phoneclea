@@ -95,7 +95,7 @@ final class Ui {
             a.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
             return true;
         } catch (Exception e) {
-            toast(a, "열 수 있는 앱이 없습니다.");
+            toast(a, Tr.t("열 수 있는 앱이 없습니다."));
             return false;
         }
     }
@@ -109,7 +109,7 @@ final class Ui {
                 if (fallback == null) throw e1;
                 a.startActivity(fallback);
             } catch (Exception e2) {
-                toast(a, "이 기기에서는 해당 설정 화면을 바로 열 수 없습니다. 설정 앱에서 직접 찾아 주세요.");
+                toast(a, Tr.t("이 기기에서는 해당 설정 화면을 바로 열 수 없습니다. 설정 앱에서 직접 찾아 주세요."));
             }
         }
     }

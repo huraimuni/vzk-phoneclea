@@ -85,7 +85,7 @@ public class DupMediaActivity extends BaseActivity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, "중복 사진·영상", "같은 파일로 추정되는 것끼리 묶었습니다"));
+        root.addView(Ui.header(this, Tr.t("중복 사진·영상"), Tr.t("같은 파일로 추정되는 것끼리 묶었습니다")));
 
         summary = Ui.text(this, "", 15, Ui.INK, true);
         summary.setPadding(Ui.dp(this, 14), Ui.dp(this, 10), Ui.dp(this, 14), Ui.dp(this, 6));
@@ -94,7 +94,7 @@ public class DupMediaActivity extends BaseActivity {
         LinearLayout row1 = new LinearLayout(this);
         row1.setOrientation(LinearLayout.HORIZONTAL);
         row1.setPadding(Ui.dp(this, 8), 0, Ui.dp(this, 8), 0);
-        Button recommend = Ui.button(this, "추천대로 선택", Color.rgb(255, 226, 214), Ui.CORAL_DARK);
+        Button recommend = Ui.button(this, Tr.t("추천대로 선택"), Color.rgb(255, 226, 214), Ui.CORAL_DARK);
         recommend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,7 +103,7 @@ public class DupMediaActivity extends BaseActivity {
                 updateButtons();
             }
         });
-        Button clear = Ui.button(this, "선택 해제", Color.rgb(226, 230, 244), Ui.NAVY);
+        Button clear = Ui.button(this, Tr.t("선택 해제"), Color.rgb(226, 230, 244), Ui.NAVY);
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,7 +122,7 @@ public class DupMediaActivity extends BaseActivity {
         listView.setAdapter(adapter);
         root.addView(listView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
 
-        btnDelete = Ui.button(this, "선택한 파일 휴지통으로", Ui.RED, Color.WHITE);
+        btnDelete = Ui.button(this, Tr.t("선택한 파일 휴지통으로"), Ui.RED, Color.WHITE);
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,7 +165,7 @@ public class DupMediaActivity extends BaseActivity {
         if (hasPerms()) {
             startScan();
         } else {
-            summary.setText("사진·영상을 읽을 권한이 필요합니다. 허용 창에서 [허용]을 눌러 주세요.");
+            summary.setText(Tr.t("사진·영상을 읽을 권한이 필요합니다. 허용 창에서 [허용]을 눌러 주세요."));
             requestPermissions(neededPerms(), REQ_PERM);
         }
     }
@@ -175,7 +175,7 @@ public class DupMediaActivity extends BaseActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQ_PERM) {
             if (hasPerms()) startScan();
-            else summary.setText("권한이 없어서 사진·영상을 볼 수 없습니다. 폰 설정 > 앱 > VZK 폰클린 > 권한에서 허용해 주세요.");
+            else summary.setText(Tr.t("권한이 없어서 사진·영상을 볼 수 없습니다. 폰 설정 > 앱 > VZK 폰클린 > 권한에서 허용해 주세요."));
         }
     }
 
@@ -184,7 +184,7 @@ public class DupMediaActivity extends BaseActivity {
     private void startScan() {
         if (scanning) return;
         scanning = true;
-        summary.setText("사진·영상을 읽는 중입니다...");
+        summary.setText(Tr.t("사진·영상을 읽는 중입니다..."));
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -251,7 +251,7 @@ public class DupMediaActivity extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (scanning) summary.setText("같은 파일인지 비교하는 중... " + done + " / " + total);
+                if (scanning) summary.setText(Tr.t("같은 파일인지 비교하는 중... ") + done + " / " + total);
             }
         });
     }
@@ -281,7 +281,7 @@ public class DupMediaActivity extends BaseActivity {
                 it.folder = Build.VERSION.SDK_INT >= 29 ? c.getString(4) : "";
                 it.video = video;
                 it.uri = ContentUris.withAppendedId(base, it.id);
-                if (it.name == null) it.name = "(이름 없음)";
+                if (it.name == null) it.name = Tr.t("(이름 없음)");
                 out.add(it);
             }
         } catch (Exception ignored) {
@@ -342,17 +342,16 @@ public class DupMediaActivity extends BaseActivity {
             for (Item it : g) it.group = gi;
             groups.add(g);
             Item first = g.get(0);
-            rows.add((first.video ? "영상 " : "사진 ") + (gi + 1) + "묶음 · " + g.size() + "개 · 파일 하나당 "
-                    + StorageActivity.fmt(first.size));
+            rows.add(Tr.f(first.video ? "영상 %d묶음 · %d개 · 파일 하나당 %s" : "사진 %d묶음 · %d개 · 파일 하나당 %s", gi + 1, g.size(), StorageActivity.fmt(first.size)));
             rows.addAll(g);
             waste += first.size * (g.size() - 1);
             gi++;
         }
         applyRecommended();
         if (groups.isEmpty()) {
-            summary.setText("중복으로 보이는 사진·영상이 없습니다.");
+            summary.setText(Tr.t("중복으로 보이는 사진·영상이 없습니다."));
         } else {
-            summary.setText("중복 " + groups.size() + "묶음 · 모두 정리하면 약 " + StorageActivity.fmt(waste) + " 확보");
+            summary.setText(Tr.f("중복 %d묶음 · 모두 정리하면 약 %s 확보", groups.size(), StorageActivity.fmt(waste)));
         }
         adapter.notifyDataSetChanged();
         updateButtons();
@@ -368,7 +367,7 @@ public class DupMediaActivity extends BaseActivity {
 
     private void updateButtons() {
         int n = checked.size();
-        btnDelete.setText(n == 0 ? "선택한 파일 휴지통으로" : "선택한 " + n + "개 휴지통으로");
+        btnDelete.setText(n == 0 ? Tr.t("선택한 파일 휴지통으로") : Tr.f("선택한 %d개 휴지통으로", n));
     }
 
     private final class RowAdapter extends BaseAdapter {
@@ -457,10 +456,10 @@ public class DupMediaActivity extends BaseActivity {
             TextView meta = (TextView) row.findViewWithTag("meta");
 
             boolean isKeeper = groups.get(it.group).get(0) == it;
-            name.setText((isKeeper ? "[남김 추천] " : "") + it.name);
+            name.setText((isKeeper ? Tr.t("[남김 추천] ") : "") + it.name);
             String folder = it.folder == null ? "" : it.folder;
             meta.setText(StorageActivity.fmt(it.size) + " · " + dateFmt.format(new Date(it.dateAdded))
-                    + (it.video ? " · 영상" : " · 사진") + (folder.isEmpty() ? "" : "\n" + folder));
+                    + (it.video ? Tr.t(" · 영상") : Tr.t(" · 사진")) + (folder.isEmpty() ? "" : "\n" + folder));
             cb.setChecked(checked.contains(key(it)));
             cb.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -485,7 +484,7 @@ public class DupMediaActivity extends BaseActivity {
                         i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         startActivity(i);
                     } catch (Exception e) {
-                        Ui.toast(DupMediaActivity.this, "미리 볼 수 있는 앱이 없습니다.");
+                        Ui.toast(DupMediaActivity.this, Tr.t("미리 볼 수 있는 앱이 없습니다."));
                     }
                 }
             });
@@ -522,11 +521,11 @@ public class DupMediaActivity extends BaseActivity {
 
     private void confirmTrash() {
         if (checked.isEmpty()) {
-            Ui.toast(this, "정리할 파일을 먼저 체크해 주세요.");
+            Ui.toast(this, Tr.t("정리할 파일을 먼저 체크해 주세요."));
             return;
         }
         if (Build.VERSION.SDK_INT < 30) {
-            Ui.toast(this, "이 기능은 안드로이드 11 이상에서만 지원합니다.");
+            Ui.toast(this, Tr.t("이 기능은 안드로이드 11 이상에서만 지원합니다."));
             return;
         }
         // 한 묶음을 통째로 지우는 실수를 막는다
@@ -534,21 +533,21 @@ public class DupMediaActivity extends BaseActivity {
             boolean keepOne = false;
             for (Item it : g) if (!checked.contains(key(it))) keepOne = true;
             if (!keepOne) {
-                Ui.toast(this, "같은 묶음의 파일을 전부 체크할 수는 없습니다. 묶음마다 1개는 남겨 주세요.");
+                Ui.toast(this, Tr.t("같은 묶음의 파일을 전부 체크할 수는 없습니다. 묶음마다 1개는 남겨 주세요."));
                 return;
             }
         }
         new AlertDialog.Builder(this)
-                .setTitle(checked.size() + "개를 휴지통으로 보낼까요?")
-                .setMessage("갤러리 휴지통에 30일 동안 보관되어서 그 안에는 되살릴 수 있습니다.\n"
-                        + "묶음마다 남길 파일이 맞는지 한 번 더 확인하세요.")
-                .setPositiveButton("휴지통으로", new DialogInterface.OnClickListener() {
+                .setTitle(Tr.f("%d개를 휴지통으로 보낼까요?", checked.size()))
+                .setMessage(Tr.t("갤러리 휴지통에 30일 동안 보관되어서 그 안에는 되살릴 수 있습니다.\n"
+                        + "묶음마다 남길 파일이 맞는지 한 번 더 확인하세요."))
+                .setPositiveButton(Tr.t("휴지통으로"), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         doTrash();
                     }
                 })
-                .setNegativeButton("취소", null)
+                .setNegativeButton(Tr.t("취소"), null)
                 .show();
     }
 
@@ -561,7 +560,7 @@ public class DupMediaActivity extends BaseActivity {
             PendingIntent pi = MediaStore.createTrashRequest(getContentResolver(), uris, true);
             startIntentSenderForResult(pi.getIntentSender(), REQ_TRASH, null, 0, 0, 0);
         } catch (Exception e) {
-            Ui.toast(this, "휴지통 이동 요청을 보내지 못했습니다.");
+            Ui.toast(this, Tr.t("휴지통 이동 요청을 보내지 못했습니다."));
         }
     }
 
@@ -570,10 +569,10 @@ public class DupMediaActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_TRASH) {
             if (resultCode == RESULT_OK) {
-                Ui.toast(this, "휴지통으로 보냈습니다. 다시 찾아봅니다.");
+                Ui.toast(this, Tr.t("휴지통으로 보냈습니다. 다시 찾아봅니다."));
                 startScan();
             } else {
-                Ui.toast(this, "취소했습니다.");
+                Ui.toast(this, Tr.t("취소했습니다."));
             }
         }
     }

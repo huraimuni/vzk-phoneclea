@@ -51,15 +51,15 @@ final class AppEntry {
     }
 
     String levelText() {
-        if (safe) return "안전 표시";
-        if (autoSafe) return "안전 후보";
+        if (safe) return Tr.t("안전 표시");
+        if (autoSafe) return Tr.t("안전 후보");
         switch (level()) {
             case LEVEL_HIGH:
-                return "위험 의심";
+                return Tr.t("위험 의심");
             case LEVEL_WARN:
-                return "주의";
+                return Tr.t("주의");
             default:
-                return "낮음";
+                return Tr.t("낮음");
         }
     }
 

@@ -41,9 +41,9 @@ public class AnalysisActivity extends BaseActivity {
         box.setPadding(Ui.dp(this, 18), Ui.dp(this, 16), Ui.dp(this, 18), Ui.dp(this, 12));
         sv.addView(box);
         setContentView(sv);
-        setTitle("새 앱 분석");
+        setTitle(Tr.t("새 앱 분석"));
 
-        box.addView(Ui.text(this, "분석하는 중입니다...", 16, Ui.INK, true));
+        box.addView(Ui.text(this, Tr.t("분석하는 중입니다..."), 16, Ui.INK, true));
         if (pkg == null) {
             finish();
             return;
@@ -73,7 +73,7 @@ public class AnalysisActivity extends BaseActivity {
     private void render(final AppEntry e) {
         box.removeAllViews();
         if (e == null) {
-            box.addView(Ui.text(this, "이 앱은 이미 삭제됐거나 분석 대상이 아닙니다.", 16, Ui.INK, true));
+            box.addView(Ui.text(this, Tr.t("이 앱은 이미 삭제됐거나 분석 대상이 아닙니다."), 16, Ui.INK, true));
             addClose();
             return;
         }
@@ -93,7 +93,7 @@ public class AnalysisActivity extends BaseActivity {
 
         int color = e.level() == AppEntry.LEVEL_HIGH ? Ui.RED
                 : e.level() == AppEntry.LEVEL_WARN ? Ui.AMBER : Ui.GREEN;
-        TextView verdict = Ui.text(this, "판정: " + e.levelText()
+        TextView verdict = Ui.text(this, Tr.t("판정: ") + e.levelText()
                 + (e.tagText().isEmpty() ? "" : "\n" + e.tagText()), 18, Color.WHITE, true);
         verdict.setBackground(Ui.round(color, 12, this));
         verdict.setPadding(Ui.dp(this, 14), Ui.dp(this, 10), Ui.dp(this, 14), Ui.dp(this, 10));
@@ -103,48 +103,48 @@ public class AnalysisActivity extends BaseActivity {
         box.addView(verdict, vlp);
 
         String date = e.installTime > 0
-                ? new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.KOREA).format(new Date(e.installTime)) : "모름";
-        TextView info = Ui.text(this, "설치 경로: " + e.installerText + "\n설치 시각: " + date, 14, Ui.GRAY, false);
+                ? new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.KOREA).format(new Date(e.installTime)) : Tr.t("모름");
+        TextView info = Ui.text(this, Tr.t("설치 경로: ") + e.installerText + Tr.t("\n설치 시각: ") + date, 14, Ui.GRAY, false);
         box.addView(info);
 
         StringBuilder sb = new StringBuilder();
         if (e.reasons.isEmpty()) {
-            sb.append("의심스러운 징후가 발견되지 않았습니다.");
+            sb.append(Tr.t("의심스러운 징후가 발견되지 않았습니다."));
         } else {
-            sb.append("분석 결과\n");
+            sb.append(Tr.t("분석 결과\n"));
             for (String r : e.reasons) sb.append("- ").append(r).append("\n");
         }
-        sb.append("\n내가 직접 설치한 앱이 아니라면 삭제를 권합니다.");
+        sb.append(Tr.t("\n내가 직접 설치한 앱이 아니라면 삭제를 권합니다."));
         TextView why = Ui.text(this, sb.toString(), 15, Ui.INK, false);
         why.setLineSpacing(0, 1.2f);
         why.setPadding(0, Ui.dp(this, 10), 0, Ui.dp(this, 8));
         box.addView(why);
 
-        Button del = Ui.button(this, "이 앱 삭제", Ui.RED, Color.WHITE);
+        Button del = Ui.button(this, Tr.t("이 앱 삭제"), Ui.RED, Color.WHITE);
         del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + e.pkg)));
                 } catch (Exception ex) {
-                    Ui.toast(AnalysisActivity.this, "삭제 창을 열 수 없습니다.");
+                    Ui.toast(AnalysisActivity.this, Tr.t("삭제 창을 열 수 없습니다."));
                 }
             }
         });
-        Button pause = Ui.button(this, "일시 중지 (백그라운드 종료)", Ui.CORAL, Color.WHITE);
+        Button pause = Ui.button(this, Tr.t("일시 중지 (백그라운드 종료)"), Ui.CORAL, Color.WHITE);
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
                     am.killBackgroundProcesses(e.pkg);
-                    Ui.toast(AnalysisActivity.this, "정지 명령을 보냈습니다. (임시 조치)");
+                    Ui.toast(AnalysisActivity.this, Tr.t("정지 명령을 보냈습니다. (임시 조치)"));
                 } catch (Exception ex) {
-                    Ui.toast(AnalysisActivity.this, "일시 중지하지 못했습니다.");
+                    Ui.toast(AnalysisActivity.this, Tr.t("일시 중지하지 못했습니다."));
                 }
             }
         });
-        Button safe = Ui.button(this, "내가 아는 안전한 앱 (표시하고 닫기)", Ui.GREEN, Color.WHITE);
+        Button safe = Ui.button(this, Tr.t("내가 아는 안전한 앱 (표시하고 닫기)"), Ui.GREEN, Color.WHITE);
         safe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,11 +154,11 @@ public class AnalysisActivity extends BaseActivity {
                 if (old != null) cur.addAll(old);
                 cur.add(e.pkg);
                 sp.edit().putStringSet("safe_pkgs", cur).apply();
-                Ui.toast(AnalysisActivity.this, "안전한 앱으로 표시했습니다.");
+                Ui.toast(AnalysisActivity.this, Tr.t("안전한 앱으로 표시했습니다."));
                 finish();
             }
         });
-        Button info2 = Ui.button(this, "앱 정보 열기", Color.rgb(226, 230, 244), Ui.NAVY);
+        Button info2 = Ui.button(this, Tr.t("앱 정보 열기"), Color.rgb(226, 230, 244), Ui.NAVY);
         info2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,7 +177,7 @@ public class AnalysisActivity extends BaseActivity {
     }
 
     private void addClose() {
-        Button close = Ui.button(this, "닫기", Ui.NAVY, Color.WHITE);
+        Button close = Ui.button(this, Tr.t("닫기"), Ui.NAVY, Color.WHITE);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

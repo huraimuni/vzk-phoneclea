@@ -56,14 +56,14 @@ public class DupContactsActivity extends BaseActivity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, "중복 연락처", "같은 전화번호가 들어 있는 연락처끼리 묶었습니다"));
+        root.addView(Ui.header(this, Tr.t("중복 연락처"), Tr.t("같은 전화번호가 들어 있는 연락처끼리 묶었습니다")));
 
         summary = Ui.text(this, "", 15, Ui.INK, true);
         summary.setPadding(Ui.dp(this, 14), Ui.dp(this, 10), Ui.dp(this, 14), Ui.dp(this, 4));
         root.addView(summary);
 
         TextView warn = Ui.text(this,
-                "삭제한 연락처는 되돌릴 수 없습니다. 지우기 전에 구글 연락처 앱에서 [내보내기]로 백업해 두세요.",
+                Tr.t("삭제한 연락처는 되돌릴 수 없습니다. 지우기 전에 구글 연락처 앱에서 [내보내기]로 백업해 두세요."),
                 13, Ui.RED, false);
         warn.setPadding(Ui.dp(this, 14), 0, Ui.dp(this, 14), Ui.dp(this, 6));
         root.addView(warn);
@@ -71,7 +71,7 @@ public class DupContactsActivity extends BaseActivity {
         LinearLayout row1 = new LinearLayout(this);
         row1.setOrientation(LinearLayout.HORIZONTAL);
         row1.setPadding(Ui.dp(this, 8), 0, Ui.dp(this, 8), 0);
-        Button recommend = Ui.button(this, "추천대로 선택", Color.rgb(255, 226, 214), Ui.CORAL_DARK);
+        Button recommend = Ui.button(this, Tr.t("추천대로 선택"), Color.rgb(255, 226, 214), Ui.CORAL_DARK);
         recommend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +80,7 @@ public class DupContactsActivity extends BaseActivity {
                 updateButtons();
             }
         });
-        Button clear = Ui.button(this, "선택 해제", Color.rgb(226, 230, 244), Ui.NAVY);
+        Button clear = Ui.button(this, Tr.t("선택 해제"), Color.rgb(226, 230, 244), Ui.NAVY);
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +99,7 @@ public class DupContactsActivity extends BaseActivity {
         lv.setAdapter(adapter);
         root.addView(lv, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
 
-        btnDelete = Ui.button(this, "선택한 연락처 삭제", Ui.RED, Color.WHITE);
+        btnDelete = Ui.button(this, Tr.t("선택한 연락처 삭제"), Ui.RED, Color.WHITE);
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,7 +130,7 @@ public class DupContactsActivity extends BaseActivity {
         if (hasPerms()) {
             startScan();
         } else {
-            summary.setText("연락처를 읽고 지울 권한이 필요합니다. 허용 창에서 [허용]을 눌러 주세요.");
+            summary.setText(Tr.t("연락처를 읽고 지울 권한이 필요합니다. 허용 창에서 [허용]을 눌러 주세요."));
             requestPermissions(PERMS, REQ_PERM);
         }
     }
@@ -140,7 +140,7 @@ public class DupContactsActivity extends BaseActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQ_PERM) {
             if (hasPerms()) startScan();
-            else summary.setText("권한이 없어서 연락처를 볼 수 없습니다. 폰 설정 > 앱 > VZK 폰클린 > 권한에서 허용해 주세요.");
+            else summary.setText(Tr.t("권한이 없어서 연락처를 볼 수 없습니다. 폰 설정 > 앱 > VZK 폰클린 > 권한에서 허용해 주세요."));
         }
     }
 
@@ -154,7 +154,7 @@ public class DupContactsActivity extends BaseActivity {
     private void startScan() {
         if (scanning) return;
         scanning = true;
-        summary.setText("연락처를 읽는 중입니다...");
+        summary.setText(Tr.t("연락처를 읽는 중입니다..."));
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -179,7 +179,7 @@ public class DupContactsActivity extends BaseActivity {
                             if (info == null) {
                                 info = new Info();
                                 info.id = id;
-                                info.name = (name == null || name.isEmpty()) ? "(이름 없음)" : name;
+                                info.name = (name == null || name.isEmpty()) ? Tr.t("(이름 없음)") : name;
                                 found.put(id, info);
                             }
                             info.numbers.add(num);
@@ -256,13 +256,13 @@ public class DupContactsActivity extends BaseActivity {
         int gi = 0;
         for (List<Info> g : groups) {
             for (Info i : g) i.group = gi;
-            rows.add("중복 묶음 " + (gi + 1) + "  (" + g.size() + "명)");
+            rows.add(Tr.f("중복 묶음 %d  (%d명)", gi + 1, g.size()));
             rows.addAll(g);
             gi++;
         }
         applyRecommended();
-        summary.setText(groups.isEmpty() ? "같은 번호가 겹치는 연락처가 없습니다."
-                : "중복 " + groups.size() + "묶음 (연락처 " + countItems() + "건)");
+        summary.setText(groups.isEmpty() ? Tr.t("같은 번호가 겹치는 연락처가 없습니다.")
+                : Tr.f("중복 %d묶음 (연락처 %d건)", groups.size(), countItems()));
         adapter.notifyDataSetChanged();
         updateButtons();
     }
@@ -283,7 +283,7 @@ public class DupContactsActivity extends BaseActivity {
 
     private void updateButtons() {
         int n = checked.size();
-        btnDelete.setText(n == 0 ? "선택한 연락처 삭제" : "선택한 " + n + "건 삭제");
+        btnDelete.setText(n == 0 ? Tr.t("선택한 연락처 삭제") : Tr.f("선택한 %d건 삭제", n));
     }
 
     private final class RowAdapter extends BaseAdapter {
@@ -362,7 +362,7 @@ public class DupContactsActivity extends BaseActivity {
             TextView name = (TextView) row.findViewWithTag("name");
             TextView num = (TextView) row.findViewWithTag("num");
             boolean keeper = groups.get(info.group).get(0) == info;
-            name.setText((keeper ? "[남김 추천] " : "") + info.name);
+            name.setText((keeper ? Tr.t("[남김 추천] ") : "") + info.name);
             StringBuilder sb = new StringBuilder();
             for (String s : info.numbers) {
                 if (sb.length() > 0) sb.append(", ");
@@ -384,14 +384,14 @@ public class DupContactsActivity extends BaseActivity {
 
     private void confirmDelete() {
         if (checked.isEmpty()) {
-            Ui.toast(this, "삭제할 연락처를 먼저 체크해 주세요.");
+            Ui.toast(this, Tr.t("삭제할 연락처를 먼저 체크해 주세요."));
             return;
         }
         for (List<Info> g : groups) {
             boolean keepOne = false;
             for (Info i : g) if (!checked.contains(i.id)) keepOne = true;
             if (!keepOne) {
-                Ui.toast(this, "같은 묶음의 연락처를 전부 체크할 수는 없습니다. 묶음마다 1명은 남겨 주세요.");
+                Ui.toast(this, Tr.t("같은 묶음의 연락처를 전부 체크할 수는 없습니다. 묶음마다 1명은 남겨 주세요."));
                 return;
             }
         }
@@ -403,19 +403,18 @@ public class DupContactsActivity extends BaseActivity {
             if (shown < 8) names.append("- ").append(i.name).append("\n");
             shown++;
         }
-        if (shown > 8) names.append("외 ").append(shown - 8).append("건\n");
+        if (shown > 8) names.append(Tr.f("외 %d건\n", shown - 8));
         new AlertDialog.Builder(this)
-                .setTitle(checked.size() + "건을 삭제할까요?")
+                .setTitle(Tr.f("%d건을 삭제할까요?", checked.size()))
                 .setMessage(names
-                        + "\n삭제하면 되돌릴 수 없고, 그 연락처에만 있던 메모·다른 번호도 함께 사라집니다.\n"
-                        + "남길 연락처에 필요한 정보가 다 들어 있는지 확인하세요.")
-                .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                        + Tr.t("\n삭제하면 되돌릴 수 없고, 그 연락처에만 있던 메모·다른 번호도 함께 사라집니다.\n남길 연락처에 필요한 정보가 다 들어 있는지 확인하세요."))
+                .setPositiveButton(Tr.t("삭제"), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         doDelete();
                     }
                 })
-                .setNegativeButton("취소", null)
+                .setNegativeButton(Tr.t("취소"), null)
                 .show();
     }
 
@@ -432,7 +431,7 @@ public class DupContactsActivity extends BaseActivity {
                 fail++;
             }
         }
-        Ui.toast(this, ok + "건 삭제" + (fail > 0 ? ", " + fail + "건 실패" : "") + ". 다시 찾아봅니다.");
+        Ui.toast(this, Tr.f(fail > 0 ? "%1$d건 삭제, %2$d건 실패. 다시 찾아봅니다." : "%1$d건 삭제. 다시 찾아봅니다.", ok, fail));
         startScan();
     }
 }
