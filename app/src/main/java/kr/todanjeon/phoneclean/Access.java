@@ -23,6 +23,10 @@ final class Access {
             r.done(false, null);
             return;
         }
+        if (Admin.is) {
+            r.done(true, "grant");   // 운영자는 구독 없이 화면 도움을 쓸 수 있다(서버 규칙도 동일)
+            return;
+        }
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("grants").document(me).get().addOnCompleteListener(g -> {
             if (g.isSuccessful() && valid(g.getResult(), true)) {
