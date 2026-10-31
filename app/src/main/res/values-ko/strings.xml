@@ -96,4 +96,6 @@
     <string name="log_requested_only">시작 안 됨</string>
     <string name="btn_delete">삭제</string>
     <string name="btn_delete_all">기록 전체 삭제</string>
+    <string name="app_name">VZK 폰클린</string>
+    <string name="app_name_notif">VZK 폰클린 알림 정리</string>
 </resources>

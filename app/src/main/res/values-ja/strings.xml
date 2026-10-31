@@ -96,4 +96,6 @@
     <string name="log_requested_only">未開始</string>
     <string name="btn_delete">削除</string>
     <string name="btn_delete_all">記録をすべて削除</string>
+    <string name="app_name">VZK PhoneClean</string>
+    <string name="app_name_notif">VZK PhoneClean Notifications</string>
 </resources>

@@ -96,4 +96,6 @@ Válido %2$d minutos, un solo uso. Díselo a tu familiar o muestra el QR.</strin
     <string name="log_requested_only">no iniciada</string>
     <string name="btn_delete">Eliminar</string>
     <string name="btn_delete_all">Eliminar todos los registros</string>
+    <string name="app_name">VZK PhoneClean</string>
+    <string name="app_name_notif">VZK PhoneClean Notifications</string>
 </resources>

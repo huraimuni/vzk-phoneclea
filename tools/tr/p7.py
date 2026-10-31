@@ -25,7 +25,7 @@ T = {
 '%d개를 휴지통으로 보낼까요?': ["Send %d items to the trash?","%d件をゴミ箱に送りますか？","¿Enviar %d elementos a la papelera?","Enviar %d itens para a lixeira?","Kirim %d item ke tempat sampah?","%d आइटम ट्रैश में भेजें?"],
 '%d건을 삭제할까요?': ["Delete %d?","%d件を削除しますか？","¿Eliminar %d?","Excluir %d?","Hapus %d?","%d हटाएं?"],
 '2단계 ▸ 선택한 앱 %d개 삭제': ["Step 2 ▸ Delete %d selected apps","2段階目 ▸ 選択した%d個のアプリを削除","Paso 2 ▸ Eliminar %d apps seleccionadas","Passo 2 ▸ Excluir %d apps selecionados","Langkah 2 ▸ Hapus %d aplikasi terpilih","चरण 2 ▸ चुने हुए %d ऐप हटाएं"],
-'VZK 폰클린 v%s': ["VZK PhoneClean v%s","VZK フォンクリーン v%s","VZK PhoneClean v%s","VZK PhoneClean v%s","VZK PhoneClean v%s","VZK PhoneClean v%s"],
+'VZK 폰클린 v%s': ["VZK PhoneClean v%s","VZK PhoneClean v%s","VZK PhoneClean v%s","VZK PhoneClean v%s","VZK PhoneClean v%s","VZK PhoneClean v%s"],
 '같은 개발사(서명)가 만든 앱이 %d개 설치돼 있음': ["%d apps from the same developer (signature) are installed","同じ開発元（署名）のアプリが%d個インストールされています","Hay %d apps del mismo desarrollador (firma) instaladas","Há %d apps do mesmo desenvolvedor (assinatura) instalados","Terpasang %d aplikasi dari pengembang (tanda tangan) yang sama","एक ही डेवलपर (हस्ताक्षर) के %d ऐप इंस्टॉल हैं"],
 '같은 파일인지 비교하는 중... ': ["Comparing to find identical files... ","同じファイルか比較中... ","Comparando para hallar archivos iguales... ","Comparando para achar arquivos iguais... ","Membandingkan untuk menemukan file yang sama... ","एक जैसी फ़ाइलें खोजने के लिए तुलना हो रही है... "],
 '광고 프로그램(SDK)이 %d종 들어 있음': ["Contains %d kinds of ad programs (SDKs)","広告プログラム（SDK）が%d種類入っています","Contiene %d tipos de programas de anuncios (SDK)","Contém %d tipos de programas de anúncios (SDK)","Berisi %d jenis program iklan (SDK)","%d तरह के विज्ञापन प्रोग्राम (SDK) मौजूद हैं"],

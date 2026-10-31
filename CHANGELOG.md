@@ -1,6 +1,7 @@
 # 변경 내역
 
 ## v2.1 (versionCode 3)
+- 앱 이름: 한국어 폰은 "VZK 폰클린", 그 외는 "VZK PhoneClean".
 - 기존 점검·분석·알림 정리·저장공간·도움말 등 모든 화면 문구를 7개 언어로 번역 (ko/en/ja/es/pt-BR/id/hi). 한국어 원문을 키로 assets/tr/*.json 에서 찾아 표시, 없으면 한국어 그대로.
 
 ## v2.0 (versionCode 2)
