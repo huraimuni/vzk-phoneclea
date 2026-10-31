@@ -42,6 +42,11 @@ final class Lang {
         return c.createConfigurationContext(cfg);
     }
 
+    /** 검색·AI 질문 연결용: 앱 언어가 한국어일 때만 네이버, 그 외 언어는 구글. */
+    static boolean useNaver(Context c) {
+        return "ko".equals(tag(c));
+    }
+
     /** 한국 사용자인지(로그인 방식 노출용): SIM·통신사 국가가 KR 이거나 앱 언어가 한국어. */
     static boolean isKoreaUser(Context c) {
         try {
