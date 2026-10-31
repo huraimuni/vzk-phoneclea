@@ -36,6 +36,8 @@ public class SubscribeActivity extends BaseActivity implements PurchasesUpdatedL
     private Button buy;
     private volatile boolean subscribed;
     private volatile String priceText;
+    private volatile boolean trial;
+    private volatile int offerIdx;
 
     @Override
     protected void onCreate(Bundle b) {
@@ -54,6 +56,13 @@ public class SubscribeActivity extends BaseActivity implements PurchasesUpdatedL
         box.setPadding(Ui.dp(this, 16), Ui.dp(this, 14), Ui.dp(this, 16), Ui.dp(this, 14));
         root.addView(box);
         box.addView(Ui.text(this, getString(R.string.sub_desc), 15, Ui.GRAY, false));
+        TextView perks = Ui.text(this, Tr.t("✔ 멀리 계신 부모님 폰 화면을 보면서 직접 도와드리기\n✔ 한 번 연결해 두면 다음부터는 코드 없이 바로 요청\n✔ 도움받는 부모님은 항상 무료\n✔ 언제든 구글 플레이에서 해지"), 15, Ui.INK, false);
+        perks.setPadding(0, Ui.dp(this, 14), 0, 0);
+        perks.setLineSpacing(Ui.dp(this, 4), 1f);
+        box.addView(perks);
+        TextView price0 = Ui.text(this, Tr.t("월 3,900원 · 커피 한 잔 값으로 부모님 걱정 덜기"), 16, Ui.NAVY, true);
+        price0.setPadding(0, Ui.dp(this, 14), 0, 0);
+        box.addView(price0);
         state = Ui.text(this, "…", 17, Ui.INK, true);
         state.setPadding(0, Ui.dp(this, 16), 0, Ui.dp(this, 8));
         box.addView(state);
@@ -116,8 +125,19 @@ public class SubscribeActivity extends BaseActivity implements PurchasesUpdatedL
                     details = list.get(0);
                     List<ProductDetails.SubscriptionOfferDetails> offers = details.getSubscriptionOfferDetails();
                     if (offers == null || offers.isEmpty()) return;
-                    final String price = offers.get(0).getPricingPhases().getPricingPhaseList().get(0).getFormattedPrice();
-                    priceText = price;
+                    // 무료 체험 구간이 있는 구독 옵션이 있으면 그것을 우선 보여 준다
+                    int pick = 0;
+                    for (int i = 0; i < offers.size(); i++) {
+                        List<ProductDetails.PricingPhase> ph = offers.get(i).getPricingPhases().getPricingPhaseList();
+                        if (ph.size() > 1 && ph.get(0).getPriceAmountMicros() == 0) {
+                            pick = i;
+                            trial = true;
+                            break;
+                        }
+                    }
+                    offerIdx = pick;
+                    List<ProductDetails.PricingPhase> phs = offers.get(pick).getPricingPhases().getPricingPhaseList();
+                    priceText = phs.get(phs.size() - 1).getFormattedPrice();
                     runOnUiThread(this::updateBuy);
                 });
     }
@@ -144,7 +164,8 @@ public class SubscribeActivity extends BaseActivity implements PurchasesUpdatedL
             buy.setEnabled(false);
             buy.setText(R.string.sub_active);
         } else if (priceText != null) {
-            buy.setText(getString(R.string.sub_price_btn, priceText));
+            buy.setText(trial ? Tr.t("7일 무료로 시작하기") + " (" + getString(R.string.sub_price_btn, priceText) + ")"
+                    : getString(R.string.sub_price_btn, priceText));
             buy.setEnabled(true);
         }
     }
@@ -154,7 +175,7 @@ public class SubscribeActivity extends BaseActivity implements PurchasesUpdatedL
         if (details == null || details.getSubscriptionOfferDetails() == null) return;
         BillingFlowParams.ProductDetailsParams pd = BillingFlowParams.ProductDetailsParams.newBuilder()
                 .setProductDetails(details)
-                .setOfferToken(details.getSubscriptionOfferDetails().get(0).getOfferToken()).build();
+                .setOfferToken(details.getSubscriptionOfferDetails().get(offerIdx).getOfferToken()).build();
         bc.launchBillingFlow(this, BillingFlowParams.newBuilder()
                 .setProductDetailsParamsList(Collections.singletonList(pd))
                 // 결제를 계정에 묶어 둔다(다른 계정이 같은 구매를 쓰지 못하게 서버가 확인)
