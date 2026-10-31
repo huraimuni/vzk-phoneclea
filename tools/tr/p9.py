@@ -23,4 +23,6 @@ T = {
 "삭제": ["Delete", "削除", "Eliminar", "Excluir", "Hapus", "हटाएँ"],
 "계정을 삭제했습니다.": ["Account deleted.", "アカウントを削除しました。", "Cuenta eliminada.", "Conta excluída.", "Akun dihapus.", "खाता हटा दिया गया।"],
 "삭제하지 못했습니다. 로그아웃 후 다시 로그인한 뒤 시도해 주세요.": ["Couldn't delete. Sign out, sign in again, then retry.", "削除できませんでした。ログアウトして再ログイン後にお試しください。", "No se pudo eliminar. Cierra sesión, vuelve a entrar e inténtalo de nuevo.", "Não foi possível excluir. Saia, entre novamente e tente de novo.", "Gagal menghapus. Keluar, masuk lagi, lalu coba lagi.", "हटा नहीं सके। साइन आउट करके फिर साइन इन करें और दोबारा कोशिश करें।"],
+"⚪ 로그아웃 상태 · 눌러서 로그인": ["⚪ Signed out · Tap to sign in","⚪ ログアウト中 · タップしてログイン","⚪ Sin sesión · Toca para iniciar sesión","⚪ Desconectado · Toque para entrar","⚪ Belum masuk · Ketuk untuk masuk","⚪ साइन आउट · साइन इन के लिए टैप करें"],
+"🟢 로그인됨: %s · 내 계정": ["🟢 Signed in: %s · My account","🟢 ログイン中: %s · マイアカウント","🟢 Sesión iniciada: %s · Mi cuenta","🟢 Conectado: %s · Minha conta","🟢 Masuk: %s · Akun saya","🟢 साइन इन: %s · मेरा खाता"],
 }

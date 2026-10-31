@@ -108,6 +108,19 @@ public class MainActivity extends BaseActivity {
 
     // ---------------------------------------------------------------- UI
 
+    private TextView accountBar;
+
+    private void updateAccountBar() {
+        if (accountBar == null) return;
+        if (Auth.uid() == null) {
+            accountBar.setText(Tr.t("⚪ 로그아웃 상태 · 눌러서 로그인"));
+            accountBar.setBackgroundColor(Color.rgb(110, 110, 118));
+        } else {
+            accountBar.setText(Tr.f("🟢 로그인됨: %s · 내 계정", Auth.myName(this)));
+            accountBar.setBackgroundColor(Ui.GREEN);
+        }
+    }
+
     private void buildUi() {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
@@ -115,6 +128,17 @@ public class MainActivity extends BaseActivity {
 
         root.addView(Ui.header(this, Tr.t("VZK 폰클린"),
                 Tr.t("광고로 깔린 의심 앱을 찾아 한 번에 정리합니다")));
+
+        accountBar = Ui.text(this, "", 14, Color.WHITE, true);
+        accountBar.setPadding(Ui.dp(this, 14), Ui.dp(this, 9), Ui.dp(this, 14), Ui.dp(this, 9));
+        accountBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, Auth.uid() == null ? LoginActivity.class : AccountActivity.class));
+            }
+        });
+        root.addView(accountBar);
+        updateAccountBar();
 
         // 글자를 크게 키워 쓰는 폰에서도 목록이 보이도록, 위쪽 안내·버튼들은 목록과 함께 스크롤되게 한다
         LinearLayout top = new LinearLayout(this);
@@ -523,6 +547,7 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         resumed = true;
         Admin.refresh();
+        updateAccountBar();
         if (Scanner.hasUsageAccess(this) != lastUsageState && !scanning && !all.isEmpty()) startScan();
         if (cbKeep != null && cbKeep.isChecked()) {
             handler.removeCallbacks(keepTask);
