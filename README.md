@@ -12,3 +12,6 @@
 
 다운로드: [Releases](../../releases) 의 `VZK_PhoneClean_v1.0.apk`
 문의: https://cafe.naver.com/vzk (카페 게시판)
+
+---
+© 2026 양문희 / 토단전. All rights reserved. 무단 복제·수정·재배포·판매 금지. (LICENSE 참고)
