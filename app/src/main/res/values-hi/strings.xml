@@ -96,4 +96,6 @@
     <string name="log_requested_only">शुरू नहीं हुई</string>
     <string name="btn_delete">हटाएं</string>
     <string name="btn_delete_all">सभी रिकॉर्ड हटाएं</string>
+    <string name="app_name">VZK PhoneClean</string>
+    <string name="app_name_notif">VZK PhoneClean Notifications</string>
 </resources>

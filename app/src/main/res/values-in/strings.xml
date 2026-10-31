@@ -96,4 +96,6 @@ Berlaku %2$d menit, sekali pakai. Beri tahu keluarga atau tunjukkan QR.</string>
     <string name="log_requested_only">belum mulai</string>
     <string name="btn_delete">Hapus</string>
     <string name="btn_delete_all">Hapus semua catatan</string>
+    <string name="app_name">VZK PhoneClean</string>
+    <string name="app_name_notif">VZK PhoneClean Notifications</string>
 </resources>

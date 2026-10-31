@@ -93,3 +93,6 @@ add('log_min', '%1$d min', '%1$d분', '%1$d分', '%1$d min', '%1$d min', '%1$d m
 add('log_requested_only', 'not started', '시작 안 됨', '未開始', 'no iniciada', 'não iniciada', 'belum mulai', 'शुरू नहीं हुई')
 add('btn_delete', 'Delete', '삭제', '削除', 'Eliminar', 'Excluir', 'Hapus', 'हटाएं')
 add('btn_delete_all', 'Delete all records', '기록 전체 삭제', '記録をすべて削除', 'Eliminar todos los registros', 'Excluir todos os registros', 'Hapus semua catatan', 'सभी रिकॉर्ड हटाएं')
+
+add('app_name', 'VZK PhoneClean', 'VZK 폰클린', 'VZK PhoneClean', 'VZK PhoneClean', 'VZK PhoneClean', 'VZK PhoneClean', 'VZK PhoneClean')
+add('app_name_notif', 'VZK PhoneClean Notifications', 'VZK 폰클린 알림 정리', 'VZK PhoneClean Notifications', 'VZK PhoneClean Notifications', 'VZK PhoneClean Notifications', 'VZK PhoneClean Notifications', 'VZK PhoneClean Notifications')

@@ -28,7 +28,7 @@ public class StorageActivity extends BaseActivity {
         root.setOrientation(LinearLayout.VERTICAL);
         Ui.fit(root);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, "저장공간 관리", "저장공간 사용량을 보고 정리하러 갑니다"));
+        root.addView(Ui.header(this, Tr.t("저장공간 관리"), "저장공간 사용량을 보고 정리하러 갑니다"));
 
         ScrollView sv = new ScrollView(this);
         LinearLayout body = new LinearLayout(this);
@@ -65,7 +65,7 @@ public class StorageActivity extends BaseActivity {
         note.setLineSpacing(0, 1.2f);
         body.addView(note);
 
-        Button back = Ui.button(this, "돌아가기", Ui.NAVY, Color.WHITE);
+        Button back = Ui.button(this, Tr.t("돌아가기"), Ui.NAVY, Color.WHITE);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, Ui.dp(this, 14), 0, 0);
@@ -93,10 +93,10 @@ public class StorageActivity extends BaseActivity {
             long total = fs.getTotalBytes();
             long free = fs.getAvailableBytes();
             long used = total - free;
-            usage.setText("저장공간  사용 " + fmt(used) + " / 전체 " + fmt(total) + "  (남은 " + fmt(free) + ")");
+            usage.setText(Tr.f("저장공간  사용 %s / 전체 %s  (남은 %s)", fmt(used), fmt(total), fmt(free)));
             bar.setProgress(total > 0 ? (int) (used * 1000 / total) : 0);
         } catch (Exception e) {
-            usage.setText("저장공간 정보를 읽지 못했습니다.");
+            usage.setText(Tr.t("저장공간 정보를 읽지 못했습니다."));
         }
     }
 

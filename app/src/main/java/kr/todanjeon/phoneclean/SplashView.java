@@ -56,10 +56,10 @@ class SplashView extends View {
         p.setTextAlign(Paint.Align.CENTER);
         p.setFakeBoldText(true);
         p.setTextSize(s * 0.15f);
-        c.drawText("VZK 폰클린", cx, cy + s / 2 + s * 0.26f, p);
+        c.drawText(Tr.t("VZK 폰클린"), cx, cy + s / 2 + s * 0.26f, p);
         p.setFakeBoldText(false);
         p.setColor(Color.rgb(110, 110, 118));
         p.setTextSize(s * 0.075f);
-        c.drawText("정크 앱 정리 도우미", cx, cy + s / 2 + s * 0.40f, p);
+        c.drawText(Tr.t("정크 앱 정리 도우미"), cx, cy + s / 2 + s * 0.40f, p);
     }
 }

@@ -46,7 +46,7 @@ public class NotifActivity extends BaseActivity {
         root.setOrientation(LinearLayout.VERTICAL);
         Ui.fit(root);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, "알림 정리", "알림이 자꾸 뜨는 앱을 찾아 끕니다"));
+        root.addView(Ui.header(this, Tr.t("알림 정리"), "알림이 자꾸 뜨는 앱을 찾아 끕니다"));
 
         ScrollView sv = new ScrollView(this);
         body = new LinearLayout(this);
@@ -57,11 +57,11 @@ public class NotifActivity extends BaseActivity {
         setContentView(root);
 
         body.addView(Ui.text(this, "앱별 알림 끄기", 17, Ui.CORAL_DARK, true));
-        TextView d = Ui.text(this, "알림이 자꾸 뜨는 앱의 [알림 끄기]를 누르면 그 앱의 알림 설정 화면이 열립니다. "
-                + "거기서 스위치를 끄세요. 이 앱이 대신 꺼 줄 수는 없습니다. 의심 순으로 보여 드립니다.", 14, Ui.INK, false);
+        TextView d = Ui.text(this, Tr.t("알림이 자꾸 뜨는 앱의 [알림 끄기]를 누르면 그 앱의 알림 설정 화면이 열립니다. "
+                + "거기서 스위치를 끄세요. 이 앱이 대신 꺼 줄 수는 없습니다. 의심 순으로 보여 드립니다."), 14, Ui.INK, false);
         d.setLineSpacing(0, 1.2f);
         body.addView(d);
-        Button all = Ui.button(this, "폰 전체 앱 알림 설정 열기", Ui.NAVY, Color.WHITE);
+        Button all = Ui.button(this, Tr.t("폰 전체 앱 알림 설정 열기"), Ui.NAVY, Color.WHITE);
         all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +77,7 @@ public class NotifActivity extends BaseActivity {
         appBox = new LinearLayout(this);
         appBox.setOrientation(LinearLayout.VERTICAL);
         body.addView(appBox);
-        appBox.addView(Ui.text(this, "앱 목록을 불러오는 중...", 14, Ui.GRAY, false));
+        appBox.addView(Ui.text(this, Tr.t("앱 목록을 불러오는 중..."), 14, Ui.GRAY, false));
 
         new Thread(new Runnable() {
             @Override
@@ -107,7 +107,7 @@ public class NotifActivity extends BaseActivity {
     private void renderApps() {
         appBox.removeAllViews();
         if (apps.isEmpty()) {
-            appBox.addView(Ui.text(this, "표시할 앱이 없습니다.", 14, Ui.GRAY, false));
+            appBox.addView(Ui.text(this, Tr.t("표시할 앱이 없습니다."), 14, Ui.GRAY, false));
             return;
         }
         int shown = 0;
@@ -132,11 +132,11 @@ public class NotifActivity extends BaseActivity {
             mid.addView(Ui.text(this, e.levelText(), 12, e.level() == AppEntry.LEVEL_HIGH ? Ui.RED
                     : e.level() == AppEntry.LEVEL_WARN ? Ui.AMBER : Ui.GRAY, false));
             row.addView(mid, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-            Button b = Ui.button(this, "알림 끄기", Ui.NAVY, Color.WHITE);
+            Button b = Ui.button(this, Tr.t("알림 끄기"), Ui.NAVY, Color.WHITE);
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Ui.toast(NotifActivity.this, "[알림 허용] 스위치 하나만 끄고 뒤로 가기를 누르세요.");
+                    Ui.toast(NotifActivity.this, Tr.t("[알림 허용] 스위치 하나만 끄고 뒤로 가기를 누르세요."));
                     Intent a = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
                     a.putExtra(Settings.EXTRA_APP_PACKAGE, e.pkg);
                     Intent fb = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + e.pkg));
