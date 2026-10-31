@@ -356,5 +356,17 @@
 "앱 점검과 정리는 로그인 없이 모두 쓸 수 있습니다.\n가족 연결·화면 도움을 쓰려면 로그인이 필요합니다. 나중에 [더보기 > 가족 연결]에서도 할 수 있습니다.": "App checks and cleanup all work without signing in.\nSigning in is needed for family link and screen help. You can also do it later in [More > Family link].",
 "✔ 멀리 계신 부모님 폰 화면을 보면서 직접 도와드리기\n✔ 한 번 연결해 두면 다음부터는 코드 없이 바로 요청\n✔ 도움받는 부모님은 항상 무료\n✔ 언제든 구글 플레이에서 해지": "✔ See your parents' phone screen from afar and help them directly\n✔ Link once, then request help next time without a code\n✔ The parent being helped is always free\n✔ Cancel anytime in Google Play",
 "월 3,900원 · 커피 한 잔 값으로 부모님 걱정 덜기": "3,900 KRW/month · the price of a coffee to worry less about your parents",
-"7일 무료로 시작하기": "Start 7-day free trial"
+"7일 무료로 시작하기": "Start 7-day free trial",
+"부모님 폰 점검 알림": "Parent phone check alerts",
+"%s님 폰에 의심 앱이 설치됐어요": "A suspicious app was installed on %s's phone",
+"눌러서 확인하고 전화나 화면 도움으로 도와주세요.": "Tap to check, then help by phone call or screen help.",
+"부모님 폰 점검 리포트": "Parent phone check report",
+"연결된 부모님 폰에 위험이 의심되는 앱이 설치되면 여기에 기록되고 알림이 옵니다.": "When a risky app is installed on a linked parent's phone, it is logged here and you get an alert.",
+"아직 기록이 없습니다. 좋은 소식이에요.": "No records yet. That's good news.",
+"점검 리포트는 구독자 전용입니다.": "The check report is for subscribers only.",
+"📋 부모님 폰 점검 리포트": "📋 Parent phone check report",
+"자녀에게 위험 앱 알림: 켜짐 (끄기)": "Risky-app alerts to child: ON (turn off)",
+"자녀에게 위험 앱 알림 켜기": "Turn on risky-app alerts to child",
+"부모님 동의로만 켜집니다. 알림은 구독 중인 자녀에게만 갑니다.": "Turned on only with the parent's consent. Alerts go only to subscribed children.",
+"위험이 의심되는 앱이 이 폰에 설치되면, 연결된 자녀(구독자)에게 앱 이름과 위험 이유만 알립니다.\n사진·메시지·통화 내용 등 개인 정보는 보내지 않습니다. 언제든 끌 수 있습니다.\n\n켤까요?": "If a risky app is installed on this phone, only the app name and the reason are sent to your linked child (subscriber).\nPhotos, messages, call content and other personal data are never sent. You can turn this off anytime.\n\nTurn on?"
 }

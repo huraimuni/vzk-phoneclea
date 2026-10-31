@@ -356,5 +356,17 @@
 "앱 점검과 정리는 로그인 없이 모두 쓸 수 있습니다.\n가족 연결·화면 도움을 쓰려면 로그인이 필요합니다. 나중에 [더보기 > 가족 연결]에서도 할 수 있습니다.": "Pemeriksaan dan pembersihan semua bisa dipakai tanpa masuk.\nUntuk koneksi keluarga dan bantuan layar perlu masuk. Bisa juga nanti di [Lainnya > Koneksi keluarga].",
 "✔ 멀리 계신 부모님 폰 화면을 보면서 직접 도와드리기\n✔ 한 번 연결해 두면 다음부터는 코드 없이 바로 요청\n✔ 도움받는 부모님은 항상 무료\n✔ 언제든 구글 플레이에서 해지": "✔ Lihat layar ponsel orang tua dari jauh dan bantu langsung\n✔ Hubungkan sekali, lain kali minta bantuan tanpa kode\n✔ Orang tua yang dibantu selalu gratis\n✔ Batalkan kapan saja di Google Play",
 "월 3,900원 · 커피 한 잔 값으로 부모님 걱정 덜기": "3.900 KRW/bulan · seharga secangkir kopi agar tak terlalu khawatir pada orang tua",
-"7일 무료로 시작하기": "Mulai uji coba gratis 7 hari"
+"7일 무료로 시작하기": "Mulai uji coba gratis 7 hari",
+"부모님 폰 점검 알림": "Peringatan pemeriksaan ponsel orang tua",
+"%s님 폰에 의심 앱이 설치됐어요": "Aplikasi mencurigakan terpasang di ponsel %s",
+"눌러서 확인하고 전화나 화면 도움으로 도와주세요.": "Ketuk untuk melihat, lalu bantu lewat telepon atau bantuan layar.",
+"부모님 폰 점검 리포트": "Laporan pemeriksaan ponsel orang tua",
+"연결된 부모님 폰에 위험이 의심되는 앱이 설치되면 여기에 기록되고 알림이 옵니다.": "Jika aplikasi berisiko terpasang di ponsel orang tua yang terhubung, akan tercatat di sini dan Anda mendapat peringatan.",
+"아직 기록이 없습니다. 좋은 소식이에요.": "Belum ada catatan. Kabar baik.",
+"점검 리포트는 구독자 전용입니다.": "Laporan pemeriksaan khusus pelanggan.",
+"📋 부모님 폰 점검 리포트": "📋 Laporan pemeriksaan ponsel orang tua",
+"자녀에게 위험 앱 알림: 켜짐 (끄기)": "Peringatan aplikasi berisiko ke anak: aktif (matikan)",
+"자녀에게 위험 앱 알림 켜기": "Aktifkan peringatan aplikasi berisiko ke anak",
+"부모님 동의로만 켜집니다. 알림은 구독 중인 자녀에게만 갑니다.": "Hanya aktif dengan persetujuan orang tua. Peringatan hanya ke anak yang berlangganan.",
+"위험이 의심되는 앱이 이 폰에 설치되면, 연결된 자녀(구독자)에게 앱 이름과 위험 이유만 알립니다.\n사진·메시지·통화 내용 등 개인 정보는 보내지 않습니다. 언제든 끌 수 있습니다.\n\n켤까요?": "Jika aplikasi berisiko terpasang di ponsel ini, hanya nama aplikasi dan alasannya yang dikirim ke anak yang terhubung (pelanggan).\nFoto, pesan, dan isi panggilan tidak pernah dikirim. Bisa dimatikan kapan saja.\n\nAktifkan?"
 }

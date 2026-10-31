@@ -15,8 +15,8 @@ android {
         applicationId 'kr.todanjeon.phoneclean'
         minSdk 26
         targetSdk 36
-        versionCode 11
-        versionName '2.9'
+        versionCode 12
+        versionName '2.10'
         buildConfigField 'String', 'NAVER_CLIENT_ID', '"' + (System.getenv('NAVER_CLIENT_ID') ?: '') + '"'
         buildConfigField 'String', 'NAVER_CLIENT_SECRET', '"' + (System.getenv('NAVER_CLIENT_SECRET') ?: '') + '"'
         buildConfigField 'String', 'UPDATE_BRANCH', '"store"'
@@ -69,6 +69,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore'
     implementation 'com.google.firebase:firebase-functions'
+    implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.android.gms:play-services-auth:21.2.0'
     implementation 'com.kakao.sdk:v2-user:2.20.6'
     implementation 'com.navercorp.nid:oauth:5.10.0'

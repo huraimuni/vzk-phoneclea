@@ -356,5 +356,17 @@
 "앱 점검과 정리는 로그인 없이 모두 쓸 수 있습니다.\n가족 연결·화면 도움을 쓰려면 로그인이 필요합니다. 나중에 [더보기 > 가족 연결]에서도 할 수 있습니다.": "A verificação e a limpeza funcionam sem login.\nPara a conexão familiar e a ajuda de tela é preciso entrar. Você também pode fazer isso depois em [Mais > Conexão familiar].",
 "✔ 멀리 계신 부모님 폰 화면을 보면서 직접 도와드리기\n✔ 한 번 연결해 두면 다음부터는 코드 없이 바로 요청\n✔ 도움받는 부모님은 항상 무료\n✔ 언제든 구글 플레이에서 해지": "✔ Veja a tela do celular dos seus pais à distância e ajude\n✔ Conecte uma vez e peça ajuda depois sem código\n✔ Quem recebe ajuda é sempre grátis\n✔ Cancele quando quiser no Google Play",
 "월 3,900원 · 커피 한 잔 값으로 부모님 걱정 덜기": "3.900 KRW/mês · o preço de um café para se preocupar menos com seus pais",
-"7일 무료로 시작하기": "Começar teste grátis de 7 dias"
+"7일 무료로 시작하기": "Começar teste grátis de 7 dias",
+"부모님 폰 점검 알림": "Alertas de verificação do celular dos pais",
+"%s님 폰에 의심 앱이 설치됐어요": "Um app suspeito foi instalado no celular de %s",
+"눌러서 확인하고 전화나 화면 도움으로 도와주세요.": "Toque para ver e ajude por ligação ou ajuda de tela.",
+"부모님 폰 점검 리포트": "Relatório de verificação do celular dos pais",
+"연결된 부모님 폰에 위험이 의심되는 앱이 설치되면 여기에 기록되고 알림이 옵니다.": "Se um app de risco for instalado no celular de um pai vinculado, ele é registrado aqui e você recebe um alerta.",
+"아직 기록이 없습니다. 좋은 소식이에요.": "Ainda não há registros. Boas notícias.",
+"점검 리포트는 구독자 전용입니다.": "O relatório é só para assinantes.",
+"📋 부모님 폰 점검 리포트": "📋 Relatório de verificação do celular dos pais",
+"자녀에게 위험 앱 알림: 켜짐 (끄기)": "Alertas de apps de risco ao filho: ligado (desligar)",
+"자녀에게 위험 앱 알림 켜기": "Ligar alertas de apps de risco ao filho",
+"부모님 동의로만 켜집니다. 알림은 구독 중인 자녀에게만 갑니다.": "Só liga com o consentimento do pai. Os alertas vão só a filhos assinantes.",
+"위험이 의심되는 앱이 이 폰에 설치되면, 연결된 자녀(구독자)에게 앱 이름과 위험 이유만 알립니다.\n사진·메시지·통화 내용 등 개인 정보는 보내지 않습니다. 언제든 끌 수 있습니다.\n\n켤까요?": "Se um app de risco for instalado neste celular, só o nome do app e o motivo são enviados ao filho vinculado (assinante).\nFotos, mensagens e chamadas nunca são enviadas. Você pode desligar quando quiser.\n\nLigar?"
 }
