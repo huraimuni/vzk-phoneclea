@@ -81,7 +81,8 @@ service cloud.firestore {
     }
 
     function hasAccess(uid) {
-      return (exists(/databases/$(database)/documents/grants/$(uid))
+      return isAdmin()
+          || (exists(/databases/$(database)/documents/grants/$(uid))
                && get(/databases/$(database)/documents/grants/$(uid)).data.get('expiresAt', request.time) >= request.time)
           || (exists(/databases/$(database)/documents/entitlements/$(uid))
                && get(/databases/$(database)/documents/entitlements/$(uid)).data.get('expiresAt', request.time) > request.time);
