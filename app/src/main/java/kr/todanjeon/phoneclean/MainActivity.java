@@ -753,9 +753,13 @@ public class MainActivity extends BaseActivity {
         try {
             ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             cm.setPrimaryClip(ClipData.newPlainText(Tr.t("질문"), q));
-            Ui.toast(this, Tr.t("네이버 검색으로 연결합니다. (질문도 복사해 두었습니다)"));
+            Ui.toast(this, Lang.isKoreaUser(this) ? Tr.t("네이버 검색으로 연결합니다. (질문도 복사해 두었습니다)") : Tr.t("구글 검색으로 연결합니다. (질문도 복사해 두었습니다)"));
         } catch (Exception ex) {
             Ui.toast(this, Tr.t("복사하지 못했습니다. 앱 이름으로 직접 물어보세요."));
+        }
+        if (!Lang.isKoreaUser(this)) {
+            Ui.openUrl(this, "https://www.google.com/search?q=" + Uri.encode(e.label + " " + e.pkg + " safe to delete?"));
+            return;
         }
         try {
             String sq = "앱 " + e.label + " 안전한가요 삭제해도 되나요";
@@ -897,7 +901,7 @@ public class MainActivity extends BaseActivity {
                 setSafe(one, !e.safe);
             }
         });
-        Button aiBtn = Ui.button(this, Tr.t("AI에게 물어보기 (질문 복사 + 네이버 검색)"),
+        Button aiBtn = Ui.button(this, Lang.isKoreaUser(this) ? Tr.t("AI에게 물어보기 (질문 복사 + 네이버 검색)") : Tr.t("AI에게 물어보기 (질문 복사 + 구글 검색)"),
                 Color.rgb(237, 231, 255), Color.rgb(80, 50, 170));
         aiBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -905,7 +909,10 @@ public class MainActivity extends BaseActivity {
                 askAi(e);
             }
         });
-        for (Button b : new Button[]{del, safeBtn, info2, aiBtn, naver, google}) {
+        Button[] btns = Lang.isKoreaUser(this)
+                ? new Button[]{del, safeBtn, info2, aiBtn, naver}
+                : new Button[]{del, safeBtn, info2, aiBtn, google};
+        for (Button b : btns) {
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(0, Ui.dp(this, 4), 0, Ui.dp(this, 4));

@@ -318,5 +318,7 @@
 "참고\n- 이 앱은 사진·연락처 같은 개인 자료에 접근하지 않고, 저장공간 사용량만 보여 줍니다.\n- 사진·연락처 등 개인 자료는 폰 밖으로 나가지 않습니다.": "Note\n- This app does not access personal data such as photos and contacts; it only shows storage usage.\n- Personal data such as photos and contacts never leaves your phone.",
 "켰습니다. 새 앱이 설치되면 15분 안에 분석 결과를 알림으로 알려 드립니다. (설치를 막지는 못하고, 설치된 뒤에 알립니다)": "Turned on. When a new app is installed, we notify you of the analysis result within 15 minutes. (It cannot block installation; it notifies you after the app is installed)",
 "폰 저장공간 화면 열기": "Open phone storage screen",
-"폰이 제공하는 저장공간 화면에서 큰 파일, 안 쓰는 앱, 중복 파일을 확인하고 정리할 수 있습니다. 삼성 폰은 [설정 > 배터리 및 디바이스 케어 > 저장공간]에서도 볼 수 있습니다.": "In the storage screen your phone provides, you can check and clean up large files, unused apps and duplicate files. On Samsung phones you can also find it in [Settings > Battery and device care > Storage]."
+"폰이 제공하는 저장공간 화면에서 큰 파일, 안 쓰는 앱, 중복 파일을 확인하고 정리할 수 있습니다. 삼성 폰은 [설정 > 배터리 및 디바이스 케어 > 저장공간]에서도 볼 수 있습니다.": "In the storage screen your phone provides, you can check and clean up large files, unused apps and duplicate files. On Samsung phones you can also find it in [Settings > Battery and device care > Storage].",
+"AI에게 물어보기 (질문 복사 + 구글 검색)": "Ask AI (copy question + Google search)",
+"구글 검색으로 연결합니다. (질문도 복사해 두었습니다)": "Opening Google search. (The question was also copied)"
 }

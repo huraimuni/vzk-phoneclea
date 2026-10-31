@@ -17,7 +17,7 @@ def dec(s):
 def load_idx(items):
     res={}  # korean -> [6]
     idxs={}
-    for f in sorted([x for x in glob.glob('tools/tr/p[0-9].py') if not x.endswith(('p7.py','p8.py'))]):
+    for f in sorted([x for x in glob.glob('tools/tr/p[0-9].py') if not x.endswith(('p7.py','p8.py','p9.py'))]):
         m=__import__(os.path.basename(f)[:-3])
         for k,v in m.T.items():
             ko=dec(items[k]['text'])
@@ -26,7 +26,7 @@ def load_idx(items):
     return res,idxs
 def load_extra():
     res={}
-    for n in ('p7','p8'):
+    for n in ('p7','p8','p9'):
         try:
             m=__import__(n)
             for ko,v in m.T.items(): res[ko]=list(v)
