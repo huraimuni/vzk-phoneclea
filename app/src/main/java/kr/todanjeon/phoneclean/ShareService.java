@@ -49,7 +49,7 @@ public class ShareService extends Service {
     static final String EXTRA_SESSION = "session";
     static final String EXTRA_DATA = "projData";
     static final String EXTRA_HELPER = "helper";
-    static final long MAX_MS = 15 * 60_000L;
+    static final long MAX_MS = 30 * 60_000L;
     private static final String CH = "share";
     private static final int NID = 77;
     static volatile boolean running;
