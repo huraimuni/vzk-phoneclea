@@ -97,3 +97,56 @@ exports.cleanupSessions = onSchedule({ schedule: 'every day 04:00', timeZone: 'A
   const snap = await db.collection('sessions').where('createdAt', '<', cutoff).limit(400).get();
   for (const d of snap.docs) await db.recursiveDelete(d.ref);
 });
+
+// ------------------------------------------------------------------ 점검 리포트 푸시 (부모 폰 위험 앱 → 구독 중인 자녀)
+const { onDocumentCreated } = require('firebase-functions/v2/firestore');
+
+async function childHasAccess(db, uid, admins) {
+  if (admins.includes(uid)) return true;
+  const now = Date.now();
+  const g = await db.doc('grants/' + uid).get();
+  if (g.exists) {
+    const e = g.data().expiresAt;
+    if (!e || e.toMillis() >= now) return true;
+  }
+  const s = await db.doc('entitlements/' + uid).get();
+  if (s.exists) {
+    const e = s.data().expiresAt;
+    if (e && e.toMillis() > now) return true;
+  }
+  return false;
+}
+
+exports.onAlertCreated = onDocumentCreated({ document: 'alerts/{id}', region: 'asia-northeast3' }, async (event) => {
+  const a = event.data && event.data.data();
+  if (!a) return;
+  const db = admin.firestore();
+  const pu = await db.doc('users/' + a.parentUid).get();
+  if (!pu.exists || pu.data().reportOn !== true) return;
+  const ad = await db.doc('config/admin').get();
+  const admins = ad.exists ? (ad.data().uids || []) : [];
+  for (const child of (a.childUids || []).slice(0, 10)) {
+    const link = await db.doc('links/' + a.parentUid + '_' + child).get();
+    if (!link.exists || link.data().status !== 'active') continue;
+    if (!(await childHasAccess(db, child, admins))) continue;
+    const cu = await db.doc('users/' + child).get();
+    const tokens = (cu.exists && cu.data().fcmTokens) || [];
+    if (!tokens.length) continue;
+    const res = await admin.messaging().sendEachForMulticast({
+      tokens,
+      data: {
+        type: 'alert',
+        parentName: String(a.parentName || ''),
+        label: String(a.label || ''),
+        reason: String((a.reasons && a.reasons[0]) || ''),
+      },
+      android: { priority: 'high' },
+    });
+    const dead = [];
+    res.responses.forEach((r, i) => {
+      const c = r.error && r.error.code;
+      if (c === 'messaging/registration-token-not-registered' || c === 'messaging/invalid-registration-token') dead.push(tokens[i]);
+    });
+    if (dead.length) await db.doc('users/' + child).update({ fcmTokens: admin.firestore.FieldValue.arrayRemove(...dead) });
+  }
+});

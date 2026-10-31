@@ -123,6 +123,7 @@ public class FamilyActivity extends BaseActivity {
             qr.setImageBitmap(qr("vzk://join?c=" + code, Ui.dp(this, 190)));
             box.addView(qr, new LinearLayout.LayoutParams(Ui.dp(this, 190), Ui.dp(this, 190)));
         }
+        box.addView(reportBox());
         List<DocumentSnapshot> pend = new ArrayList<>();
         for (DocumentSnapshot d : asParent) if ("pending".equals(d.getString("status"))) pend.add(d);
         if (!pend.isEmpty()) {
@@ -169,6 +170,13 @@ public class FamilyActivity extends BaseActivity {
         }
         if (n == 0) box.addView(Ui.text(this, getString(R.string.members_empty), 14, Ui.GRAY, false));
 
+        if (!asChild.isEmpty()) {
+            Button rp = Ui.button(this, Tr.t("📋 부모님 폰 점검 리포트"), Color.WHITE, Ui.INK);
+            rp.setOnClickListener(v -> startActivity(new Intent(this, ReportActivity.class)));
+            LinearLayout.LayoutParams lr = lp();
+            lr.topMargin = Ui.dp(this, 22);
+            box.addView(rp, lr);
+        }
         Button sub = Ui.button(this, getString(R.string.btn_subscription), Color.WHITE, Ui.INK);
         sub.setOnClickListener(v -> startActivity(new Intent(this, SubscribeActivity.class)));
         LinearLayout.LayoutParams ls = lp();
@@ -309,6 +317,30 @@ public class FamilyActivity extends BaseActivity {
         if (c != null) wb.update(db.collection("invites").document(c), "used", true);
         wb.commit().addOnFailureListener(e -> Ui.toast(this, getString(R.string.err_generic, Auth.msg(e))));
         code = null;
+    }
+
+    /** 부모: 위험 앱 설치 알림을 자녀에게 보낼지 동의하는 곳. 동의해야 켜진다. */
+    private View reportBox() {
+        LinearLayout b = new LinearLayout(this);
+        b.setOrientation(LinearLayout.VERTICAL);
+        b.setPadding(0, Ui.dp(this, 10), 0, Ui.dp(this, 4));
+        final boolean on = Report.on(this);
+        Button t = Ui.button(this, Tr.t(on ? "자녀에게 위험 앱 알림: 켜짐 (끄기)" : "자녀에게 위험 앱 알림 켜기"), on ? Color.WHITE : Ui.GREEN, on ? Ui.INK : Color.WHITE);
+        t.setTextSize(14);
+        t.setOnClickListener(v -> {
+            if (on) {
+                Report.setOn(this, false);
+                render();
+            } else {
+                confirm(Tr.t("위험이 의심되는 앱이 이 폰에 설치되면, 연결된 자녀(구독자)에게 앱 이름과 위험 이유만 알립니다.\n사진·메시지·통화 내용 등 개인 정보는 보내지 않습니다. 언제든 끌 수 있습니다.\n\n켤까요?"), () -> {
+                    Report.setOn(this, true);
+                    render();
+                });
+            }
+        });
+        b.addView(t, lp());
+        b.addView(Ui.text(this, Tr.t("부모님 동의로만 켜집니다. 알림은 구독 중인 자녀에게만 갑니다."), 13, Ui.GRAY, false));
+        return b;
     }
 
     private void confirm(String msg, final Runnable yes) {
