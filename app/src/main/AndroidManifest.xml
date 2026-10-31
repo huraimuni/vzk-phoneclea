@@ -73,6 +73,16 @@
             android:exported="false"
             android:showWhenLocked="true"
             android:turnScreenOn="true" />
+        <activity
+            android:name=".ReportActivity"
+            android:exported="false" />
+        <service
+            android:name=".PushService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         <service
             android:name=".StandbyService"
             android:exported="false"

@@ -88,6 +88,18 @@ service cloud.firestore {
                && get(/databases/$(database)/documents/entitlements/$(uid)).data.get('expiresAt', request.time) > request.time);
     }
 
+    // ---- 점검 리포트: 부모 폰이 위험 앱 설치를 기록하면 서버가 자녀에게 푸시. 자녀 조회는 구독자만 ----
+    match /alerts/{id} {
+      allow create: if signedIn()
+        && request.resource.data.parentUid == request.auth.uid
+        && request.resource.data.childUids is list
+        && request.resource.data.childUids.size() <= 10;
+      allow read: if signedIn() && (resource.data.parentUid == request.auth.uid
+                                 || (request.auth.uid in resource.data.childUids && hasAccess(request.auth.uid)));
+      allow delete: if signedIn() && resource.data.parentUid == request.auth.uid;
+      allow update: if false;
+    }
+
     // ---- 화면 공유 세션 ----
     match /sessions/{sid} {
       allow read: if signedIn() && (resource.data.parentUid == request.auth.uid || resource.data.childUid == request.auth.uid);

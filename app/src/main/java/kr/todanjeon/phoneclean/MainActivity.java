@@ -560,6 +560,7 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         resumed = true;
         Admin.refresh();
+        Report.registerToken();
         StandbyService.ensure(this);
         updateAccountBar();
         if (Scanner.hasUsageAccess(this) != lastUsageState && !scanning && !all.isEmpty()) startScan();

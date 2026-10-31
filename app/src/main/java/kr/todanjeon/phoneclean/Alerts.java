@@ -71,5 +71,6 @@ final class Alerts {
             nm.notify(id, b.build());
         } catch (Exception ignored) {
         }
+        Report.send(c, e);
     }
 }

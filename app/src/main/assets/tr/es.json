@@ -355,5 +355,17 @@
 "앱 점검과 정리는 로그인 없이 모두 쓸 수 있습니다.\n가족 연결·화면 도움을 쓰려면 로그인이 필요합니다. 나중에 [더보기 > 가족 연결]에서도 할 수 있습니다.": "La revisión y limpieza funcionan sin iniciar sesión.\nPara la conexión familiar y la ayuda en pantalla se necesita iniciar sesión. También puedes hacerlo luego en [Más > Conexión familiar].",
 "✔ 멀리 계신 부모님 폰 화면을 보면서 직접 도와드리기\n✔ 한 번 연결해 두면 다음부터는 코드 없이 바로 요청\n✔ 도움받는 부모님은 항상 무료\n✔ 언제든 구글 플레이에서 해지": "✔ Ve la pantalla del móvil de tus padres a distancia y ayúdalos\n✔ Conecta una vez y la próxima vez pide ayuda sin código\n✔ El padre que recibe ayuda siempre es gratis\n✔ Cancela cuando quieras en Google Play",
 "월 3,900원 · 커피 한 잔 값으로 부모님 걱정 덜기": "3.900 KRW/mes · el precio de un café para preocuparte menos por tus padres",
-"7일 무료로 시작하기": "Empezar prueba gratis de 7 días"
+"7일 무료로 시작하기": "Empezar prueba gratis de 7 días",
+"부모님 폰 점검 알림": "Alertas de revisión del móvil de tus padres",
+"%s님 폰에 의심 앱이 설치됐어요": "Se instaló una app sospechosa en el móvil de %s",
+"눌러서 확인하고 전화나 화면 도움으로 도와주세요.": "Toca para ver y ayuda por llamada o ayuda en pantalla.",
+"부모님 폰 점검 리포트": "Informe de revisión del móvil de tus padres",
+"연결된 부모님 폰에 위험이 의심되는 앱이 설치되면 여기에 기록되고 알림이 옵니다.": "Si se instala una app de riesgo en el móvil de un padre vinculado, se registra aquí y recibes un aviso.",
+"아직 기록이 없습니다. 좋은 소식이에요.": "Aún no hay registros. Buenas noticias.",
+"점검 리포트는 구독자 전용입니다.": "El informe es solo para suscriptores.",
+"📋 부모님 폰 점검 리포트": "📋 Informe de revisión del móvil de tus padres",
+"자녀에게 위험 앱 알림: 켜짐 (끄기)": "Avisos de apps de riesgo al hijo: activado (desactivar)",
+"자녀에게 위험 앱 알림 켜기": "Activar avisos de apps de riesgo al hijo",
+"위험이 의심되는 앱이 이 폰에 설치되면, 연결된 자녀(구독자)에게 앱 이름과 위험 이유만 알립니다.\n사진·메시지·통화 내용 등 개인 정보는 보내지 않습니다. 언제든 끌 수 있습니다.\n\n켤까요?": "Si se instala una app de riesgo en este móvil, solo se envía el nombre de la app y el motivo a tu hijo vinculado (suscriptor).\nNunca se envían fotos, mensajes ni llamadas. Puedes desactivarlo cuando quieras.\n\n¿Activar?",
+"부모님 동의로만 켜집니다. 알림은 구독 중인 자녀에게만 갑니다.": "Solo se activa con el consentimiento del padre. Los avisos solo llegan a hijos suscritos."
 }
