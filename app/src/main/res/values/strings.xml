@@ -30,7 +30,7 @@
 Valid for %2$d minutes, one use only. Tell it to your family or let them scan the QR.</string>
     <string name="btn_enter_code">Enter code</string>
     <string name="btn_scan_qr">Scan QR</string>
-    <string name="code_hint">Invite code (6 digits)</string>
+    <string name="code_hint">Invite code (8 digits)</string>
     <string name="err_code_invalid">The code is invalid or has expired.</string>
     <string name="err_generic">Something went wrong: %1$s</string>
     <string name="request_sent">Request sent. Waiting for approval from %1$s.</string>

@@ -30,7 +30,7 @@
 %2$d分間・1回のみ有効です。家族に伝えるかQRを見せてください。</string>
     <string name="btn_enter_code">コードを入力</string>
     <string name="btn_scan_qr">QRスキャン</string>
-    <string name="code_hint">招待コード（6桁）</string>
+    <string name="code_hint">招待コード（8桁）</string>
     <string name="err_code_invalid">コードが無効か、期限切れです。</string>
     <string name="err_generic">問題が発生しました: %1$s</string>
     <string name="request_sent">接続リクエストを送りました。%1$s さんの承認を待っています。</string>

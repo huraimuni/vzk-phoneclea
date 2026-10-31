@@ -30,7 +30,7 @@
 Berlaku %2$d menit, sekali pakai. Beri tahu keluarga atau tunjukkan QR.</string>
     <string name="btn_enter_code">Masukkan kode</string>
     <string name="btn_scan_qr">Pindai QR</string>
-    <string name="code_hint">Kode undangan (6 digit)</string>
+    <string name="code_hint">Kode undangan (8 digit)</string>
     <string name="err_code_invalid">Kode tidak valid atau sudah kedaluwarsa.</string>
     <string name="err_generic">Terjadi kesalahan: %1$s</string>
     <string name="request_sent">Permintaan terkirim. Menunggu persetujuan %1$s.</string>
