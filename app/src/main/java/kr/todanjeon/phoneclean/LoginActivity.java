@@ -21,10 +21,19 @@ public class LoginActivity extends BaseActivity {
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(Ui.BG);
         root.addView(Ui.header(this, getString(R.string.login_title), getString(R.string.login_desc)));
-        busyBar = Ui.text(this, Tr.t("로그인 중입니다... 잠시만 기다려 주세요"), 14, Color.WHITE, true);
-        busyBar.setBackgroundColor(Ui.AMBER);
-        busyBar.setPadding(Ui.dp(this, 14), Ui.dp(this, 9), Ui.dp(this, 14), Ui.dp(this, 9));
-        busyBar.setVisibility(View.GONE);
+        LinearLayout bb = new LinearLayout(this);
+        bb.setOrientation(LinearLayout.VERTICAL);
+        bb.setBackgroundColor(Ui.AMBER);
+        bb.setPadding(Ui.dp(this, 14), Ui.dp(this, 9), Ui.dp(this, 14), Ui.dp(this, 10));
+        bb.addView(Ui.text(this, Tr.t("로그인 중입니다... 잠시만 기다려 주세요"), 14, Color.WHITE, true));
+        android.widget.ProgressBar pb = new android.widget.ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
+        pb.setIndeterminate(true);
+        pb.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.SRC_IN);
+        LinearLayout.LayoutParams pl = new LinearLayout.LayoutParams(-1, Ui.dp(this, 8));
+        pl.topMargin = Ui.dp(this, 8);
+        bb.addView(pb, pl);
+        bb.setVisibility(View.GONE);
+        busyBar = bb;
         root.addView(busyBar);
         box = new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);
@@ -37,7 +46,7 @@ public class LoginActivity extends BaseActivity {
         Auth.warmUp();
     }
 
-    private TextView busyBar;
+    private View busyBar;
 
     private void busy(boolean on) {
         if (busyBar != null) busyBar.setVisibility(on ? View.VISIBLE : View.GONE);
