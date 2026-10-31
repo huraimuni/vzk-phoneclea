@@ -342,5 +342,12 @@
 "계정을 삭제했습니다.": "Account deleted.",
 "삭제하지 못했습니다. 로그아웃 후 다시 로그인한 뒤 시도해 주세요.": "Couldn't delete. Sign out, sign in again, then retry.",
 "⚪ 로그아웃 상태 · 눌러서 로그인": "⚪ Signed out · Tap to sign in",
-"🟢 로그인됨: %s · 내 계정": "🟢 Signed in: %s · My account"
+"🟢 로그인됨: %s · 내 계정": "🟢 Signed in: %s · My account",
+"업데이트 확인": "Check for updates",
+"업데이트를 확인하는 중입니다...": "Checking for updates...",
+"업데이트 정보를 가져오지 못했습니다. 인터넷 연결을 확인해 주세요.": "Couldn't get update info. Check your internet connection.",
+"최신 버전입니다. (v%s)": "You're up to date. (v%s)",
+"새 버전이 있습니다": "A new version is available",
+"현재 v%s → 최신 v%s\n\n받으러 갈까요?": "Current v%s → latest v%s\n\nGo get it?",
+"받으러 가기": "Get it"
 }

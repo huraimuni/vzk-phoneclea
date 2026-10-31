@@ -25,4 +25,12 @@ T = {
 "삭제하지 못했습니다. 로그아웃 후 다시 로그인한 뒤 시도해 주세요.": ["Couldn't delete. Sign out, sign in again, then retry.", "削除できませんでした。ログアウトして再ログイン後にお試しください。", "No se pudo eliminar. Cierra sesión, vuelve a entrar e inténtalo de nuevo.", "Não foi possível excluir. Saia, entre novamente e tente de novo.", "Gagal menghapus. Keluar, masuk lagi, lalu coba lagi.", "हटा नहीं सके। साइन आउट करके फिर साइन इन करें और दोबारा कोशिश करें।"],
 "⚪ 로그아웃 상태 · 눌러서 로그인": ["⚪ Signed out · Tap to sign in","⚪ ログアウト中 · タップしてログイン","⚪ Sin sesión · Toca para iniciar sesión","⚪ Desconectado · Toque para entrar","⚪ Belum masuk · Ketuk untuk masuk","⚪ साइन आउट · साइन इन के लिए टैप करें"],
 "🟢 로그인됨: %s · 내 계정": ["🟢 Signed in: %s · My account","🟢 ログイン中: %s · マイアカウント","🟢 Sesión iniciada: %s · Mi cuenta","🟢 Conectado: %s · Minha conta","🟢 Masuk: %s · Akun saya","🟢 साइन इन: %s · मेरा खाता"],
+"업데이트 확인": ["Check for updates","アップデートを確認","Buscar actualizaciones","Verificar atualizações","Periksa pembaruan","अपडेट जाँचें"],
+"업데이트를 확인하는 중입니다...": ["Checking for updates...","アップデートを確認中です...","Buscando actualizaciones...","Verificando atualizações...","Memeriksa pembaruan...","अपडेट जाँच रहे हैं..."],
+"업데이트 정보를 가져오지 못했습니다. 인터넷 연결을 확인해 주세요.": ["Couldn't get update info. Check your internet connection.","アップデート情報を取得できませんでした。インターネット接続を確認してください。","No se pudo obtener la información. Revisa tu conexión a internet.","Não foi possível obter as informações. Verifique sua conexão com a internet.","Gagal mengambil info pembaruan. Periksa koneksi internet Anda.","अपडेट जानकारी नहीं मिली। इंटरनेट कनेक्शन जाँचें।"],
+"최신 버전입니다. (v%s)": ["You're up to date. (v%s)","最新バージョンです。(v%s)","Ya tienes la última versión. (v%s)","Você está na versão mais recente. (v%s)","Sudah versi terbaru. (v%s)","आप नवीनतम संस्करण पर हैं। (v%s)"],
+"새 버전이 있습니다": ["A new version is available","新しいバージョンがあります","Hay una nueva versión","Há uma nova versão","Tersedia versi baru","नया संस्करण उपलब्ध है"],
+"현재 v%s → 최신 v%s\n\n받으러 갈까요?": ["Current v%s → latest v%s\n\nGo get it?","現在 v%s → 最新 v%s\n\n入手しますか？","Actual v%s → última v%s\n\n¿Ir a descargarla?","Atual v%s → mais recente v%s\n\nQuer baixar?","Saat ini v%s → terbaru v%s\n\nUnduh sekarang?","वर्तमान v%s → नवीनतम v%s\n\nडाउनलोड करें?"],
+"나중에": ["Later","あとで","Más tarde","Depois","Nanti","बाद में"],
+"받으러 가기": ["Get it","入手する","Descargar","Baixar","Unduh","डाउनलोड करें"],
 }
