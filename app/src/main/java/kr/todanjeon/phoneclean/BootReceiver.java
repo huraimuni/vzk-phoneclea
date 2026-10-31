@@ -11,6 +11,7 @@ public class BootReceiver extends BroadcastReceiver {
         try {
             boolean on = context.getSharedPreferences(NewAppJob.PREFS, Context.MODE_PRIVATE).getBoolean("watch_on", false);
             if (on) {
+                WatchService.start(context);
                 NewAppJob.schedule(context);
             }
         } catch (Exception ignored) {

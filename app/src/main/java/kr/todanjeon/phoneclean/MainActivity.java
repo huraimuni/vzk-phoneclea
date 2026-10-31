@@ -716,7 +716,7 @@ public class MainActivity extends BaseActivity {
 
     private void showMore() {
         final String[] base = {getString(R.string.home_family_btn), getString(R.string.btn_language), Tr.t("내 계정"), Tr.t("응급 가이드 (폰이 멈췄을 때)"), Tr.t("광고·알고리즘 정리"), Tr.t("알림 정리 (알림 비우기·끄기)"), Tr.t("안전 표시한 앱 관리"),
-                watchOn() ? Tr.t("새 앱 설치 알림 끄기") : Tr.t("새 앱 설치 알림 켜기 (15분마다 확인)"),
+                watchOn() ? Tr.t("새 앱 즉시 분석 알림 끄기 (감시 중)") : Tr.t("새 앱 즉시 분석 알림 켜기 (감시)"),
                 Tr.t("결과 공유 (카카오톡 등)"), Tr.t("오류 보고·건의하기"), Tr.t("업데이트 확인"), Tr.t("도움말")};
         final boolean adm = Admin.is;
         final String[] items = new String[base.length + (adm ? 1 : 0)];
@@ -758,6 +758,7 @@ public class MainActivity extends BaseActivity {
     private void toggleWatch() {
         if (watchOn()) {
             NewAppJob.cancel(this);
+            WatchService.stop(this);
             getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean("watch_on", false).apply();
             Ui.toast(this, Tr.t("새 앱 설치 알림을 껐습니다."));
             return;
@@ -773,8 +774,9 @@ public class MainActivity extends BaseActivity {
     private void enableWatch() {
         NewAppJob.saveBaseline(this);
         NewAppJob.schedule(this);
+        WatchService.start(this);
         getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean("watch_on", true).apply();
-        Ui.toast(this, Tr.t("켰습니다. 새 앱이 설치되면 15분 안에 분석 결과를 알림으로 알려 드립니다. (설치를 막지는 못하고, 설치된 뒤에 알립니다)"));
+        Ui.toast(this, Tr.t("켰습니다. 새 앱이 설치되면 바로 분석 결과를 알림으로 띄웁니다. (설치를 막지는 못하고, 설치된 뒤에 알립니다)"));
     }
 
     @Override
@@ -1124,7 +1126,7 @@ public class MainActivity extends BaseActivity {
                 + "- 바이러스를 잡는 백신이 아닙니다. 악성 파일 DB가 없고, 징후만 보고 판단합니다.\n"
                 + "- 징후가 있어도 정상 앱일 수 있습니다. 모르는 앱만 지우세요.\n"
                 + "- 판정 이름: 권한 장악형 / 광고 도배형 / 방치형 / 한 패거리형(같은 개발사) / 설치 도우미형 / 도구·겁주기 위장형. 근거가 2개 이상 겹치면 [위험 의심]입니다.\n"
-                + "- [더보기 > 새 앱 설치 알림]을 켜면 새 앱이 깔린 뒤 15분 안에 분석 결과가 알림으로 뜹니다. 알림을 누르면 분석 화면이 열리고 바로 삭제할 수 있습니다. (설치를 막지는 못합니다)\n"
+                + "- [더보기 > 새 앱 즉시 분석 알림]을 켜면 새 앱이 깔리는 즉시 분석 결과가 알림으로 뜹니다. 알림을 누르면 분석 화면이 열리고 바로 삭제할 수 있습니다. (알림창에 '감시 중' 표시가 계속 보이고, 폰 절전 설정에 따라 꺼질 수 있어 15분마다 확인하는 보조 장치도 함께 켜집니다. 설치를 막지는 못합니다)\n"
                 + "- [더보기 > 알림 정리]에서 알림이 자꾸 뜨는 앱의 알림 설정 화면으로 바로 가서 끌 수 있습니다.\n"
                 + "- [더보기 > 응급 가이드]에 폰이 멈췄을 때 안전 모드 등의 순서가 있습니다.\n"
                 + "- 내가 아는 안전한 앱은 체크한 뒤 [안전 앱으로 표시]를 누르면 목록·일시 중지·삭제에서 빠집니다.\n"
