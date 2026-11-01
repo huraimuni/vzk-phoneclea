@@ -128,9 +128,15 @@ public class AdminActivity extends BaseActivity {
         return e != null && e.toDate().after(new Date());
     }
 
+    /** 카카오·네이버 ID(kakao:123…)는 전체, 구글처럼 긴 ID는 뒤 8자리를 보여 줘서 서로 구분되게 한다. */
+    private static String shortId(String uid) {
+        if (uid.contains(":")) return uid;
+        return "…" + uid.substring(Math.max(0, uid.length() - 8));
+    }
+
     private String nameOf(String uid) {
         for (DocumentSnapshot d : users) if (d.getId().equals(uid)) return nz(d.getString("name"));
-        return uid.substring(0, Math.min(8, uid.length()));
+        return shortId(uid);
     }
 
     private void sectionUsers() {
@@ -239,7 +245,7 @@ public class AdminActivity extends BaseActivity {
             final String nm = d.getString("name");
             String b = badge(uid);
             TextView r = row((b.isEmpty() ? "" : b + "\n") + nz(nm) + " · " + d.getString("provider") + " · " + when(d, "updatedAt")
-                    + (note.isEmpty() ? "" : "\n📝 " + note) + "\nID " + uid.substring(0, Math.min(10, uid.length())));
+                    + (note.isEmpty() ? "" : "\n📝 " + note) + "\nID " + shortId(uid));
             r.setOnClickListener(v -> userMenu(uid, nm));
             userList.addView(r);
         }
@@ -262,7 +268,7 @@ public class AdminActivity extends BaseActivity {
         for (final DocumentSnapshot d : grantMap.values()) {
             Timestamp e = d.getTimestamp("expiresAt");
             final String uid = d.getId();
-            TextView r = row(nameOf(uid) + " · " + (e == null ? "만료 없음" : "~" + fmt.format(e.toDate())) + "  (눌러서 해제)");
+            TextView r = row(nameOf(uid) + " (" + shortId(uid) + ") · " + (e == null ? "만료 없음" : "~" + fmt.format(e.toDate())) + "  (눌러서 해제)");
             r.setOnClickListener(v -> revoke(uid));
             grantBox.addView(r);
         }
