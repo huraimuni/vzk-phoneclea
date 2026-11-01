@@ -73,6 +73,10 @@ service cloud.firestore {
       allow read: if signedIn() && request.auth.uid == uid;
       allow read, write: if isAdmin();
     }
+    // 관리자 메모: 누가 어떤 고객인지 표시(관리자만)
+    match /adminNotes/{uid} {
+      allow read, write: if isAdmin();
+    }
     // TURN 서버 설정 등: 로그인한 사용자가 읽기만
     match /config/{doc} {
       allow read: if signedIn() && doc != 'admin';

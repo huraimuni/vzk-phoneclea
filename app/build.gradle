@@ -15,8 +15,8 @@ android {
         applicationId 'kr.todanjeon.phoneclean'
         minSdk 26
         targetSdk 36
-        versionCode 14
-        versionName '2.12'
+        versionCode 15
+        versionName '2.13'
         buildConfigField 'String', 'NAVER_CLIENT_ID', '"' + (System.getenv('NAVER_CLIENT_ID') ?: '') + '"'
         buildConfigField 'String', 'NAVER_CLIENT_SECRET', '"' + (System.getenv('NAVER_CLIENT_SECRET') ?: '') + '"'
         buildConfigField 'String', 'UPDATE_BRANCH', '"store"'
