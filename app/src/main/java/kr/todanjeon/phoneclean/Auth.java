@@ -169,6 +169,11 @@ final class Auth {
         m.put("name", name);
         m.put("provider", provider);
         m.put("lang", Lang.tag(c));
+        try {
+            com.google.firebase.auth.FirebaseUser fu = FirebaseAuth.getInstance().getCurrentUser();
+            if (fu != null && fu.getEmail() != null) m.put("email", fu.getEmail());
+        } catch (Throwable ignored) {
+        }
         m.put("updatedAt", com.google.firebase.Timestamp.now());
         FirebaseFirestore.getInstance().collection("users").document(uid())
                 .set(m, SetOptions.merge())
