@@ -368,5 +368,10 @@
 "자녀에게 위험 앱 알림: 켜짐 (끄기)": "Peringatan aplikasi berisiko ke anak: aktif (matikan)",
 "자녀에게 위험 앱 알림 켜기": "Aktifkan peringatan aplikasi berisiko ke anak",
 "부모님 동의로만 켜집니다. 알림은 구독 중인 자녀에게만 갑니다.": "Hanya aktif dengan persetujuan orang tua. Peringatan hanya ke anak yang berlangganan.",
-"위험이 의심되는 앱이 이 폰에 설치되면, 연결된 자녀(구독자)에게 앱 이름과 위험 이유만 알립니다.\n사진·메시지·통화 내용 등 개인 정보는 보내지 않습니다. 언제든 끌 수 있습니다.\n\n켤까요?": "Jika aplikasi berisiko terpasang di ponsel ini, hanya nama aplikasi dan alasannya yang dikirim ke anak yang terhubung (pelanggan).\nFoto, pesan, dan isi panggilan tidak pernah dikirim. Bisa dimatikan kapan saja.\n\nAktifkan?"
+"위험이 의심되는 앱이 이 폰에 설치되면, 연결된 자녀(구독자)에게 앱 이름과 위험 이유만 알립니다.\n사진·메시지·통화 내용 등 개인 정보는 보내지 않습니다. 언제든 끌 수 있습니다.\n\n켤까요?": "Jika aplikasi berisiko terpasang di ponsel ini, hanya nama aplikasi dan alasannya yang dikirim ke anak yang terhubung (pelanggan).\nFoto, pesan, dan isi panggilan tidak pernah dikirim. Bisa dimatikan kapan saja.\n\nAktifkan?",
+"원격 제어 앱 (남이 내 폰을 대신 조작할 수 있음. 보이스피싱에 자주 악용됨. 내가 설치한 게 아니면 삭제하세요)": "Aplikasi kendali jarak jauh (orang lain bisa mengoperasikan ponsel Anda; sering disalahgunakan penipu). Hapus jika bukan Anda yang memasang",
+"원격 제어형": "Kendali jarak jauh",
+"앱 이름이 금융·택배·수사기관·초대장을 흉내 냄 (피싱 앱에 흔한 이름)": "Nama aplikasi meniru bank, paket, aparat, atau undangan (umum pada aplikasi phishing)",
+"스토어 밖 설치 + 화면 읽기·조작 + 화면 위 표시가 한꺼번에 있음 (금융 사기 앱의 전형적인 조합)": "Dipasang di luar toko + membaca/mengendalikan layar + tampil di atas aplikasi lain sekaligus (kombinasi khas aplikasi penipuan keuangan)",
+"설치 직후 24시간 안에 강한 권한(접근성·기기 관리자)을 얻음": "Mendapat izin kuat (aksesibilitas / admin perangkat) dalam 24 jam setelah dipasang"
 }

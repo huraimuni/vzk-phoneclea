@@ -368,5 +368,10 @@
 "자녀에게 위험 앱 알림: 켜짐 (끄기)": "Risky-app alerts to child: ON (turn off)",
 "자녀에게 위험 앱 알림 켜기": "Turn on risky-app alerts to child",
 "부모님 동의로만 켜집니다. 알림은 구독 중인 자녀에게만 갑니다.": "Turned on only with the parent's consent. Alerts go only to subscribed children.",
-"위험이 의심되는 앱이 이 폰에 설치되면, 연결된 자녀(구독자)에게 앱 이름과 위험 이유만 알립니다.\n사진·메시지·통화 내용 등 개인 정보는 보내지 않습니다. 언제든 끌 수 있습니다.\n\n켤까요?": "If a risky app is installed on this phone, only the app name and the reason are sent to your linked child (subscriber).\nPhotos, messages, call content and other personal data are never sent. You can turn this off anytime.\n\nTurn on?"
+"위험이 의심되는 앱이 이 폰에 설치되면, 연결된 자녀(구독자)에게 앱 이름과 위험 이유만 알립니다.\n사진·메시지·통화 내용 등 개인 정보는 보내지 않습니다. 언제든 끌 수 있습니다.\n\n켤까요?": "If a risky app is installed on this phone, only the app name and the reason are sent to your linked child (subscriber).\nPhotos, messages, call content and other personal data are never sent. You can turn this off anytime.\n\nTurn on?",
+"원격 제어 앱 (남이 내 폰을 대신 조작할 수 있음. 보이스피싱에 자주 악용됨. 내가 설치한 게 아니면 삭제하세요)": "Remote-control app (lets someone else operate your phone; often abused in phone scams). Delete it if you didn't install it",
+"원격 제어형": "Remote control",
+"앱 이름이 금융·택배·수사기관·초대장을 흉내 냄 (피싱 앱에 흔한 이름)": "App name imitates banks, parcels, authorities or invitations (common in phishing apps)",
+"스토어 밖 설치 + 화면 읽기·조작 + 화면 위 표시가 한꺼번에 있음 (금융 사기 앱의 전형적인 조합)": "Installed outside the store + screen reading/control + display over other apps all at once (typical of financial-fraud apps)",
+"설치 직후 24시간 안에 강한 권한(접근성·기기 관리자)을 얻음": "Gained strong permissions (accessibility / device admin) within 24 hours of installing"
 }
