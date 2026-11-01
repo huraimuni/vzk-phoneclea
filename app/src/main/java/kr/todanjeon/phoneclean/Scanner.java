@@ -62,7 +62,28 @@ final class Scanner {
             "com.google.", "com.samsung.", "com.sec.", "com.android.", "com.kakao.",
             "com.nhn.android.", "com.naver.", "com.skt.", "com.kt.", "com.lguplus.",
             "com.microsoft.", "com.facebook.", "com.instagram.", "com.whatsapp",
-            "viva.republica.toss", "com.coupang.", "net.daum.", "com.sktelecom."
+            "viva.republica.toss", "com.coupang.", "net.daum.", "com.sktelecom.",
+            // 은행·금융·공공 (스토어에서 설치된 경우만 신뢰 처리됨)
+            "com.kbstar.", "com.shinhan.", "com.wooribank.", "com.kakaobank.", "com.kbankwith.", "com.kebhana.",
+            "com.nonghyup.", "com.epost.", "kr.go.", "com.tmoney.", "com.nhn.", "com.lotte.", "com.cjone.",
+            // 널리 쓰는 메신저·영상·게임·업무 앱
+            "jp.naver.line", "org.telegram.", "com.discord", "com.spotify.", "com.netflix.", "com.amazon.",
+            "com.dropbox.", "com.adobe.", "us.zoom.", "com.zhiliaoapp.", "com.twitter.", "com.nexon.", "com.ncsoft.",
+            "com.netmarble.", "com.kakaogames.", "com.supercell.", "com.nianticlabs.", "com.hancom.", "com.skype."
+    };
+
+    /** 원격 제어 앱: 보이스피싱에서 "폰을 대신 조작"하려고 설치하게 시키는 대표적인 앱들(정상 앱도 있으니 본인이 깐 게 아니면 삭제) */
+    private static final String[] REMOTE_CONTROL = {
+            "com.anydesk", "com.teamviewer", "com.carriez.flutter_hbb", "com.rustdesk", "com.splashtop", "com.rsupport",
+            "com.logmein", "com.islonline", "com.sand.airdroid", "com.airdroid", "net.christianbeier.droidvnc",
+            "com.realvnc", "com.ammyy", "com.microsoft.rdc", "com.sand.remotesupport"
+    };
+
+    /** 앱 이름이 금융·택배·수사기관을 흉내 내는 경우(피싱 앱에서 흔함). 스토어 밖에서 깔렸을 때만 본다. */
+    private static final String[] KW_PHISH = {
+            "보안 업데이트", "보안업데이트", "보안 카드", "보안카드", "안심 보안", "안심보안", "택배 조회", "택배조회", "택배 확인",
+            "대출", "검찰", "경찰청", "금융감독", "금감원", "공인인증", "인증서 복구", "민원", "건강검진", "과태료", "범칙금",
+            "부고", "청첩장", "모바일 초대장", "모바일초대장", "돌잔치"
     };
 
     /** 겁주기식·유틸리티 위장 앱에서 흔한 이름들 (강한 단서) */
@@ -302,6 +323,13 @@ final class Scanner {
         return false;
     }
 
+    private static boolean containsAnyPkg(String pkg, String[] prefixes) {
+        for (String p : prefixes) {
+            if (pkg.startsWith(p)) return true;
+        }
+        return false;
+    }
+
     private static boolean containsAny(String text, String[] words) {
         for (String w : words) {
             if (text.contains(w)) return true;
@@ -411,6 +439,21 @@ final class Scanner {
 
             int score = 0;
             int hard = 0;
+            String lowPkg = ai.packageName.toLowerCase(java.util.Locale.ROOT);
+            for (String rc : REMOTE_CONTROL) {
+                if (lowPkg.startsWith(rc)) {
+                    score += 5;
+                    hard++;
+                    e.reasons.add(Tr.t("원격 제어 앱 (남이 내 폰을 대신 조작할 수 있음. 보이스피싱에 자주 악용됨. 내가 설치한 게 아니면 삭제하세요)"));
+                    e.tags.add(Tr.t("원격 제어형"));
+                    break;
+                }
+            }
+            if (sideload && !preloaded && containsAny(e.label.toLowerCase(java.util.Locale.ROOT), KW_PHISH)) {
+                score += 3;
+                hard++;
+                e.reasons.add(Tr.t("앱 이름이 금융·택배·수사기관·초대장을 흉내 냄 (피싱 앱에 흔한 이름)"));
+            }
             if (sideload && !preloaded) {
                 score += 3;
                 hard++;
@@ -558,6 +601,24 @@ final class Scanner {
                     score += 1;
                     e.reasons.add(Tr.t("60일 넘게 쓰지 않음"));
                 }
+            }
+
+            // 위험한 조합: 하나씩은 약해도 함께 있으면 금융 사기 앱의 전형
+            if (sideload && !preloaded && e.accEnabled && e.overlay) {
+                score += 4;
+                hard++;
+                e.reasons.add(Tr.t("스토어 밖 설치 + 화면 읽기·조작 + 화면 위 표시가 한꺼번에 있음 (금융 사기 앱의 전형적인 조합)"));
+            }
+            if (sideload && !preloaded && (e.accEnabled || e.adminActive) && e.installTime > 0 && now - e.installTime <= DAY) {
+                score += 3;
+                hard++;
+                e.reasons.add(Tr.t("설치 직후 24시간 안에 강한 권한(접근성·기기 관리자)을 얻음"));
+            }
+            // 스토어에서 받았고 최근에 직접 쓰는 오래된 앱은 점수를 낮춘다(오탐 줄이기)
+            if (trustedInstaller && e.usedRecently && e.installTime > 0 && now - e.installTime > 180 * DAY
+                    && !e.accEnabled && !e.adminActive && !e.isHome && !containsAnyPkg(lowPkg, REMOTE_CONTROL)) {
+                score = Math.max(0, score - 3);
+                if (hard > 0) hard--;
             }
 
             e.signer = signerHash(pm, ai.packageName);
