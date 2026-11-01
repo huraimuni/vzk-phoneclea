@@ -367,5 +367,10 @@
 "자녀에게 위험 앱 알림: 켜짐 (끄기)": "Alertas de apps de risco ao filho: ligado (desligar)",
 "자녀에게 위험 앱 알림 켜기": "Ligar alertas de apps de risco ao filho",
 "위험이 의심되는 앱이 이 폰에 설치되면, 연결된 자녀(구독자)에게 앱 이름과 위험 이유만 알립니다.\n사진·메시지·통화 내용 등 개인 정보는 보내지 않습니다. 언제든 끌 수 있습니다.\n\n켤까요?": "Se um app de risco for instalado neste celular, só o nome do app e o motivo são enviados ao filho vinculado (assinante).\nFotos, mensagens e chamadas nunca são enviadas. Você pode desligar quando quiser.\n\nLigar?",
-"부모님 동의로만 켜집니다. 알림은 구독 중인 자녀에게만 갑니다.": "Só liga com o consentimento do pai. Os alertas vão só a filhos assinantes."
+"부모님 동의로만 켜집니다. 알림은 구독 중인 자녀에게만 갑니다.": "Só liga com o consentimento do pai. Os alertas vão só a filhos assinantes.",
+"원격 제어 앱 (남이 내 폰을 대신 조작할 수 있음. 보이스피싱에 자주 악용됨. 내가 설치한 게 아니면 삭제하세요)": "App de controle remoto (permite que outra pessoa opere seu celular; muito usado em golpes). Exclua se não foi você que instalou",
+"원격 제어형": "Controle remoto",
+"앱 이름이 금융·택배·수사기관·초대장을 흉내 냄 (피싱 앱에 흔한 이름)": "O nome imita bancos, encomendas, autoridades ou convites (comum em apps de phishing)",
+"스토어 밖 설치 + 화면 읽기·조작 + 화면 위 표시가 한꺼번에 있음 (금융 사기 앱의 전형적인 조합)": "Instalado fora da loja + leitura/controle de tela + sobreposição ao mesmo tempo (combinação típica de apps de fraude financeiro)",
+"설치 직후 24시간 안에 강한 권한(접근성·기기 관리자)을 얻음": "Obteve permissões fortes (acessibilidade / administrador) nas 24 h após a instalação"
 }
