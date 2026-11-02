@@ -373,5 +373,8 @@
 "원격 제어형": "Remote control",
 "앱 이름이 금융·택배·수사기관·초대장을 흉내 냄 (피싱 앱에 흔한 이름)": "App name imitates banks, parcels, authorities or invitations (common in phishing apps)",
 "스토어 밖 설치 + 화면 읽기·조작 + 화면 위 표시가 한꺼번에 있음 (금융 사기 앱의 전형적인 조합)": "Installed outside the store + screen reading/control + display over other apps all at once (typical of financial-fraud apps)",
-"설치 직후 24시간 안에 강한 권한(접근성·기기 관리자)을 얻음": "Gained strong permissions (accessibility / device admin) within 24 hours of installing"
+"설치 직후 24시간 안에 강한 권한(접근성·기기 관리자)을 얻음": "Gained strong permissions (accessibility / device admin) within 24 hours of installing",
+"이름 바꾸기": "Rename",
+"내 폰에서만 보이는 이름입니다. 비우면 원래 이름으로 돌아갑니다.": "This name is only shown on your phone. Leave it empty to restore the original name.",
+"예: 어머니, 큰아버지": "e.g. Mom, Uncle"
 }

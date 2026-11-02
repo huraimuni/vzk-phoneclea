@@ -94,7 +94,14 @@ public class ConsentActivity extends BaseActivity {
 
     private void startProjection() {
         MediaProjectionManager mpm = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        startActivityForResult(mpm.createScreenCaptureIntent(), RC_PROJ);
+        Intent it;
+        if (android.os.Build.VERSION.SDK_INT >= 34) {
+            // 안드로이드 14 이상: '한 앱'이 아니라 '전체 화면'만 선택되게 한다.
+            it = mpm.createScreenCaptureIntent(android.media.projection.MediaProjectionConfig.createConfigForDefaultDisplay());
+        } else {
+            it = mpm.createScreenCaptureIntent();
+        }
+        startActivityForResult(it, RC_PROJ);
     }
 
     @Override

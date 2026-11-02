@@ -157,13 +157,26 @@ public class ShareService extends Service {
         source = factory.createVideoSource(true);
         sth = SurfaceTextureHelper.create("cap", egl.getEglBaseContext());
         capturer.initialize(sth, this, source.getCapturerObserver());
-        DisplayMetrics dm = getResources().getDisplayMetrics();
-        int w = dm.widthPixels, hh = dm.heightPixels;
-        float k = 720f / Math.min(w, hh);
+        // 화면 전체의 실제 크기(상태바·내비게이션 바 포함)로 맞춘다. 앱 영역 크기를 쓰면 가로세로 비율이 어긋나 화면이 늘어나 보인다.
+        int w, hh;
+        android.view.WindowManager wm = (android.view.WindowManager) getSystemService(WINDOW_SERVICE);
+        if (Build.VERSION.SDK_INT >= 30) {
+            android.graphics.Rect bnd = wm.getMaximumWindowMetrics().getBounds();
+            w = bnd.width();
+            hh = bnd.height();
+        } else {
+            DisplayMetrics dm = new DisplayMetrics();
+            wm.getDefaultDisplay().getRealMetrics(dm);
+            w = dm.widthPixels;
+            hh = dm.heightPixels;
+        }
+        float k = 1080f / Math.min(w, hh);
         if (k < 1f) {
             w = Math.round(w * k);
             hh = Math.round(hh * k);
         }
+        w &= ~1;
+        hh &= ~1;
         capturer.startCapture(w, hh, 15);
         VideoTrack track = factory.createVideoTrack("screen", source);
         pc.addTrack(track, Collections.singletonList("s"));

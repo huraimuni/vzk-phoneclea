@@ -129,7 +129,7 @@ public class FamilyActivity extends BaseActivity {
         if (!pend.isEmpty()) {
             section(getString(R.string.pending_title));
             for (final DocumentSnapshot d : pend) {
-                final String nm = nz(d.getString("childName"));
+                final String nm = shownName(d, true);
                 box.addView(Ui.text(this, nm, 16, Ui.INK, true));
                 LinearLayout row = new LinearLayout(this);
                 Button ok = Ui.button(this, getString(R.string.btn_accept), Ui.GREEN, Color.WHITE);
@@ -201,8 +201,38 @@ public class FamilyActivity extends BaseActivity {
         box.addView(ver);
     }
 
+    /** 상대 이름: 내가 붙인 별명이 있으면 그것, 없으면 상대 이름. 같은 이름이 여럿이면 ID 끝 4자리를 붙여 구분한다. */
+    private String shownName(DocumentSnapshot d, boolean iAmParent) {
+        String uid = nz(iAmParent ? d.getString("childUid") : d.getString("parentUid"));
+        String alias = getSharedPreferences("aliases", MODE_PRIVATE).getString(uid, null);
+        if (alias != null && !alias.isEmpty()) return alias;
+        String name = nz(iAmParent ? d.getString("childName") : d.getString("parentName"));
+        int same = 0;
+        for (DocumentSnapshot x : asParent) if (name.equals(nz(x.getString("childName")))) same++;
+        for (DocumentSnapshot x : asChild) if (name.equals(nz(x.getString("parentName")))) same++;
+        if (same > 1 && uid.length() >= 4) return name + " (" + uid.substring(uid.length() - 4) + ")";
+        return name;
+    }
+
+    private void rename(final DocumentSnapshot d, final boolean iAmParent) {
+        final String uid = nz(iAmParent ? d.getString("childUid") : d.getString("parentUid"));
+        final android.widget.EditText et = new android.widget.EditText(this);
+        et.setSingleLine(true);
+        String cur = getSharedPreferences("aliases", MODE_PRIVATE).getString(uid, "");
+        et.setText(cur);
+        et.setHint(Tr.t("예: 어머니, 큰아버지"));
+        new AlertDialog.Builder(this).setTitle(Tr.t("이름 바꾸기"))
+                .setMessage(Tr.t("내 폰에서만 보이는 이름입니다. 비우면 원래 이름으로 돌아갑니다."))
+                .setView(et)
+                .setPositiveButton(getString(R.string.btn_ok), (x, w) -> {
+                    getSharedPreferences("aliases", MODE_PRIVATE).edit().putString(uid, et.getText().toString().trim()).apply();
+                    render();
+                })
+                .setNegativeButton(getString(R.string.btn_cancel), null).show();
+    }
+
     private void memberRow(final DocumentSnapshot d, final boolean iAmParent, boolean blocked) {
-        final String other = nz(iAmParent ? d.getString("childName") : d.getString("parentName"));
+        final String other = shownName(d, iAmParent);
         String role = iAmParent ? getString(R.string.role_helper) : getString(R.string.role_helped);
         TextView t = Ui.text(this, "👤 " + other + "  ·  " + role + (blocked ? "  ·  " + getString(R.string.status_blocked) : ""), 16, Ui.INK, true);
         t.setPadding(0, Ui.dp(this, 10), 0, Ui.dp(this, 2));
@@ -214,6 +244,10 @@ public class FamilyActivity extends BaseActivity {
             box.addView(Ui.text(this, getString(R.string.disconnect_requested), 13, Ui.AMBER, false));
         }
         LinearLayout row = new LinearLayout(this);
+        Button rn = Ui.button(this, Tr.t("이름 바꾸기"), Color.WHITE, Ui.INK);
+        rn.setTextSize(13);
+        rn.setOnClickListener(v -> rename(d, iAmParent));
+        row.addView(rn, Ui.weight(this, 3));
         if (iAmParent) {
             Button rm = Ui.button(this, getString(R.string.btn_remove), Color.WHITE, Ui.RED);
             rm.setTextSize(13);
