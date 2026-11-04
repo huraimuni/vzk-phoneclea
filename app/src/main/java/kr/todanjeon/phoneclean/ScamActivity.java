@@ -102,7 +102,7 @@ public class ScamActivity extends BaseActivity {
         for (String s : items) {
             CheckBox c = new CheckBox(this);
             c.setText(s);
-            c.setTextSize(16);
+            c.setTextSize(18);
             c.setTextColor(Ui.INK);
             c.setPadding(Ui.dp(this, 6), Ui.dp(this, 10), 0, Ui.dp(this, 10));
             c.setOnCheckedChangeListener((v, on) -> updateCall(boxes));
@@ -141,7 +141,7 @@ public class ScamActivity extends BaseActivity {
         input.setMinLines(4);
         input.setGravity(Gravity.TOP | Gravity.START);
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        input.setTextSize(15);
+        input.setTextSize(17);
         input.setBackground(Ui.round(Color.WHITE, 10, this));
         input.setPadding(Ui.dp(this, 12), Ui.dp(this, 10), Ui.dp(this, 12), Ui.dp(this, 10));
         body.addView(input, lp(8));
@@ -283,7 +283,7 @@ public class ScamActivity extends BaseActivity {
             for (String w : f.why) sb.append("• ").append(w).append('\n');
             card.addView(Ui.text(this, sb.toString().trim(), 14, Ui.INK, false));
             Button del = Ui.button(this, "지우기", Color.WHITE, Ui.RED);
-            del.setTextSize(13);
+            del.setTextSize(17);
             del.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + f.e.pkg))));
             card.addView(del, lp(6));
             phoneResult.addView(card, lp(8));

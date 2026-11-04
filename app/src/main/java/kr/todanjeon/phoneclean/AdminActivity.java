@@ -160,7 +160,7 @@ public class AdminActivity extends BaseActivity {
         for (int i = 0; i < names.length; i++) {
             final int m = i;
             Button bt = Ui.button(this, names[i], mode == i ? Ui.NAVY : Color.WHITE, mode == i ? Color.WHITE : Ui.INK);
-            bt.setTextSize(13);
+            bt.setTextSize(17);
             bt.setOnClickListener(v -> {
                 mode = m;
                 load();

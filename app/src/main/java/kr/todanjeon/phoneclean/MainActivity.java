@@ -207,7 +207,7 @@ public class MainActivity extends BaseActivity {
         pauseRow.setPadding(Ui.dp(this, 12), Ui.dp(this, 4), Ui.dp(this, 12), Ui.dp(this, 2));
         cbKeep = new CheckBox(this);
         cbKeep.setText(Tr.t("계속 멈춰 두기 (카톡 알림이 늦게 올 수 있어요)"));
-        cbKeep.setTextSize(13);
+        cbKeep.setTextSize(17);
         cbKeep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -217,7 +217,7 @@ public class MainActivity extends BaseActivity {
         });
         pauseRow.addView(cbKeep, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
         Button homeBtn = Ui.button(this, Tr.t("원래 홈 화면으로 되돌리기"), Color.rgb(226, 230, 244), Ui.NAVY);
-        homeBtn.setTextSize(12);
+        homeBtn.setTextSize(16);
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -259,9 +259,9 @@ public class MainActivity extends BaseActivity {
                 refreshList();
             }
         });
-        btnFilter.setTextSize(13);
-        btnSelect.setTextSize(13);
-        btnClear.setTextSize(13);
+        btnFilter.setTextSize(17);
+        btnSelect.setTextSize(17);
+        btnClear.setTextSize(17);
         row1.addView(btnSelect, Ui.weight(this, 3));
         row1.addView(btnClear, Ui.weight(this, 3));
         top.addView(row1);
@@ -298,7 +298,7 @@ public class MainActivity extends BaseActivity {
         row2.setOrientation(LinearLayout.HORIZONTAL);
         row2.setPadding(Ui.dp(this, 8), 0, Ui.dp(this, 8), Ui.dp(this, 6));
         Button b1 = Ui.button(this, Tr.t("안전한 앱으로 알려두기"), Ui.GREEN, Color.WHITE);
-        b1.setTextSize(13);
+        b1.setTextSize(17);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -306,7 +306,7 @@ public class MainActivity extends BaseActivity {
             }
         });
         Button b2 = Ui.button(this, Tr.t("폰 공간 정리"), Ui.CORAL, Color.WHITE);
-        b2.setTextSize(13);
+        b2.setTextSize(17);
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -314,7 +314,7 @@ public class MainActivity extends BaseActivity {
             }
         });
         Button b3 = Ui.button(this, Tr.t("다른 메뉴"), Ui.NAVY, Color.WHITE);
-        b3.setTextSize(13);
+        b3.setTextSize(17);
         b3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

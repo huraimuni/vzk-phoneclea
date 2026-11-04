@@ -105,7 +105,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void add(Button bt, View.OnClickListener l) {
-        bt.setTextSize(16);
+        bt.setTextSize(18);
         bt.setOnClickListener(l);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
         lp.setMargins(0, Ui.dp(this, 6), 0, Ui.dp(this, 6));

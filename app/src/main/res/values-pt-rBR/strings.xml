@@ -54,7 +54,7 @@ Válido por %2$d minutos, uso único. Passe ao familiar ou mostre o QR.</string>
     <string name="share_stop">Parar</string>
     <string name="consent_title">%1$s quer ver a sua tela</string>
     <string name="consent_warn">⚠ Permita somente se VOCÊ pediu ajuda a esta pessoa. Golpistas podem pedir para compartilhar a tela. Nunca permita se um desconhecido, banco ou polícia pedir.</string>
-    <string name="consent_privacy">Sua tela vai direto a essa pessoa e não é gravada nem armazenada. Feche antes senhas e apps de banco. Você pode parar a qualquer momento (máx. 15 minutos).</string>
+    <string name="consent_privacy">Sua tela vai direto a essa pessoa e não é gravada nem armazenada. Feche antes senhas e apps de banco. Você pode parar a qualquer momento (máx. 30 minutos).</string>
     <string name="btn_allow">PERMITIR</string>
     <string name="btn_deny">RECUSAR</string>
     <string name="btn_ask_help">🖥 Pedir para ver a tela</string>

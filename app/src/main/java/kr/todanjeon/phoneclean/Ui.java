@@ -47,12 +47,12 @@ final class Ui {
         b.setText(text);
         b.setAllCaps(false);
         b.setTextColor(fg);
-        b.setTextSize(15);
+        b.setTextSize(18);
         b.setTypeface(Typeface.DEFAULT_BOLD);
         b.setBackground(round(bg, 12, c));
-        b.setPadding(dp(c, 10), dp(c, 12), dp(c, 10), dp(c, 12));
-        b.setMinHeight(0);
-        b.setMinimumHeight(0);
+        b.setPadding(dp(c, 12), dp(c, 14), dp(c, 12), dp(c, 14));
+        b.setMinHeight(dp(c, 56));
+        b.setMinimumHeight(dp(c, 56));
         return b;
     }
 
@@ -65,7 +65,8 @@ final class Ui {
     static TextView text(Context c, String s, float sp, int color, boolean bold) {
         TextView t = new TextView(c);
         t.setText(s);
-        t.setTextSize(sp);
+        t.setTextSize(sp < 16 ? 16 : (sp < 20 ? sp + 1 : sp));
+        t.setLineSpacing(0, 1.15f);
         t.setTextColor(color);
         if (bold) t.setTypeface(Typeface.DEFAULT_BOLD);
         return t;

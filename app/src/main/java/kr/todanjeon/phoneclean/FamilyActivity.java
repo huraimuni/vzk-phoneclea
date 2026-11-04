@@ -245,24 +245,24 @@ public class FamilyActivity extends BaseActivity {
         }
         LinearLayout row = new LinearLayout(this);
         Button rn = Ui.button(this, Tr.t("이름 바꾸기"), Color.WHITE, Ui.INK);
-        rn.setTextSize(13);
+        rn.setTextSize(17);
         rn.setOnClickListener(v -> rename(d, iAmParent));
         row.addView(rn, Ui.weight(this, 3));
         if (iAmParent) {
             Button rm = Ui.button(this, getString(R.string.btn_remove), Color.WHITE, Ui.RED);
-            rm.setTextSize(13);
+            rm.setTextSize(17);
             rm.setOnClickListener(v -> confirm(getString(R.string.confirm_remove, other), () -> d.getReference().delete()));
             row.addView(rm, Ui.weight(this, 3));
             if (!blocked) {
                 Button bl = Ui.button(this, getString(R.string.btn_block), Color.WHITE, Ui.INK);
-                bl.setTextSize(13);
+                bl.setTextSize(17);
                 bl.setOnClickListener(v -> confirm(getString(R.string.confirm_block, other),
                         () -> d.getReference().update("status", "blocked")));
                 row.addView(bl, Ui.weight(this, 3));
             }
         } else if (req == null) {
             Button ask = Ui.button(this, getString(R.string.btn_ask_help), Ui.CORAL, Color.WHITE);
-            ask.setTextSize(13);
+            ask.setTextSize(17);
             ask.setOnClickListener(v -> Access.check((ok, via) -> runOnUiThread(() -> {
                 if (!ok) {
                     startActivity(new Intent(this, SubscribeActivity.class));
@@ -274,7 +274,7 @@ public class FamilyActivity extends BaseActivity {
             })));
             if ("active".equals(d.getString("status"))) row.addView(ask, Ui.weight(this, 3));
             Button rq = Ui.button(this, getString(R.string.btn_request_disconnect), Color.WHITE, Ui.RED);
-            rq.setTextSize(13);
+            rq.setTextSize(17);
             rq.setOnClickListener(v -> d.getReference().update("deleteRequestedBy", Auth.uid()));
             row.addView(rq, Ui.weight(this, 3));
         }
@@ -360,7 +360,7 @@ public class FamilyActivity extends BaseActivity {
         b.setPadding(0, Ui.dp(this, 10), 0, Ui.dp(this, 4));
         final boolean on = Report.on(this);
         Button t = Ui.button(this, Tr.t(on ? "자녀에게 위험한 앱 알려주기: 켜짐 (끄려면 누르세요)" : "자녀에게 위험한 앱 알려주기 켜기"), on ? Color.WHITE : Ui.GREEN, on ? Ui.INK : Color.WHITE);
-        t.setTextSize(14);
+        t.setTextSize(17);
         t.setOnClickListener(v -> {
             if (on) {
                 Report.setOn(this, false);

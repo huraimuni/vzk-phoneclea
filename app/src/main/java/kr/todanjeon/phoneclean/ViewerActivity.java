@@ -104,7 +104,7 @@ public class ViewerActivity extends BaseActivity {
         for (int i = 0; i < ids.length; i++) {
             final int idx = i;
             Button pb = Ui.button(this, getString(ids[i]), Color.argb(230, 32, 40, 66), Color.WHITE);
-            pb.setTextSize(13);
+            pb.setTextSize(17);
             pb.setOnClickListener(v -> {
                 Map<String, Object> m2 = new HashMap<>();
                 m2.put("kind", "say");
