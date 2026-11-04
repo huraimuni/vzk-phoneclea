@@ -17,7 +17,23 @@ final class Updater {
     private Updater() {
     }
 
+    /** 구글 플레이에서 설치된 앱이면 GitHub 버전과 비교하지 않고 스토어 페이지로 보낸다(플레이에 아직 안 올라온 버전을 안내하는 일 방지). */
+    private static boolean isPlay(Activity a) {
+        try {
+            String ins = android.os.Build.VERSION.SDK_INT >= 30
+                    ? a.getPackageManager().getInstallSourceInfo(a.getPackageName()).getInstallingPackageName()
+                    : a.getPackageManager().getInstallerPackageName(a.getPackageName());
+            return "com.android.vending".equals(ins);
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+
     static void check(final Activity a) {
+        if (isPlay(a)) {
+            open(a);
+            return;
+        }
         Ui.toast(a, Tr.t("업데이트를 확인하는 중입니다..."));
         new Thread(() -> {
             int code = -1;
@@ -60,6 +76,11 @@ final class Updater {
 
     /** 요청받은 업데이트: 새 버전이 있으면 묻지 않고 바로 받는 화면(스토어/내려받기)으로 보낸다. */
     static void now(final Activity a, final Runnable after) {
+        if (isPlay(a)) {
+            open(a);
+            if (after != null) after.run();
+            return;
+        }
         Ui.toast(a, Tr.t("업데이트를 확인하는 중입니다..."));
         new Thread(() -> {
             int code = -1;

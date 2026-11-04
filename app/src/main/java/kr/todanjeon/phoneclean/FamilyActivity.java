@@ -45,6 +45,7 @@ public class FamilyActivity extends BaseActivity {
     private final List<DocumentSnapshot> asParent = new ArrayList<>();
     private final List<DocumentSnapshot> asChild = new ArrayList<>();
     private ListenerRegistration l1, l2;
+    private boolean askedNoti;
     private LinearLayout box;
     private String code, codeExpiresText;
 
@@ -83,6 +84,12 @@ public class FamilyActivity extends BaseActivity {
     private void fill(List<DocumentSnapshot> to, QuerySnapshot snap) {
         to.clear();
         to.addAll(snap.getDocuments());
+        // 자녀로 연결된 폰은 부모 폰의 위험 앱 알림을 받으려면 알림 권한이 필요하다(안드로이드 13 이상)
+        if (to == asChild && !to.isEmpty() && !askedNoti && android.os.Build.VERSION.SDK_INT >= 33
+                && checkSelfPermission("android.permission.POST_NOTIFICATIONS") != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            askedNoti = true;
+            requestPermissions(new String[]{"android.permission.POST_NOTIFICATIONS"}, 72);
+        }
         if (to == asParent) {
             boolean any = false;
             for (DocumentSnapshot d : to) if ("active".equals(d.getString("status"))) any = true;

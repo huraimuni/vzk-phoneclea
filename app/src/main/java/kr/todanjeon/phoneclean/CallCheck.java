@@ -20,7 +20,6 @@ public class CallCheck extends BroadcastReceiver {
     static final String PREFS = "phoneclean";
     static final String KEY_ON = "call_check_on";
     private static final String CH = "callcheck";
-    private static String last = TelephonyManager.EXTRA_STATE_IDLE;
 
     static boolean on(Context c) {
         return c.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getBoolean(KEY_ON, false);
@@ -48,15 +47,20 @@ public class CallCheck extends BroadcastReceiver {
         if (!TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(intent.getAction())) return;
         String st = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
         if (st == null) return;
-        String prev = last;
-        last = st;
+        // 프로세스가 중간에 종료돼도 이어지도록 이전 상태를 저장해 둔다
+        android.content.SharedPreferences sp = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        String prev = sp.getString("call_last", TelephonyManager.EXTRA_STATE_IDLE);
+        sp.edit().putString("call_last", st).apply();
         if (!TelephonyManager.EXTRA_STATE_IDLE.equals(st) || TelephonyManager.EXTRA_STATE_IDLE.equals(prev)) return;
         if (!on(ctx) || !granted(ctx)) return;
         final PendingResult pr = goAsync();
         new Thread(() -> {
             try {
-                Thread.sleep(2000); // 통화 기록에 올라올 때까지 잠깐 기다린다
-                check(ctx.getApplicationContext());
+                // 통화 기록에 올라올 때까지 기다리며 최대 3번 확인한다
+                for (int i = 0; i < 3; i++) {
+                    Thread.sleep(2000);
+                    if (check(ctx.getApplicationContext())) break;
+                }
             } catch (Throwable ignored) {
             } finally {
                 pr.finish();
@@ -64,24 +68,29 @@ public class CallCheck extends BroadcastReceiver {
         }).start();
     }
 
-    private static void check(Context c) {
+    /** 방금 끝난 통화를 찾았으면 true(알림을 띄웠든 건너뛰었든). 아직 기록이 없으면 false. */
+    private static boolean check(Context c) {
         String number = null;
         int type = 0;
         long date = 0;
+        long dur = 0;
         try (Cursor cur = c.getContentResolver().query(CallLog.Calls.CONTENT_URI,
-                new String[]{CallLog.Calls.NUMBER, CallLog.Calls.TYPE, CallLog.Calls.DATE}, null, null,
+                new String[]{CallLog.Calls.NUMBER, CallLog.Calls.TYPE, CallLog.Calls.DATE, CallLog.Calls.DURATION}, null, null,
                 CallLog.Calls.DATE + " DESC LIMIT 1")) {
             if (cur != null && cur.moveToFirst()) {
                 number = cur.getString(0);
                 type = cur.getInt(1);
                 date = cur.getLong(2);
+                dur = cur.getLong(3);
             }
         }
-        if (number == null || number.trim().isEmpty()) return;
-        if (System.currentTimeMillis() - date > 3 * 60 * 1000L) return;
-        if (type != CallLog.Calls.INCOMING_TYPE && type != CallLog.Calls.MISSED_TYPE) return; // 걸려 온 전화만
-        if (inContacts(c, number)) return;
+        if (number == null || number.trim().isEmpty()) return false;
+        // 통화 기록의 시각은 '시작' 시각이라, 긴 통화도 놓치지 않도록 통화 시간을 더해 '끝난' 시각으로 본다
+        if (System.currentTimeMillis() - (date + dur * 1000L) > 3 * 60 * 1000L) return false;
+        if (type != CallLog.Calls.INCOMING_TYPE && type != CallLog.Calls.MISSED_TYPE) return true; // 걸려 온 전화만
+        if (inContacts(c, number)) return true;
         notifyNumber(c, number);
+        return true;
     }
 
     private static boolean inContacts(Context c, String number) {
