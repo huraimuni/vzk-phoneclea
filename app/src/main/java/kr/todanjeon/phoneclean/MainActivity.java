@@ -297,7 +297,7 @@ public class MainActivity extends BaseActivity {
         LinearLayout row2 = new LinearLayout(this);
         row2.setOrientation(LinearLayout.HORIZONTAL);
         row2.setPadding(Ui.dp(this, 8), 0, Ui.dp(this, 8), Ui.dp(this, 6));
-        Button b1 = Ui.button(this, Tr.t("안전한 앱으로 알려두기"), Ui.GREEN, Color.WHITE);
+        Button b1 = Ui.button(this, Tr.t("안전한 앱 표시"), Ui.GREEN, Color.WHITE);
         b1.setTextSize(17);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override

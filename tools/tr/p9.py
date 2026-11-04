@@ -66,7 +66,7 @@ T = {
 "수상한 앱만 보기": ["Show suspicious apps only", "怪しいアプリのみ表示", "Ver solo apps sospechosas", "Ver somente apps suspeitos", "Hanya tampilkan yang mencurigakan", "केवल संदिग्ध ऐप दिखाएं"],
 "모든 앱 보기": ["Show all apps", "すべてのアプリを表示", "Ver todas las apps", "Ver todos os apps", "Tampilkan semua aplikasi", "सभी ऐप दिखाएं"],
 "고른 것 취소": ["Clear selection", "選択解除", "Quitar selección", "Limpar seleção", "Batalkan pilihan", "चयन हटाएं"],
-"안전한 앱으로 알려두기": ["Mark as safe", "安全アプリとしてマーク", "Marcar como segura", "Marcar como segura", "Tandai aman", "सुरक्षित चिह्नित करें"],
+"안전한 앱 표시": ["Mark as safe", "安全アプリとしてマーク", "Marcar como segura", "Marcar como segura", "Tandai aman", "सुरक्षित चिह्नित करें"],
 "폰 공간 정리": ["Storage manager", "ストレージ管理", "Gestor de almacenamiento", "Gerenciador de armazenamento", "Kelola penyimpanan", "स्टोरेज प्रबंधन"],
 "다른 메뉴": ["More", "その他", "Más", "Mais", "Lainnya", "और"],
 "원래 홈 화면으로 되돌리기": ["Restore default home screen", "標準のホーム画面に戻す", "Restaurar pantalla de inicio predeterminada", "Restaurar tela inicial padrão", "Pulihkan layar utama default", "डिफ़ॉल्ट होम स्क्रीन वापस लाएं"],
