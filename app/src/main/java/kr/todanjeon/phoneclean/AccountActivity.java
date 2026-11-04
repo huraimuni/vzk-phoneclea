@@ -101,6 +101,10 @@ public class AccountActivity extends BaseActivity {
     private void deleteAccount(final FirebaseUser u) {
         final String uid = u.getUid();
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // 부모로서 남긴 점검 리포트 기록도 함께 지운다
+        db.collection("alerts").whereEqualTo("parentUid", uid).get().addOnSuccessListener(qa -> {
+            for (QueryDocumentSnapshot d : qa) d.getReference().delete();
+        });
         db.collection("links").whereEqualTo("parentUid", uid).get().addOnCompleteListener(t1 -> {
             if (t1.isSuccessful()) for (QueryDocumentSnapshot d : t1.getResult()) d.getReference().delete();
             db.collection("links").whereEqualTo("childUid", uid).get().addOnCompleteListener(t2 -> {
