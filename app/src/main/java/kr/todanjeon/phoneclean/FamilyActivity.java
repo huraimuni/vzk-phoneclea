@@ -171,7 +171,7 @@ public class FamilyActivity extends BaseActivity {
         if (n == 0) box.addView(Ui.text(this, getString(R.string.members_empty), 14, Ui.GRAY, false));
 
         if (!asChild.isEmpty()) {
-            Button rp = Ui.button(this, Tr.t("📋 부모님 폰 점검 리포트"), Color.WHITE, Ui.INK);
+            Button rp = Ui.button(this, Tr.t("📋 부모님 폰 확인 결과 보기"), Color.WHITE, Ui.INK);
             rp.setOnClickListener(v -> startActivity(new Intent(this, ReportActivity.class)));
             LinearLayout.LayoutParams lr = lp();
             lr.topMargin = Ui.dp(this, 22);
@@ -359,7 +359,7 @@ public class FamilyActivity extends BaseActivity {
         b.setOrientation(LinearLayout.VERTICAL);
         b.setPadding(0, Ui.dp(this, 10), 0, Ui.dp(this, 4));
         final boolean on = Report.on(this);
-        Button t = Ui.button(this, Tr.t(on ? "자녀에게 위험 앱 알림: 켜짐 (끄기)" : "자녀에게 위험 앱 알림 켜기"), on ? Color.WHITE : Ui.GREEN, on ? Ui.INK : Color.WHITE);
+        Button t = Ui.button(this, Tr.t(on ? "자녀에게 위험한 앱 알려주기: 켜짐 (끄려면 누르세요)" : "자녀에게 위험한 앱 알려주기 켜기"), on ? Color.WHITE : Ui.GREEN, on ? Ui.INK : Color.WHITE);
         t.setTextSize(14);
         t.setOnClickListener(v -> {
             if (on) {

@@ -26,7 +26,7 @@ public class AdsGuideActivity extends BaseActivity {
         root.setOrientation(LinearLayout.VERTICAL);
         Ui.fit(root);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, Tr.t("광고·알고리즘 정리"), Tr.t("이상한 광고가 계속 나올 때 순서대로 따라 하세요")));
+        root.addView(Ui.header(this, Tr.t("광고 줄이기"), Tr.t("이상한 광고가 계속 나올 때 순서대로 따라 하세요")));
 
         ScrollView sv = new ScrollView(this);
         LinearLayout body = new LinearLayout(this);

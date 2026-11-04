@@ -22,7 +22,7 @@ public class EmergencyActivity extends BaseActivity {
         root.setOrientation(LinearLayout.VERTICAL);
         Ui.fit(root);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, Tr.t("응급 가이드"), Tr.t("폰이 멈추고 조작이 안 될 때 순서대로")));
+        root.addView(Ui.header(this, Tr.t("응급 도움말"), Tr.t("폰이 멈추고 눌러도 반응이 없을 때, 순서대로 따라 하세요")));
 
         ScrollView sv = new ScrollView(this);
         LinearLayout body = new LinearLayout(this);

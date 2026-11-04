@@ -120,7 +120,7 @@ public class AnalysisActivity extends BaseActivity {
         why.setPadding(0, Ui.dp(this, 10), 0, Ui.dp(this, 8));
         box.addView(why);
 
-        Button del = Ui.button(this, Tr.t("이 앱 삭제"), Ui.RED, Color.WHITE);
+        Button del = Ui.button(this, Tr.t("이 앱 지우기"), Ui.RED, Color.WHITE);
         del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,7 +131,7 @@ public class AnalysisActivity extends BaseActivity {
                 }
             }
         });
-        Button pause = Ui.button(this, Tr.t("일시 중지 (백그라운드 종료)"), Ui.CORAL, Color.WHITE);
+        Button pause = Ui.button(this, Tr.t("이 앱 잠시 멈추기"), Ui.CORAL, Color.WHITE);
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,7 +144,7 @@ public class AnalysisActivity extends BaseActivity {
                 }
             }
         });
-        Button safe = Ui.button(this, Tr.t("내가 아는 안전한 앱 (표시하고 닫기)"), Ui.GREEN, Color.WHITE);
+        Button safe = Ui.button(this, Tr.t("내가 아는 안전한 앱이에요"), Ui.GREEN, Color.WHITE);
         safe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,7 +158,7 @@ public class AnalysisActivity extends BaseActivity {
                 finish();
             }
         });
-        Button info2 = Ui.button(this, Tr.t("앱 정보 열기"), Color.rgb(226, 230, 244), Ui.NAVY);
+        Button info2 = Ui.button(this, Tr.t("이 앱 정보 보기"), Color.rgb(226, 230, 244), Ui.NAVY);
         info2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

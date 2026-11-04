@@ -141,7 +141,7 @@ public class MainActivity extends BaseActivity {
         root.setBackgroundColor(Ui.BG);
 
         root.addView(Ui.header(this, Tr.t("VZK 폰클린"),
-                Tr.t("광고로 깔린 의심 앱을 찾아 한 번에 정리합니다")));
+                Tr.t("광고로 깔린 수상한 앱을 찾아 한 번에 지워 드려요")));
 
         accountBar = Ui.text(this, "", 14, Color.WHITE, true);
         accountBar.setPadding(Ui.dp(this, 14), Ui.dp(this, 9), Ui.dp(this, 14), Ui.dp(this, 9));
@@ -158,7 +158,7 @@ public class MainActivity extends BaseActivity {
         LinearLayout top = new LinearLayout(this);
         top.setOrientation(LinearLayout.VERTICAL);
 
-        summary = Ui.text(this, Tr.t("앱을 분석하는 중입니다..."), 15, Ui.INK, true);
+        summary = Ui.text(this, Tr.t("폰을 살펴보는 중입니다..."), 15, Ui.INK, true);
         summary.setPadding(Ui.dp(this, 14), Ui.dp(this, 10), Ui.dp(this, 14), Ui.dp(this, 6));
         top.addView(summary);
 
@@ -166,7 +166,7 @@ public class MainActivity extends BaseActivity {
         usageHint.setPadding(Ui.dp(this, 14), 0, Ui.dp(this, 14), Ui.dp(this, 2));
         top.addView(usageHint);
 
-        btnPause = Ui.button(this, Tr.t("1단계 ▸ 원클릭 전체 일시 중지"), Ui.CORAL, Color.WHITE);
+        btnPause = Ui.button(this, Tr.t("1단계  다른 앱 모두 잠시 멈추기"), Ui.CORAL, Color.WHITE);
         btnPause.setTextSize(19);
         btnPause.setPadding(Ui.dp(this, 10), Ui.dp(this, 18), Ui.dp(this, 10), Ui.dp(this, 18));
         btnPause.setOnClickListener(new View.OnClickListener() {
@@ -181,7 +181,7 @@ public class MainActivity extends BaseActivity {
         top.addView(btnPause, plp);
 
         TextView pauseNote = Ui.text(this,
-                Tr.t("이 앱, 시스템 앱, 키보드·홈 화면·문자·전화 앱은 빼고 모두 멈춥니다"),
+                Tr.t("이 앱과 꼭 필요한 앱(키보드·홈 화면·문자·전화)만 빼고 나머지를 모두 잠시 멈춥니다"),
                 12, Ui.GRAY, false);
         pauseNote.setPadding(Ui.dp(this, 14), Ui.dp(this, 4), Ui.dp(this, 14), 0);
         top.addView(pauseNote);
@@ -206,7 +206,7 @@ public class MainActivity extends BaseActivity {
         pauseRow.setGravity(Gravity.CENTER_VERTICAL);
         pauseRow.setPadding(Ui.dp(this, 12), Ui.dp(this, 4), Ui.dp(this, 12), Ui.dp(this, 2));
         cbKeep = new CheckBox(this);
-        cbKeep.setText(Tr.t("정지 유지 (4초마다 반복, 카톡 알림이 늦을 수 있음)"));
+        cbKeep.setText(Tr.t("계속 멈춰 두기 (카톡 알림이 늦게 올 수 있어요)"));
         cbKeep.setTextSize(13);
         cbKeep.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -216,7 +216,7 @@ public class MainActivity extends BaseActivity {
             }
         });
         pauseRow.addView(cbKeep, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-        Button homeBtn = Ui.button(this, Tr.t("기본 홈 화면 되돌리기"), Color.rgb(226, 230, 244), Ui.NAVY);
+        Button homeBtn = Ui.button(this, Tr.t("원래 홈 화면으로 되돌리기"), Color.rgb(226, 230, 244), Ui.NAVY);
         homeBtn.setTextSize(12);
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,7 +230,7 @@ public class MainActivity extends BaseActivity {
         LinearLayout row1 = new LinearLayout(this);
         row1.setOrientation(LinearLayout.HORIZONTAL);
         row1.setPadding(Ui.dp(this, 8), 0, Ui.dp(this, 8), 0);
-        btnFilter = Ui.button(this, Tr.t("전체 앱 보기"), Color.rgb(226, 230, 244), Ui.NAVY);
+        btnFilter = Ui.button(this, Tr.t("모든 앱 보기"), Color.rgb(226, 230, 244), Ui.NAVY);
         btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -238,7 +238,7 @@ public class MainActivity extends BaseActivity {
                 applyFilter();
             }
         });
-        Button btnSelect = Ui.button(this, Tr.t("의심 앱 선택"), Color.rgb(255, 226, 214), Ui.CORAL_DARK);
+        Button btnSelect = Ui.button(this, Tr.t("수상한 앱 고르기"), Color.rgb(255, 226, 214), Ui.CORAL_DARK);
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -251,7 +251,7 @@ public class MainActivity extends BaseActivity {
             }
         });
         row1.addView(btnFilter, Ui.weight(this, 3));
-        Button btnClear = Ui.button(this, Tr.t("선택 해제"), Color.rgb(226, 230, 244), Ui.NAVY);
+        Button btnClear = Ui.button(this, Tr.t("고른 것 취소"), Color.rgb(226, 230, 244), Ui.NAVY);
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -282,7 +282,7 @@ public class MainActivity extends BaseActivity {
         root.addView(listView, new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
 
-        btnDelete = Ui.button(this, Tr.t("2단계 ▸ 선택한 앱 삭제"), Ui.RED, Color.WHITE);
+        btnDelete = Ui.button(this, Tr.t("2단계  고른 앱 지우기"), Ui.RED, Color.WHITE);
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -297,7 +297,7 @@ public class MainActivity extends BaseActivity {
         LinearLayout row2 = new LinearLayout(this);
         row2.setOrientation(LinearLayout.HORIZONTAL);
         row2.setPadding(Ui.dp(this, 8), 0, Ui.dp(this, 8), Ui.dp(this, 6));
-        Button b1 = Ui.button(this, Tr.t("안전 앱으로 표시"), Ui.GREEN, Color.WHITE);
+        Button b1 = Ui.button(this, Tr.t("안전한 앱으로 알려두기"), Ui.GREEN, Color.WHITE);
         b1.setTextSize(13);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -305,7 +305,7 @@ public class MainActivity extends BaseActivity {
                 markSelectedSafe();
             }
         });
-        Button b2 = Ui.button(this, Tr.t("저장공간 관리"), Ui.CORAL, Color.WHITE);
+        Button b2 = Ui.button(this, Tr.t("폰 공간 정리"), Ui.CORAL, Color.WHITE);
         b2.setTextSize(13);
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -313,7 +313,7 @@ public class MainActivity extends BaseActivity {
                 startActivity(new Intent(MainActivity.this, StorageActivity.class));
             }
         });
-        Button b3 = Ui.button(this, Tr.t("더보기"), Ui.NAVY, Color.WHITE);
+        Button b3 = Ui.button(this, Tr.t("다른 메뉴"), Ui.NAVY, Color.WHITE);
         b3.setTextSize(13);
         b3.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -356,13 +356,13 @@ public class MainActivity extends BaseActivity {
     private void startScan() {
         if (scanning) return;
         scanning = true;
-        summary.setText(Tr.t("앱을 분석하는 중입니다..."));
+        summary.setText(Tr.t("폰을 살펴보는 중입니다..."));
         final Runnable progress = new Runnable() {
             @Override
             public void run() {
                 if (!scanning) return;
                 int t = Scanner.progressTotal;
-                if (t > 0) summary.setText(Tr.t("앱을 분석하는 중입니다... ") + Scanner.progressDone + " / " + t);
+                if (t > 0) summary.setText(Tr.t("폰을 살펴보는 중입니다... ") + Scanner.progressDone + " / " + t);
                 handler.postDelayed(this, 400);
             }
         };
@@ -423,7 +423,7 @@ public class MainActivity extends BaseActivity {
             if (!onlySuspicious || e.level() >= AppEntry.LEVEL_WARN) shown.add(e);
         }
         summary.setText(Tr.f(Tr.t("직접 설치한 앱 %d개 중 위험 의심 %d개 / 주의 %d개"), all.size(), high, warn));
-        btnFilter.setText(onlySuspicious ? Tr.t("전체 앱 보기") : Tr.t("의심 앱만 보기"));
+        btnFilter.setText(onlySuspicious ? Tr.t("모든 앱 보기") : Tr.t("수상한 앱만 보기"));
         updateHomeBanner();
         usageHint.setVisibility(View.GONE);
         refreshList();
@@ -432,7 +432,7 @@ public class MainActivity extends BaseActivity {
     private void refreshList() {
         adapter.notifyDataSetChanged();
         int n = selected.size();
-        btnDelete.setText(n == 0 ? Tr.t("2단계 ▸ 선택한 앱 삭제") : Tr.f(Tr.t("2단계 ▸ 선택한 앱 %d개 삭제"), n));
+        btnDelete.setText(n == 0 ? Tr.t("2단계  고른 앱 지우기") : Tr.f(Tr.t("2단계 ▸ 선택한 앱 %d개 삭제"), n));
     }
 
     private int levelColor(AppEntry e) {
@@ -544,7 +544,7 @@ public class MainActivity extends BaseActivity {
                     if (((CheckBox) v).isChecked()) selected.add(e.pkg);
                     else selected.remove(e.pkg);
                     int n = selected.size();
-                    btnDelete.setText(n == 0 ? Tr.t("2단계 ▸ 선택한 앱 삭제") : Tr.f(Tr.t("2단계 ▸ 선택한 앱 %d개 삭제"), n));
+                    btnDelete.setText(n == 0 ? Tr.t("2단계  고른 앱 지우기") : Tr.f(Tr.t("2단계 ▸ 선택한 앱 %d개 삭제"), n));
                 }
             });
             return row;
@@ -716,7 +716,7 @@ public class MainActivity extends BaseActivity {
                         on[which] = isChecked;
                     }
                 })
-                .setPositiveButton(Tr.t("안전 표시 해제"), new DialogInterface.OnClickListener() {
+                .setPositiveButton(Tr.t("안전 표시 취소"), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         List<String> rm = new ArrayList<>();
@@ -729,12 +729,12 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showMore() {
-        final String[] base0 = {getString(R.string.home_family_btn), getString(R.string.btn_language), Tr.t("내 계정"), Tr.t("응급 가이드 (폰이 멈췄을 때)"), Tr.t("광고·알고리즘 정리"), Tr.t("알림 정리 (알림 비우기·끄기)"), Tr.t("안전 표시한 앱 관리"),
-                watchOn() ? Tr.t("새 앱 즉시 분석 알림 끄기 (감시 중)") : Tr.t("새 앱 즉시 분석 알림 켜기 (감시)"),
-                Tr.t("결과 공유 (카카오톡 등)"), Tr.t("오류 보고·건의하기"), Tr.t("업데이트 확인"), Tr.t("도움말")};
+        final String[] base0 = {getString(R.string.home_family_btn), getString(R.string.btn_language), Tr.t("내 계정"), Tr.t("폰이 이상할 때 (응급 도움말)"), Tr.t("광고 줄이기"), Tr.t("알림 정리하기"), Tr.t("안전하다고 알려둔 앱 보기"),
+                watchOn() ? Tr.t("새 앱 알려주기 끄기 (지금 켜져 있음)") : Tr.t("새 앱이 깔리면 바로 알려주기 켜기"),
+                Tr.t("결과를 카톡으로 보내기"), Tr.t("문제 알리기 · 의견 보내기"), Tr.t("새 버전 확인하기"), Tr.t("도움말")};
         final boolean scam = Lang.useNaver(this);
         java.util.ArrayList<String> bl = new java.util.ArrayList<>(java.util.Arrays.asList(base0));
-        if (scam) bl.add(3, "🛡 보이스피싱·스미싱 점검");
+        if (scam) bl.add(3, "🛡 사기 전화·문자 확인하기");
         final String[] base = bl.toArray(new String[0]);
         final int baseN = base.length - (scam ? 1 : 0);
         final boolean adm = Admin.is;
@@ -742,7 +742,7 @@ public class MainActivity extends BaseActivity {
         for (int i = 0; i < base.length; i++) items[i + (adm ? 1 : 0)] = base[i];
         if (adm) items[0] = "👑 관리자";
         new AlertDialog.Builder(this)
-                .setTitle(Tr.t("더보기"))
+                .setTitle(Tr.t("다른 메뉴"))
                 .setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -870,7 +870,7 @@ public class MainActivity extends BaseActivity {
         sb.append(Tr.t("\n[홈 설정 열기]를 누르고, [기본 홈 앱]에서 위 기본 앱을 선택하세요. "))
                 .append(Tr.t("끝나면 바뀌어 있던 런처 앱은 목록에서 삭제하시면 됩니다."));
         new AlertDialog.Builder(this)
-                .setTitle(Tr.t("기본 홈 화면 되돌리기"))
+                .setTitle(Tr.t("원래 홈 화면으로 되돌리기"))
                 .setMessage(sb.toString())
                 .setPositiveButton(Tr.t("홈 설정 열기"), new DialogInterface.OnClickListener() {
                     @Override
@@ -924,7 +924,7 @@ public class MainActivity extends BaseActivity {
         actions.setOrientation(LinearLayout.VERTICAL);
         actions.setPadding(0, Ui.dp(this, 10), 0, 0);
 
-        Button del = Ui.button(this, Tr.t("이 앱 삭제"), Ui.RED, Color.WHITE);
+        Button del = Ui.button(this, Tr.t("이 앱 지우기"), Ui.RED, Color.WHITE);
         del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -934,14 +934,14 @@ public class MainActivity extends BaseActivity {
                 beginDelete(one);
             }
         });
-        Button info2 = Ui.button(this, Tr.t("앱 정보 열기 (설정)"), Color.rgb(226, 230, 244), Ui.NAVY);
+        Button info2 = Ui.button(this, Tr.t("이 앱 정보 보기"), Color.rgb(226, 230, 244), Ui.NAVY);
         info2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openAppInfo(e.pkg);
             }
         });
-        Button naver = Ui.button(this, Tr.t("네이버에서 앱 이름 검색"), Color.rgb(222, 245, 232), Color.rgb(10, 110, 60));
+        Button naver = Ui.button(this, Tr.t("네이버에서 이 앱 찾아보기"), Color.rgb(222, 245, 232), Color.rgb(10, 110, 60));
         naver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -949,7 +949,7 @@ public class MainActivity extends BaseActivity {
                         + Uri.encode(e.label + " 앱"));
             }
         });
-        Button google = Ui.button(this, Tr.t("구글에서 앱 이름 검색"), Color.rgb(224, 236, 255), Color.rgb(25, 80, 190));
+        Button google = Ui.button(this, Tr.t("구글에서 이 앱 찾아보기"), Color.rgb(224, 236, 255), Color.rgb(25, 80, 190));
         google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -957,7 +957,7 @@ public class MainActivity extends BaseActivity {
                         + Uri.encode(e.label + " 앱"));
             }
         });
-        Button safeBtn = Ui.button(this, e.safe ? Tr.t("안전 표시 해제") : Tr.t("안전한 앱으로 표시 (목록에서 제외)"),
+        Button safeBtn = Ui.button(this, e.safe ? Tr.t("안전 표시 취소") : Tr.t("안전한 앱이에요 (목록에서 빼기)"),
                 Color.rgb(222, 245, 232), Color.rgb(10, 110, 60));
         safeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -968,7 +968,7 @@ public class MainActivity extends BaseActivity {
                 setSafe(one, !e.safe);
             }
         });
-        Button aiBtn = Ui.button(this, Lang.useNaver(this) ? Tr.t("AI에게 물어보기 (질문 복사 + 네이버 검색)") : Tr.t("AI에게 물어보기 (질문 복사 + 구글 검색)"),
+        Button aiBtn = Ui.button(this, Lang.useNaver(this) ? Tr.t("인공지능에게 물어보기") : Tr.t("인공지능에게 물어보기"),
                 Color.rgb(237, 231, 255), Color.rgb(80, 50, 170));
         aiBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1086,7 +1086,7 @@ public class MainActivity extends BaseActivity {
                 .setTitle(Tr.f(Tr.t("삭제되지 않은 앱 %d개"), bad.size()))
                 .setMessage(sb
                         + Tr.t("\n삭제 확인 창에서 [취소]를 눌렀거나, 앱이 스스로를 지키고 있는 경우입니다.\n\n[기기 관리자]나 [접근성]으로 등록된 앱은 그 권한을 먼저 끄고 나서 삭제해야 합니다.\n1) 아래 [기기 관리자 설정]이나 [접근성 설정]에서 해당 앱을 끄기\n2) 앱 정보를 열어 [삭제] 누르기\n그래도 안 지워지면 폰을 안전 모드로 켜서 삭제해 보세요."))
-                .setPositiveButton(Tr.t("앱 정보 열기"), new DialogInterface.OnClickListener() {
+                .setPositiveButton(Tr.t("이 앱 정보 보기"), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         openAppInfo(bad.get(0));
@@ -1134,7 +1134,7 @@ public class MainActivity extends BaseActivity {
         Intent send = new Intent(Intent.ACTION_SEND);
         send.setType("text/plain");
         send.putExtra(Intent.EXTRA_TEXT, sb.toString());
-        startActivity(Intent.createChooser(send, Tr.t("결과 공유 (카카오톡 등)")));
+        startActivity(Intent.createChooser(send, Tr.t("결과를 카톡으로 보내기")));
     }
 
     private void showHelp() {
@@ -1231,7 +1231,7 @@ public class MainActivity extends BaseActivity {
     private void showFeedback() {
         final String[] items = {Tr.t("오류 내용 보내기 (카톡·문자 등으로 공유)"), Tr.t("건의하기 (카페 게시판 열기)")};
         new AlertDialog.Builder(this)
-                .setTitle(Tr.t("오류 보고·건의하기"))
+                .setTitle(Tr.t("문제 알리기 · 의견 보내기"))
                 .setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface d, int which) {

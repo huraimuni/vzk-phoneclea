@@ -28,7 +28,7 @@ public class StorageActivity extends BaseActivity {
         root.setOrientation(LinearLayout.VERTICAL);
         Ui.fit(root);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, Tr.t("저장공간 관리"), Tr.t("저장공간 사용량을 보고 정리하러 갑니다")));
+        root.addView(Ui.header(this, Tr.t("폰 공간 정리"), Tr.t("저장공간 사용량을 보고 정리하러 갑니다")));
 
         ScrollView sv = new ScrollView(this);
         LinearLayout body = new LinearLayout(this);

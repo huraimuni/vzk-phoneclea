@@ -34,7 +34,7 @@ public class ReportActivity extends BaseActivity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, Tr.t("부모님 폰 점검 리포트"), getString(R.string.version_line, BuildConfig.VERSION_NAME)));
+        root.addView(Ui.header(this, Tr.t("부모님 폰 확인 결과"), getString(R.string.version_line, BuildConfig.VERSION_NAME)));
         ScrollView sv = new ScrollView(this);
         box = new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);

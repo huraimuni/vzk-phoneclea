@@ -40,7 +40,7 @@ public class ScamActivity extends BaseActivity {
         root.setOrientation(LinearLayout.VERTICAL);
         Ui.fit(root);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, "보이스피싱·스미싱 점검", "참고용 점검입니다. 최종 판단은 직접 하세요"));
+        root.addView(Ui.header(this, "사기 전화·문자 확인하기", "참고용입니다. 마지막 판단은 직접 하세요"));
         ScrollView sv = new ScrollView(this);
         body = new LinearLayout(this);
         body.setOrientation(LinearLayout.VERTICAL);
@@ -145,7 +145,7 @@ public class ScamActivity extends BaseActivity {
         input.setBackground(Ui.round(Color.WHITE, 10, this));
         input.setPadding(Ui.dp(this, 12), Ui.dp(this, 10), Ui.dp(this, 12), Ui.dp(this, 10));
         body.addView(input, lp(8));
-        Button go = Ui.button(this, "점검하기", Ui.CORAL, Color.WHITE);
+        Button go = Ui.button(this, "확인하기", Ui.CORAL, Color.WHITE);
         go.setOnClickListener(v -> runText());
         body.addView(go, lp(8));
         textResult = new LinearLayout(this);
@@ -186,7 +186,7 @@ public class ScamActivity extends BaseActivity {
     private void buildPhone() {
         section("🔍 내 폰 위험 징후 점검");
         body.addView(Ui.text(this, "보이스피싱 앱이 흔히 쓰는 수법(원격 제어 앱, 접근성·기기 관리자·화면 덮기 권한, 출처 불명 설치)을 찾습니다. 결과는 폰 밖으로 나가지 않습니다.", 14, Ui.GRAY, false));
-        phoneBtn = Ui.button(this, "지금 점검하기", Ui.CORAL, Color.WHITE);
+        phoneBtn = Ui.button(this, "지금 확인하기", Ui.CORAL, Color.WHITE);
         phoneBtn.setOnClickListener(v -> runPhone());
         body.addView(phoneBtn, lp(8));
         phoneResult = new LinearLayout(this);
@@ -282,7 +282,7 @@ public class ScamActivity extends BaseActivity {
             StringBuilder sb = new StringBuilder();
             for (String w : f.why) sb.append("• ").append(w).append('\n');
             card.addView(Ui.text(this, sb.toString().trim(), 14, Ui.INK, false));
-            Button del = Ui.button(this, "삭제하기", Color.WHITE, Ui.RED);
+            Button del = Ui.button(this, "지우기", Color.WHITE, Ui.RED);
             del.setTextSize(13);
             del.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + f.e.pkg))));
             card.addView(del, lp(6));
