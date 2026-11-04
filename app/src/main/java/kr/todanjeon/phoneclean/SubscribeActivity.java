@@ -120,7 +120,8 @@ public class SubscribeActivity extends BaseActivity implements PurchasesUpdatedL
         QueryProductDetailsParams.Product p = QueryProductDetailsParams.Product.newBuilder()
                 .setProductId(Access.PRODUCT_ID).setProductType(BillingClient.ProductType.SUBS).build();
         bc.queryProductDetailsAsync(QueryProductDetailsParams.newBuilder().setProductList(Collections.singletonList(p)).build(),
-                (br, list) -> {
+                (br, res) -> {
+                    List<ProductDetails> list = res == null ? null : res.getProductDetailsList();
                     if (list == null || list.isEmpty()) return;
                     details = list.get(0);
                     List<ProductDetails.SubscriptionOfferDetails> offers = details.getSubscriptionOfferDetails();
