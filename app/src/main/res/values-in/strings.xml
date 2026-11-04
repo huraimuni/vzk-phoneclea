@@ -54,7 +54,7 @@ Berlaku %2$d menit, sekali pakai. Beri tahu keluarga atau tunjukkan QR.</string>
     <string name="share_stop">Hentikan</string>
     <string name="consent_title">%1$s ingin melihat layar Anda</string>
     <string name="consent_warn">⚠ Izinkan hanya jika ANDA yang meminta bantuan orang ini. Penipu bisa meminta Anda berbagi layar. Jangan izinkan jika orang asing, bank, atau polisi yang meminta.</string>
-    <string name="consent_privacy">Layar dikirim langsung ke orang ini dan tidak direkam atau disimpan. Tutup dulu kata sandi dan aplikasi bank. Anda dapat menghentikan kapan saja (maks. 15 menit).</string>
+    <string name="consent_privacy">Layar dikirim langsung ke orang ini dan tidak direkam atau disimpan. Tutup dulu kata sandi dan aplikasi bank. Anda dapat menghentikan kapan saja (maks. 30 menit).</string>
     <string name="btn_allow">IZINKAN</string>
     <string name="btn_deny">TOLAK</string>
     <string name="btn_ask_help">🖥 Minta lihat layarnya</string>

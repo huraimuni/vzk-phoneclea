@@ -56,7 +56,7 @@ public class DupContactsActivity extends BaseActivity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, Tr.t("중복 연락처"), Tr.t("같은 전화번호가 들어 있는 연락처끼리 묶었습니다")));
+        root.addView(Ui.header(this, Tr.t("똑같은 연락처"), Tr.t("같은 전화번호끼리 묶어 보여 드려요")));
 
         summary = Ui.text(this, "", 15, Ui.INK, true);
         summary.setPadding(Ui.dp(this, 14), Ui.dp(this, 10), Ui.dp(this, 14), Ui.dp(this, 4));
@@ -71,7 +71,7 @@ public class DupContactsActivity extends BaseActivity {
         LinearLayout row1 = new LinearLayout(this);
         row1.setOrientation(LinearLayout.HORIZONTAL);
         row1.setPadding(Ui.dp(this, 8), 0, Ui.dp(this, 8), 0);
-        Button recommend = Ui.button(this, Tr.t("추천대로 선택"), Color.rgb(255, 226, 214), Ui.CORAL_DARK);
+        Button recommend = Ui.button(this, Tr.t("추천대로 고르기"), Color.rgb(255, 226, 214), Ui.CORAL_DARK);
         recommend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +80,7 @@ public class DupContactsActivity extends BaseActivity {
                 updateButtons();
             }
         });
-        Button clear = Ui.button(this, Tr.t("선택 해제"), Color.rgb(226, 230, 244), Ui.NAVY);
+        Button clear = Ui.button(this, Tr.t("고른 것 취소"), Color.rgb(226, 230, 244), Ui.NAVY);
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +99,7 @@ public class DupContactsActivity extends BaseActivity {
         lv.setAdapter(adapter);
         root.addView(lv, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
 
-        btnDelete = Ui.button(this, Tr.t("선택한 연락처 삭제"), Ui.RED, Color.WHITE);
+        btnDelete = Ui.button(this, Tr.t("고른 연락처 지우기"), Ui.RED, Color.WHITE);
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -283,7 +283,7 @@ public class DupContactsActivity extends BaseActivity {
 
     private void updateButtons() {
         int n = checked.size();
-        btnDelete.setText(n == 0 ? Tr.t("선택한 연락처 삭제") : Tr.f(Tr.t("선택한 %d건 삭제"), n));
+        btnDelete.setText(n == 0 ? Tr.t("고른 연락처 지우기") : Tr.f(Tr.t("선택한 %d건 삭제"), n));
     }
 
     private final class RowAdapter extends BaseAdapter {

@@ -54,7 +54,7 @@ Válido %2$d minutos, un solo uso. Díselo a tu familiar o muestra el QR.</strin
     <string name="share_stop">Detener</string>
     <string name="consent_title">%1$s quiere ver tu pantalla</string>
     <string name="consent_warn">⚠ Permite solo si TÚ pediste ayuda a esta persona. Los estafadores (vishing) pueden pedirte compartir pantalla. Nunca lo hagas si te lo pide un desconocido, banco o policía.</string>
-    <string name="consent_privacy">Tu pantalla se envía solo a esta persona y no se graba ni se guarda. Cierra antes las contraseñas y apps bancarias. Puedes detenerlo cuando quieras (máx. 15 minutos).</string>
+    <string name="consent_privacy">Tu pantalla se envía solo a esta persona y no se graba ni se guarda. Cierra antes las contraseñas y apps bancarias. Puedes detenerlo cuando quieras (máx. 30 minutos).</string>
     <string name="btn_allow">PERMITIR</string>
     <string name="btn_deny">RECHAZAR</string>
     <string name="btn_ask_help">🖥 Pedir ver su pantalla</string>

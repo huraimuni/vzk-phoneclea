@@ -24,7 +24,7 @@ public class AccountActivity extends BaseActivity {
         root.setOrientation(LinearLayout.VERTICAL);
         Ui.fit(root);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, Tr.t("내 계정"), Tr.t("로그인 정보 확인 · 로그아웃 · 계정 삭제")));
+        root.addView(Ui.header(this, Tr.t("내 계정"), Tr.t("로그인 확인 · 로그아웃 · 계정 지우기")));
         ScrollView sv = new ScrollView(this);
         body = new LinearLayout(this);
         body.setOrientation(LinearLayout.VERTICAL);
@@ -88,7 +88,7 @@ public class AccountActivity extends BaseActivity {
         LinearLayout.LayoutParams l = lp();
         l.topMargin = Ui.dp(this, 24);
         body.addView(out, l);
-        android.widget.Button del = Ui.button(this, Tr.t("계정 삭제"), Color.WHITE, Ui.RED);
+        android.widget.Button del = Ui.button(this, Tr.t("계정 지우기"), Color.WHITE, Ui.RED);
         del.setOnClickListener(v -> new AlertDialog.Builder(this)
                 .setTitle(Tr.t("계정을 삭제할까요?"))
                 .setMessage(Tr.t("내 계정 정보와 가족 연결이 삭제되며 되돌릴 수 없습니다."))

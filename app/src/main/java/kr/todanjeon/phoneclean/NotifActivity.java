@@ -45,7 +45,7 @@ public class NotifActivity extends BaseActivity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, Tr.t("알림 정리"), Tr.t("알림이 많이 오는 앱을 찾아 끄거나 비웁니다")));
+        root.addView(Ui.header(this, Tr.t("알림 정리하기"), Tr.t("알림이 많이 오는 앱을 찾아 끄거나 지워 드려요")));
 
         ScrollView sv = new ScrollView(this);
         body = new LinearLayout(this);
@@ -66,7 +66,7 @@ public class NotifActivity extends BaseActivity {
                 + "거기서 스위치를 끄세요. 이 앱이 대신 꺼 줄 수는 없습니다. 의심 순으로 보여 드립니다."), 14, Ui.INK, false);
         d.setLineSpacing(0, 1.2f);
         body.addView(d);
-        Button all = Ui.button(this, Tr.t("폰 전체 앱 알림 설정 열기"), Ui.NAVY, Color.WHITE);
+        Button all = Ui.button(this, Tr.t("폰의 알림 설정 열기"), Ui.NAVY, Color.WHITE);
         all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,7 +134,7 @@ public class NotifActivity extends BaseActivity {
                     + "- 이 권한은 악성 앱도 노리는 권한이라, 쓰고 나면 다시 꺼 두기를 권합니다."), 14, Ui.INK, false);
             t.setLineSpacing(0, 1.2f);
             stackBox.addView(t);
-            Button b = Ui.button(this, Tr.t("알림 접근 허용하러 가기"), Ui.AMBER, Color.WHITE);
+            Button b = Ui.button(this, Tr.t("알림 보기 허용하러 가기"), Ui.AMBER, Color.WHITE);
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -186,7 +186,7 @@ public class NotifActivity extends BaseActivity {
         for (final Map.Entry<String, Integer> en : counts.entrySet()) {
             CheckBox cb = new CheckBox(this);
             cb.setText(labelOf(en.getKey()) + Tr.f(Tr.t("  (%d개)"), en.getValue()));
-            cb.setTextSize(15);
+            cb.setTextSize(17);
             cb.setChecked(true);
             cb.setOnCheckedChangeListener(new android.widget.CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -197,7 +197,7 @@ public class NotifActivity extends BaseActivity {
             });
             stackBox.addView(cb);
         }
-        Button clear = Ui.button(this, Tr.t("선택한 앱의 알림 비우기"), Ui.CORAL, Color.WHITE);
+        Button clear = Ui.button(this, Tr.t("고른 앱의 알림 지우기"), Ui.CORAL, Color.WHITE);
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,7 +254,7 @@ public class NotifActivity extends BaseActivity {
             mid.addView(Ui.text(this, e.levelText(), 12, e.level() == AppEntry.LEVEL_HIGH ? Ui.RED
                     : e.level() == AppEntry.LEVEL_WARN ? Ui.AMBER : Ui.GRAY, false));
             row.addView(mid, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-            Button b = Ui.button(this, Tr.t("알림 끄기"), Ui.NAVY, Color.WHITE);
+            Button b = Ui.button(this, Tr.t("이 앱 알림 끄기"), Ui.NAVY, Color.WHITE);
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

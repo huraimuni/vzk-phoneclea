@@ -27,7 +27,7 @@ public class StorageActivity extends BaseActivity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(Ui.BG);
-        root.addView(Ui.header(this, Tr.t("저장공간 관리"), Tr.t("겹치는 사진·영상과 연락처를 찾아 정리합니다")));
+        root.addView(Ui.header(this, Tr.t("폰 공간 정리"), Tr.t("똑같은 사진·영상과 연락처를 찾아 정리해 드려요")));
 
         ScrollView sv = new ScrollView(this);
         LinearLayout body = new LinearLayout(this);
@@ -45,7 +45,7 @@ public class StorageActivity extends BaseActivity {
         blp.setMargins(0, Ui.dp(this, 6), 0, Ui.dp(this, 14));
         body.addView(bar, blp);
 
-        addCard(body, Tr.t("중복 사진·영상"),
+        addCard(body, Tr.t("똑같은 사진·영상"),
                 Tr.t("같은 내용인데 여러 번 저장된 사진과 영상을 묶어서 보여 줍니다. "
                         + "남길 파일 1개만 빼고 나머지를 휴지통으로 보낼 수 있습니다. (휴지통 30일 보관, 안드로이드 11 이상)"),
                 Tr.t("중복 사진·영상 찾기"), Ui.CORAL, new Runnable() {
@@ -55,7 +55,7 @@ public class StorageActivity extends BaseActivity {
                     }
                 });
 
-        addCard(body, Tr.t("중복 연락처"),
+        addCard(body, Tr.t("똑같은 연락처"),
                 Tr.t("같은 전화번호가 여러 연락처에 들어 있는 경우를 묶어서 보여 줍니다. "
                         + "삭제하면 되돌릴 수 없으니, 먼저 구글 연락처 앱에서 내보내기(백업)를 해 두세요."),
                 Tr.t("중복 연락처 찾기"), Ui.GREEN, new Runnable() {

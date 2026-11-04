@@ -54,7 +54,7 @@
     <string name="share_stop">停止</string>
     <string name="consent_title">%1$s さんがあなたの画面を見ようとしています</string>
     <string name="consent_warn">⚠ あなたが相談した相手の場合のみ許可してください。銀行・警察・見知らぬ人が画面共有を求めたら詐欺です。絶対に許可しないでください。</string>
-    <string name="consent_privacy">画面はこの人にだけ直接送られ、録画・保存されません。パスワードや銀行アプリが見えることがあるので先に閉じてください。いつでも停止でき、最大15分で自動終了します。</string>
+    <string name="consent_privacy">画面はこの人にだけ直接送られ、録画・保存されません。パスワードや銀行アプリが見えることがあるので先に閉じてください。いつでも停止でき、最大30分で自動終了します。</string>
     <string name="btn_allow">許可</string>
     <string name="btn_deny">拒否</string>
     <string name="btn_ask_help">🖥 画面を見せてもらう</string>

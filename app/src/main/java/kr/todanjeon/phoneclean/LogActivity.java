@@ -91,7 +91,7 @@ public class LogActivity extends BaseActivity {
             if (Auth.uid().equals(d.getString("parentUid"))) {
                 anyMine = true;
                 Button del = Ui.button(this, getString(R.string.btn_delete), Color.WHITE, Ui.RED);
-                del.setTextSize(12);
+                del.setTextSize(16);
                 del.setOnClickListener(v -> d.getReference().delete().addOnSuccessListener(x -> load()));
                 box.addView(del, new LinearLayout.LayoutParams(-2, -2));
             }
