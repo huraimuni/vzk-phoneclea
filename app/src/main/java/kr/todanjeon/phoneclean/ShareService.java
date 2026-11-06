@@ -69,6 +69,49 @@ public class ShareService extends Service {
     private Guide guide;
     private ListenerRegistration l3;
 
+    private int capW, capH;
+
+    private final Runnable sizeWatch = new Runnable() {
+        @Override
+        public void run() {
+            if (ended || capturer == null) return;
+            try {
+                int[] sz = realSize();
+                if (sz[0] != capW || sz[1] != capH) {
+                    capW = sz[0];
+                    capH = sz[1];
+                    capturer.changeCaptureFormat(capW, capH, 15);
+                }
+            } catch (Throwable ignored) {
+            }
+            h.postDelayed(this, 1500);
+        }
+    };
+
+    /** 지금 켜져 있는 화면(기본 디스플레이)의 실제 크기. 상태바·내비게이션 바를 포함하고, 짧은 변이 1080을 넘으면 줄이며 가로세로 비율은 유지한다. */
+    private int[] realSize() {
+        int w, hh;
+        try {
+            android.hardware.display.DisplayManager dmg = (android.hardware.display.DisplayManager) getSystemService(DISPLAY_SERVICE);
+            DisplayMetrics dm = new DisplayMetrics();
+            dmg.getDisplay(android.view.Display.DEFAULT_DISPLAY).getRealMetrics(dm);
+            w = dm.widthPixels;
+            hh = dm.heightPixels;
+        } catch (Throwable e) {
+            android.view.WindowManager wm = (android.view.WindowManager) getSystemService(WINDOW_SERVICE);
+            DisplayMetrics dm = new DisplayMetrics();
+            wm.getDefaultDisplay().getRealMetrics(dm);
+            w = dm.widthPixels;
+            hh = dm.heightPixels;
+        }
+        float k = 1080f / Math.min(w, hh);
+        if (k < 1f) {
+            w = Math.round(w * k);
+            hh = Math.round(hh * k);
+        }
+        return new int[]{w & ~1, hh & ~1};
+    }
+
     @Override
     public IBinder onBind(Intent i) {
         return null;
@@ -158,26 +201,12 @@ public class ShareService extends Service {
         sth = SurfaceTextureHelper.create("cap", egl.getEglBaseContext());
         capturer.initialize(sth, this, source.getCapturerObserver());
         // 화면 전체의 실제 크기(상태바·내비게이션 바 포함)로 맞춘다. 앱 영역 크기를 쓰면 가로세로 비율이 어긋나 화면이 늘어나 보인다.
-        int w, hh;
-        android.view.WindowManager wm = (android.view.WindowManager) getSystemService(WINDOW_SERVICE);
-        if (Build.VERSION.SDK_INT >= 30) {
-            android.graphics.Rect bnd = wm.getMaximumWindowMetrics().getBounds();
-            w = bnd.width();
-            hh = bnd.height();
-        } else {
-            DisplayMetrics dm = new DisplayMetrics();
-            wm.getDefaultDisplay().getRealMetrics(dm);
-            w = dm.widthPixels;
-            hh = dm.heightPixels;
-        }
-        float k = 1080f / Math.min(w, hh);
-        if (k < 1f) {
-            w = Math.round(w * k);
-            hh = Math.round(hh * k);
-        }
-        w &= ~1;
-        hh &= ~1;
-        capturer.startCapture(w, hh, 15);
+        int[] sz = realSize();
+        capW = sz[0];
+        capH = sz[1];
+        capturer.startCapture(capW, capH, 15);
+        // 폴더블 폰은 접거나 펼치거나 돌리면 화면 크기가 바뀐다. 바뀌면 캡처 크기도 따라 바꿔야 모양이 늘어나지 않는다.
+        h.postDelayed(sizeWatch, 1500);
         VideoTrack track = factory.createVideoTrack("screen", source);
         pc.addTrack(track, Collections.singletonList("s"));
 
