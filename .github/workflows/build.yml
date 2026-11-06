@@ -68,5 +68,7 @@ jobs:
           name: VZK 폰클린 스토어 버전 테스트
           body: |
             스토어 제출용 버전의 테스트 APK입니다. (민감 권한 기능을 뺀 버전)
-            정식 스토어 파일(AAB)은 Actions 결과물에서 받습니다.
-          files: out/VZK_PhoneClean_store_test.apk
+            정식 스토어 파일(AAB, 플레이 콘솔 업로드용)도 이 릴리스에 함께 올라옵니다.
+          files: |
+            out/VZK_PhoneClean_store_test.apk
+            out/VZK_PhoneClean_store.aab
