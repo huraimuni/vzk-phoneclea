@@ -118,7 +118,29 @@ public class StandbyService extends Service {
                 });
     }
 
-    private void handle(DocumentSnapshot d) {
+    /** 연결된 가족이 있으면 대기 서비스를 켠다. 앱을 처음 열었을 때도 요청을 바로 받도록 한다. */
+    static void refreshParent(final Context c) {
+        try {
+            String me = Auth.uid();
+            if (me == null) return;
+            FirebaseFirestore.getInstance().collection("links").whereEqualTo("parentUid", me).whereEqualTo("status", "active").limit(1).get()
+                    .addOnSuccessListener(q -> {
+                        setParent(c, !q.isEmpty());
+                        if (!q.isEmpty()) ensure(c);
+                    });
+        } catch (Throwable ignored) {
+        }
+    }
+
+    private void handle(final DocumentSnapshot d) {
+        if ("ping".equals(d.getString("kind"))) {
+            // 도와주는 사람이 '화면공유 가능한지' 확인하는 신호: 화면은 띄우지 않고 응답만 한다.
+            Timestamp pt = d.getTimestamp("createdAt");
+            if (pt != null && System.currentTimeMillis() - pt.toDate().getTime() > 60_000L) return;
+            d.getReference().update("status", "pong");
+            h.postDelayed(() -> d.getReference().delete(), 20_000L);
+            return;
+        }
         if (ShareService.running) return;
         // 오래된 요청(자녀가 이미 포기한 것)은 무시
         Timestamp ts = d.getTimestamp("createdAt");

@@ -227,14 +227,24 @@ public class FamilyActivity extends BaseActivity {
         final String uid = nz(iAmParent ? d.getString("childUid") : d.getString("parentUid"));
         final android.widget.EditText et = new android.widget.EditText(this);
         et.setSingleLine(true);
+        final android.widget.EditText memo = new android.widget.EditText(this);
+        memo.setSingleLine(true);
+        memo.setHint(Tr.t("메모 (예: 광주 이모, 전화번호 뒷자리)"));
+        memo.setText(getSharedPreferences("memos", MODE_PRIVATE).getString(uid, ""));
+        LinearLayout form = new LinearLayout(this);
+        form.setOrientation(LinearLayout.VERTICAL);
+        form.setPadding(Ui.dp(this, 20), Ui.dp(this, 8), Ui.dp(this, 20), 0);
+        form.addView(et);
+        form.addView(memo);
         String cur = getSharedPreferences("aliases", MODE_PRIVATE).getString(uid, "");
         et.setText(cur);
         et.setHint(Tr.t("예: 어머니, 큰아버지"));
         new AlertDialog.Builder(this).setTitle(Tr.t("이름 바꾸기"))
                 .setMessage(Tr.t("내 폰에서만 보이는 이름입니다. 비우면 원래 이름으로 돌아갑니다."))
-                .setView(et)
+                .setView(form)
                 .setPositiveButton(getString(R.string.btn_ok), (x, w) -> {
                     getSharedPreferences("aliases", MODE_PRIVATE).edit().putString(uid, et.getText().toString().trim()).apply();
+                    getSharedPreferences("memos", MODE_PRIVATE).edit().putString(uid, memo.getText().toString().trim()).apply();
                     render();
                 })
                 .setNegativeButton(getString(R.string.btn_cancel), null).show();
@@ -246,6 +256,8 @@ public class FamilyActivity extends BaseActivity {
         TextView t = Ui.text(this, "👤 " + other + "  ·  " + role + (blocked ? "  ·  " + getString(R.string.status_blocked) : ""), 16, Ui.INK, true);
         t.setPadding(0, Ui.dp(this, 10), 0, Ui.dp(this, 2));
         box.addView(t);
+        String memoTxt = getSharedPreferences("memos", MODE_PRIVATE).getString(nz(iAmParent ? d.getString("childUid") : d.getString("parentUid")), "");
+        if (!memoTxt.isEmpty()) box.addView(Ui.text(this, "📝 " + memoTxt, 14, Ui.GRAY, false));
         String req = d.getString("deleteRequestedBy");
         if (req != null && !req.equals(Auth.uid())) {
             box.addView(Ui.text(this, getString(R.string.disconnect_incoming, other), 13, Ui.AMBER, true));
@@ -282,6 +294,10 @@ public class FamilyActivity extends BaseActivity {
                         .putExtra(ViewerActivity.EXTRA_PARENT_NAME, other));
             })));
             if ("active".equals(d.getString("status"))) row.addView(ask, Ui.weight(this, 3));
+            Button chk = Ui.button(this, Tr.t("화면공유 가능한지 확인"), Color.WHITE, Ui.INK);
+            chk.setTextSize(17);
+            chk.setOnClickListener(v -> pingParent(d, other, chk));
+            if ("active".equals(d.getString("status"))) row.addView(chk, Ui.weight(this, 3));
             Button up = Ui.button(this, getString(R.string.btn_ask_update), Ui.NAVY, Color.WHITE);
             up.setTextSize(17);
             up.setOnClickListener(v -> requestUpdate(d, other));
@@ -295,6 +311,44 @@ public class FamilyActivity extends BaseActivity {
     }
 
     // ------------------------------------------------------------------ 동작
+    /** 자녀: 부모 폰이 지금 요청을 받을 수 있는지(앱이 켜져 있고 대기 중인지) 확인한다. 화면은 뜨지 않는다. */
+    private void pingParent(DocumentSnapshot link, final String parentName, final Button btn) {
+        final String parentUid = link.getString("parentUid");
+        Map<String, Object> m = new HashMap<>();
+        m.put("kind", "ping");
+        m.put("parentUid", parentUid);
+        m.put("childUid", Auth.uid());
+        m.put("childName", Auth.myName(this));
+        m.put("parentName", parentName);
+        m.put("status", "requested");
+        m.put("createdAt", FieldValue.serverTimestamp());
+        final String sid = java.util.UUID.randomUUID().toString().replace("-", "").substring(0, 20);
+        btn.setEnabled(false);
+        final boolean[] done = {false};
+        final android.os.Handler hh = new android.os.Handler(android.os.Looper.getMainLooper());
+        final ListenerRegistration[] reg = new ListenerRegistration[1];
+        final Runnable end = () -> {
+            done[0] = true;
+            if (reg[0] != null) reg[0].remove();
+            btn.setEnabled(true);
+        };
+        db.collection("sessions").document(sid).set(m).addOnSuccessListener(x -> {
+            reg[0] = db.collection("sessions").document(sid).addSnapshotListener((s, e) -> {
+                if (done[0] || s == null || !"pong".equals(s.getString("status"))) return;
+                end.run();
+                Ui.toast(this, Tr.t(parentName + " 폰: 화면공유 요청을 받을 수 있습니다 ✅"));
+            });
+            hh.postDelayed(() -> {
+                if (done[0]) return;
+                end.run();
+                Ui.toast(this, Tr.t(parentName + " 폰이 응답하지 않습니다. 상대 폰에서 앱을 한 번 열어 보라고 해 주세요."));
+            }, 10_000L);
+        }).addOnFailureListener(e -> {
+            btn.setEnabled(true);
+            Ui.toast(this, getString(R.string.err_generic, Auth.msg(e)));
+        });
+    }
+
     /** 대기 모드 켜기/끄기와 [다른 앱 위에 표시] 허용 상태 */
     private View standbyBox() {
         LinearLayout b = new LinearLayout(this);

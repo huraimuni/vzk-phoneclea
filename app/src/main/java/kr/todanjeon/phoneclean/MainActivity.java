@@ -562,6 +562,7 @@ public class MainActivity extends BaseActivity {
         Admin.refresh();
         Report.registerToken();
         StandbyService.ensure(this);
+        StandbyService.refreshParent(this);
         updateAccountBar();
         if (Scanner.hasUsageAccess(this) != lastUsageState && !scanning && !all.isEmpty()) startScan();
         if (cbKeep != null && cbKeep.isChecked()) {

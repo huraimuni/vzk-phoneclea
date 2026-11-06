@@ -68,6 +68,7 @@
         <activity
             android:name=".ConsentActivity"
             android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|density|uiMode"
             android:showWhenLocked="true"
             android:turnScreenOn="true" />
         <activity
@@ -102,7 +103,8 @@
         </service>
         <activity
             android:name=".ViewerActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|density|uiMode" />
         <activity
             android:name=".SubscribeActivity"
             android:exported="false" />
