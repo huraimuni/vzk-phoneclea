@@ -553,12 +553,16 @@ public class MainActivity extends BaseActivity {
 
     // ---------------------------------------------------------------- 일시 중지
 
+    private com.google.firebase.firestore.ListenerRegistration reqWatch;
+
     @Override
     protected void onResume() {
         super.onResume();
         resumed = true;
         Admin.refresh();
         Report.registerToken();
+        if (reqWatch != null) reqWatch.remove();
+        reqWatch = RequestWatch.start(this);
         updateAccountBar();
         if (Scanner.hasUsageAccess(this) != lastUsageState && !scanning && !all.isEmpty()) startScan();
         if (cbKeep != null && cbKeep.isChecked()) {
@@ -570,6 +574,10 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        if (reqWatch != null) {
+            reqWatch.remove();
+            reqWatch = null;
+        }
         resumed = false;
         handler.removeCallbacks(keepTask);
     }
