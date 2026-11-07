@@ -39,6 +39,8 @@ final class Lang {
         Locale.setDefault(l);
         Configuration cfg = new Configuration(c.getResources().getConfiguration());
         cfg.setLocale(l);
+        // 글자 크기를 아주 크게 쓰는 폰에서 화면이 깨지지 않도록 최대 1.3배까지만 반영
+        if (cfg.fontScale > 1.3f) cfg.fontScale = 1.3f;
         return c.createConfigurationContext(cfg);
     }
 
