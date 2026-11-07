@@ -202,8 +202,7 @@ public class MainActivity extends BaseActivity {
         top.addView(homeBanner, hlp);
 
         LinearLayout pauseRow = new LinearLayout(this);
-        pauseRow.setOrientation(LinearLayout.HORIZONTAL);
-        pauseRow.setGravity(Gravity.CENTER_VERTICAL);
+        pauseRow.setOrientation(LinearLayout.VERTICAL);
         pauseRow.setPadding(Ui.dp(this, 12), Ui.dp(this, 4), Ui.dp(this, 12), Ui.dp(this, 2));
         cbKeep = new CheckBox(this);
         cbKeep.setText(Tr.t("계속 멈춰 두기 (카톡 알림이 늦게 올 수 있어요)"));
@@ -215,7 +214,7 @@ public class MainActivity extends BaseActivity {
                 if (cbKeep.isChecked()) handler.post(keepTask);
             }
         });
-        pauseRow.addView(cbKeep, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+        pauseRow.addView(cbKeep, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         Button homeBtn = Ui.button(this, Tr.t("원래 홈 화면으로 되돌리기"), Color.rgb(226, 230, 244), Ui.NAVY);
         homeBtn.setTextSize(16);
         homeBtn.setOnClickListener(new View.OnClickListener() {
@@ -224,7 +223,7 @@ public class MainActivity extends BaseActivity {
                 restoreHome();
             }
         });
-        pauseRow.addView(homeBtn);
+        pauseRow.addView(homeBtn, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         top.addView(pauseRow);
 
         LinearLayout row1 = new LinearLayout(this);
