@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
@@ -738,7 +739,7 @@ public class MainActivity extends BaseActivity {
     private void showMore() {
         final String[] base0 = {getString(R.string.home_family_btn), getString(R.string.btn_language), Tr.t("내 계정"), Tr.t("폰이 이상할 때 (응급 도움말)"), Tr.t("광고 줄이기"), Tr.t("알림 정리하기"), Tr.t("안전하다고 알려둔 앱 보기"),
                 watchOn() ? Tr.t("새 앱 알려주기 끄기 (지금 켜져 있음)") : Tr.t("새 앱이 깔리면 바로 알려주기 켜기"),
-                Tr.t("결과를 카톡으로 보내기"), Tr.t("문제 알리기 · 의견 보내기"), Tr.t("새 버전 확인하기"), Tr.t("도움말")};
+                Tr.t("결과를 카톡으로 보내기"), Tr.t("지인에게 앱 알려주기 (공유)"), Tr.t("문제 알리기 · 의견 보내기"), Tr.t("새 버전 확인하기"), Tr.t("도움말")};
         final boolean scam = Lang.useNaver(this);
         java.util.ArrayList<String> bl = new java.util.ArrayList<>(java.util.Arrays.asList(base0));
         if (scam) bl.add(3, "🛡 사기 전화·문자 확인하기");
@@ -776,6 +777,7 @@ public class MainActivity extends BaseActivity {
                         else if (which == 6) manageSafe();
                         else if (which == 7) toggleWatch();
                         else if (which == 8) shareReport();
+                        else if (which == 9) shareApp();
                         else if (which == baseN - 3) showFeedback();
                         else if (which == baseN - 2) Updater.check(MainActivity.this);
                         else showHelp();
@@ -1118,6 +1120,30 @@ public class MainActivity extends BaseActivity {
     }
 
     // ---------------------------------------------------------------- 공유 / 도움말
+
+    /** 지인에게 앱을 소개하는 글과 설치 링크를 카톡·문자 등으로 보내요. */
+    private void shareApp() {
+        String link;
+        if ("store".equals(BuildConfig.UPDATE_BRANCH)) {
+            link = "https://play.google.com/store/apps/details?id=" + getPackageName();
+        } else {
+            link = BuildConfig.UPDATE_URL;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(Tr.t("VZK 폰클린 - 광고 때문에 저절로 깔린 이상한 앱을 찾아서 멈춰 주는 무료 앱이에요.\n"));
+        sb.append(Tr.t("부모님 폰, 내 폰에 써 보세요.\n\n"));
+        sb.append(Tr.t("설치: ")).append(link).append("\n");
+        sb.append(Tr.t("안내·문의: ")).append(Ui.CAFE_URL);
+        Intent send = new Intent(Intent.ACTION_SEND);
+        send.setType("text/plain");
+        send.putExtra(Intent.EXTRA_SUBJECT, "VZK 폰클린");
+        send.putExtra(Intent.EXTRA_TEXT, sb.toString());
+        try {
+            startActivity(Intent.createChooser(send, Tr.t("지인에게 앱 알려주기")));
+        } catch (Throwable e) {
+            Toast.makeText(this, Tr.t("공유할 수 있는 앱이 없어요."), Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void shareReport() {
         if (all.isEmpty()) {
